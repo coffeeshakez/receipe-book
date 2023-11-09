@@ -1,0 +1,44 @@
+.container {
+  width: 100%;
+}
+
+.center {
+  text-align: center;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.headerImage {
+  height: 500px;
+  width: 100%;
+  object-fit: cover;
+}
+
+.splitContainer {
+  display: grid;
+  position: relative;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 40px;
+}
+
+.ingredientsSection {
+  padding: 32px;
+  color: black;
+  border-radius: 8px;
+  background-color: whitesmoke;
+  // box-shadow: 0 12px 12px rgba(0, 0, 0, 0.1);
+}
+
+.section {
+  padding: 32px;
+}
+
+.icon {
+  margin-right: 8px;
+}
+
+.header {
+  margin-bottom: 16px;
+}

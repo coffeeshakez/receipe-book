@@ -1,0 +1,140 @@
+
+{
+  "recipes": [
+    {
+      "name": "Spaghetti Bolognese",
+      "img": "./burger.jpg",
+      "description": "Classic Italian pasta dish with meat sauce",
+      "ingredients": [
+        {
+          "name": "spaghetti",
+          "quantity": 250,
+          "measurement": "grams"
+        },
+        {
+          "name": "beef",
+          "quantity": 400,
+          "measurement": "grams"
+        },
+        {
+          "name": "onion",
+          "quantity": 1,
+          "measurement": "medium"
+        },
+        {
+          "name": "garlic",
+          "quantity": 2,
+          "measurement": "cloves"
+        },
+        {
+          "name": "canned tomatoes",
+          "quantity": 400,
+          "measurement": "grams"
+        },
+        {
+          "name": "tomato paste",
+          "quantity": 2,
+          "measurement": "tablespoons"
+        },
+        {
+          "name": "dried oregano",
+          "quantity": 1,
+          "measurement": "teaspoon"
+        },
+        {
+          "name": "dried basil",
+          "quantity": 1,
+          "measurement": "teaspoon"
+        },
+        {
+          "name": "salt",
+          "quantity": "to taste",
+          "measurement": ""
+        },
+        {
+          "name": "pepper",
+          "quantity": "to taste",
+          "measurement": ""
+        },
+        {
+          "name": "grated Parmesan cheese",
+          "quantity": "for serving",
+          "measurement": ""
+        }
+      ],
+      "instructions": [
+        "Bring a large pot of water to a boil. Add a generous pinch of salt and the spaghetti. Cook according to package instructions.",
+        "Meanwhile, heat a large skillet over medium-high heat. Add the beef and cook, breaking it up with a wooden spoon, until browned, about 5 minutes. Add the onion and garlic and cook until softened, about 5 minutes. Add the tomatoes, tomato paste, oregano, basil, salt, and pepper. Bring to a boil, then reduce the heat to medium-low and simmer for 10 minutes.",
+        "Drain the pasta and divide between 4 bowls. Top with the sauce and Parmesan cheese."
+      ]
+    },
+    {
+      "name": "Chicken Stir-Fry",
+      "img": "./burger.jpg",
+      "description": "Quick and flavorful chicken stir-fry with vegetables",
+      "ingredients": [
+        {
+          "name": "chicken breast",
+          "quantity": 500,
+          "measurement": "grams"
+        },
+        {
+          "name": "bell pepper",
+          "quantity": 1,
+          "measurement": "large"
+        },
+        {
+          "name": "broccoli florets",
+          "quantity": 2,
+          "measurement": "cups"
+        },
+        {
+          "name": "carrot",
+          "quantity": 1,
+          "measurement": "medium"
+        },
+        {
+          "name": "soy sauce",
+          "quantity": 3,
+          "measurement": "tablespoons"
+        },
+        {
+          "name": "sesame oil",
+          "quantity": 1,
+          "measurement": "tablespoon"
+        },
+        {
+          "name": "garlic",
+          "quantity": 3,
+          "measurement": "cloves"
+        },
+        {
+          "name": "ginger",
+          "quantity": 1,
+          "measurement": "thumb-sized piece"
+        },
+        {
+          "name": "cornstarch",
+          "quantity": 1,
+          "measurement": "tablespoon"
+        },
+        {
+          "name": "vegetable oil",
+          "quantity": 2,
+          "measurement": "tablespoons"
+        },
+        {
+          "name": "rice",
+          "quantity": 2,
+          "measurement": "cups"
+        }
+      ],
+      "instructions": [
+        "Bring a large pot of water to a boil. Add a generous pinch of salt and the spaghetti. Cook according to package instructions.",
+        "Meanwhile, heat a large skillet over medium-high heat. Add the beef and cook, breaking it up with a wooden spoon, until browned, about 5 minutes. Add the onion and garlic and cook until softened, about 5 minutes. Add the tomatoes, tomato paste, oregano, basil, salt, and pepper. Bring to a boil, then reduce the heat to medium-low and simmer for 10 minutes.",
+        "Drain the pasta and divide between 4 bowls. Top with the sauce and Parmesan cheese."
+      ]
+    }
+  ]
+}
+  
