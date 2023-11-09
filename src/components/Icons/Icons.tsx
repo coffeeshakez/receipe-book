@@ -18,7 +18,23 @@ enum IconNamesEnum {
   oregano = 'herbs',
 }
 
-type IconNamesEnumType = keyof typeof IconNamesEnum;
+enum IconNamesEnumNo {
+  chicken = 'kylling',
+  cucumber = 'agurk',
+  fish = 'fisk',
+  onion = 'løk',
+  paprika = 'paprika',
+  pepper = 'pepper',
+  peppershaker = 'peppershaker',
+  spaghetti = 'spaghetti',
+  salt = 'salt',
+  beef = 'kjøtt',
+  tomato = 'tomat',
+  garlic = 'hvitløk',
+  cheese = 'ost',
+  basil = 'basilikum',
+  oregano = 'oregano',
+}
 
 type IconsProps = {
   size: 'sm' | 'md' | 'lg';
@@ -28,9 +44,9 @@ type IconsProps = {
 
 const ingredientToIcon = (icon: string) => {
   let iconName = 'fish';
-  for (const [key, value] of Object.entries(IconNamesEnum)) {
-    if (icon.toLowerCase().includes(key.toString())) {
-      iconName = value;
+  for (const [key, value] of Object.entries(IconNamesEnumNo)) {
+    if (icon.toLowerCase().includes(value.toString())) {
+      iconName = key;
     }
   }
   return iconName;

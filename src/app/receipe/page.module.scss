@@ -10,6 +10,27 @@
   text-decoration: underline;
 }
 
+.instructionIngredientSection {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.instructionListItem {
+  margin-bottom: 24px;
+}
+
+.ingredientCard {
+  width: 100%;
+  background-color: rgb(6, 178, 9);
+  color: white;
+  margin-bottom: 4px;
+  padding: 8px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+}
+
 .headerImage {
   height: 500px;
   width: 100%;
@@ -20,12 +41,15 @@
   display: grid;
   position: relative;
   grid-template-columns: 1fr 1fr;
-  grid-gap: 40px;
+  grid-gap: 8px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .ingredientsSection {
   padding: 32px;
-  color: black;
   border-radius: 8px;
   background-color: whitesmoke;
   // box-shadow: 0 12px 12px rgba(0, 0, 0, 0.1);
