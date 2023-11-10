@@ -2,6 +2,7 @@ import styles from './page.module.scss';
 import receipes from '../../mockdata/receipes.json';
 import {Icons} from '@/components/Icons/Icons';
 import {classNames} from '@/util/styles';
+import {Button} from '@/components/Button/Button';
 
 type Ingredient = {
   name: string;
@@ -23,7 +24,7 @@ type Recipe = {
 };
 
 export default function Receipe() {
-  const receipe = receipes.recipes[0];
+  const receipe = receipes.recipes[0] as Recipe;
   return (
     <div>
       <div>
@@ -42,6 +43,7 @@ export default function Receipe() {
               </li>
             ))}
           </ul>
+          <Button>!Lag handleliste!</Button>
         </div>
         <div className={styles.section}>
           <h1 className={styles.header}>Instructions</h1>
