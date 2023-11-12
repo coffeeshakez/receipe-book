@@ -18,6 +18,15 @@
 
 .menuItem {
   margin-bottom: 8px;
+  h2 {
+    font-size: 20px;
+  }
+  p {
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 300;
+    color: grey;
+  }
 }
 
 .menuItemsContainer {
@@ -37,7 +46,7 @@
 .image {
   position: absolute;
   border-radius: 100%;
-  bottom: -50px;
+  top: -50px;
   right: -50px;
   width: 200px;
   height: 200px;
