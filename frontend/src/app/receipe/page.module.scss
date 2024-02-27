@@ -1,0 +1,59 @@
+.container {
+  width: 100%;
+}
+
+.center {
+  text-align: center;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.instructionListItem {
+  margin-bottom: 24px;
+}
+
+.header {
+  margin-bottom: 24px;
+  font-size: 34px;
+  font-family: 'Dancing Script', cursive;
+}
+
+.headerImage {
+  height: 500px;
+  width: 100%;
+  object-fit: cover;
+}
+
+.splitContainer {
+  display: grid;
+  position: relative;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 8px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.flexContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.ingredientsSection {
+  padding: 32px;
+  border-radius: 8px;
+  background-color: whitesmoke;
+}
+
+.section {
+  padding: 32px;
+}
+
+.subHeader {
+  font-size: 20px;
+}

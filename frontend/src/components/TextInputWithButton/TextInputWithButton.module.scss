@@ -1,0 +1,15 @@
+.input-container {
+  position: relative;
+  width: 200px;
+
+  .input-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border: none;
+    background: none;
+    height: 100%;
+    cursor: pointer;
+  }
+}

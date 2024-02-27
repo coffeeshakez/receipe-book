@@ -1,0 +1,218 @@
+
+{
+  "recipes": [
+    {
+      "name": "Spaghetti Bolognese",
+      "img": "./bolognese.jpg",
+      "description": "Klassisk italiensk pastarett med kjøttsaus",
+      "ingredients": [
+        {
+          "name": "spaghetti",
+          "quantity": 250,
+          "measurement": "gram"
+        },
+        {
+          "name": "kjøttdeig",
+          "quantity": 400,
+          "measurement": "gram"
+        },
+        {
+          "name": "løk",
+          "quantity": 1,
+          "measurement": "medium"
+        },
+        {
+          "name": "hvitløk",
+          "quantity": 2,
+          "measurement": "fedd"
+        },
+        {
+          "name": "hermetiske tomater",
+          "quantity": 400,
+          "measurement": "gram"
+        },
+        {
+          "name": "tomatpuré",
+          "quantity": 2,
+          "measurement": "ss"
+        },
+        {
+          "name": "tørket oregano",
+          "quantity": 1,
+          "measurement": "ts"
+        },
+        {
+          "name": "tørket basilikum",
+          "quantity": 1,
+          "measurement": "ts"
+        },
+        {
+          "name": "salt",
+          "quantity": "smak",
+          "measurement": ""
+        },
+        {
+          "name": "pepper",
+          "quantity": "smak",
+          "measurement": ""
+        },
+        {
+          "name": "revet parmesanost",
+          "quantity": "til servering",
+          "measurement": ""
+        }
+      ],
+      "instructions": [
+        {
+          "instruction": "Kok opp en stor kjele med vann. Tilsett en god klype salt og spaghetti. Kok etter anvisningen på pakken.",
+          "ingredients": [
+            {
+              "name": "spaghetti",
+              "quantity": 250,
+              "measurement": "gram"
+            }
+          ]
+        },
+        {
+          "instruction": "I mellomtiden, varm en stor stekepanne over middels-høy varme. Tilsett kjøttdeig og stek, smuldre den med en treskje, til den er brunet, ca. 5 minutter. Tilsett løk og hvitløk, og stek til de er myke, ca. 5 minutter. Tilsett tomater, tomatpuré, oregano, basilikum, salt og pepper. Kok opp, reduser deretter varmen til middels-lav og la det småkoke i 10 minutter.",
+          "ingredients": [
+            {
+              "name": "kjøttdeig",
+              "quantity": 400,
+              "measurement": "gram"
+            },
+            {
+              "name": "løk",
+              "quantity": 1,
+              "measurement": "medium"
+            },
+            {
+              "name": "hvitløk",
+              "quantity": 2,
+              "measurement": "fedd"
+            },
+            {
+              "name": "hermetiske tomater",
+              "quantity": 400,
+              "measurement": "gram"
+            },
+            {
+              "name": "tomatpuré",
+              "quantity": 2,
+              "measurement": "ss"
+            },
+            {
+              "name": "tørket oregano",
+              "quantity": 1,
+              "measurement": "ts"
+            },
+            {
+              "name": "tørket basilikum",
+              "quantity": 1,
+              "measurement": "ts"
+            },
+            {
+              "name": "salt",
+              "quantity": "smak",
+              "measurement": ""
+            },
+            {
+              "name": "pepper",
+              "quantity": "smak",
+              "measurement": ""
+            }
+          ]
+        },
+        {
+          "instruction": "Hell av vannet fra pastaen og fordel den mellom 4 boller. Topp med sausen og parmesanosten.",
+          "ingredients": [
+            {
+              "name": "revet parmesanost",
+              "quantity": "til servering",
+              "measurement": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Chicken Stir-Fry",
+      "img": "./burger.jpg",
+      "description": "Quick and flavorful chicken stir-fry with vegetables",
+      "ingredients": [
+        {
+          "id": 1,
+          "name": "chicken breast",
+          "quantity": 500,
+          "measurement": "grams"
+        },
+        {
+          "id": 2,
+          "name": "bell pepper",
+          "quantity": 1,
+          "measurement": "large"
+        },
+        {
+          "id": 3,
+          "name": "broccoli florets",
+          "quantity": 2,
+          "measurement": "cups"
+        },
+        {
+          "id": 4,
+          "name": "carrot",
+          "quantity": 1,
+          "measurement": "medium"
+        },
+        {
+          "id": 5,
+          "name": "soy sauce",
+          "quantity": 3,
+          "measurement": "tablespoons"
+        },
+        {
+          "id": 6,
+          "name": "sesame oil",
+          "quantity": 1,
+          "measurement": "tablespoon"
+        },
+        {
+          "id": 7,
+          "name": "garlic",
+          "quantity": 3,
+          "measurement": "cloves"
+        },
+        {
+          "id": 8,
+          "name": "ginger",
+          "quantity": 1,
+          "measurement": "thumb-sized piece"
+        },
+        {
+          "id": 9,
+          "name": "cornstarch",
+          "quantity": 1,
+          "measurement": "tablespoon"
+        },
+        {
+          "id": 10,
+          "name": "vegetable oil",
+          "quantity": 2,
+          "measurement": "tablespoons"
+        },
+        {
+          "id": 11,
+          "name": "rice",
+          "quantity": 2,
+          "measurement": "cups"
+        }
+      ],
+      "instructions": [
+        {"instruction": "Bring a large pot of water to a boil. Add a generous pinch of salt and the spaghetti. Cook according to package instructions.", "ingredients": [{}]},
+        {"instruction": "Meanwhile, heat a large skillet over medium-high heat. Add the beef and cook, breaking it up with a wooden spoon, until browned, about 5 minutes. Add the onion and garlic and cook until softened, about 5 minutes. Add the tomatoes, tomato paste, oregano, basil, salt, and pepper. Bring to a boil, then reduce the heat to medium-low and simmer for 10 minutes.", "ingredients": []},
+        {"instruction": "Drain the pasta and divide between 4 bowls. Top with the sauce and Parmesan cheese.", "ingredients": []}
+      ]
+    }
+  ]
+}
+  
