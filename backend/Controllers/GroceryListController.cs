@@ -92,7 +92,7 @@ namespace backend.Controllers
 
         // PUT: api/grocerylist/{id}/item/{itemId}
         [HttpPut("{id}/item/{itemId}")]
-        public IActionResult UpdateGroceryItem(int id, int itemId, GroceryItem item)
+        public IActionResult UpdateGroceryItem(int id, int itemId, [FromBody] GroceryItemDTO itemDTO)
         {
             var groceryList = _context.GroceryLists
                 .Include(gl => gl.Items)
@@ -110,7 +110,79 @@ namespace backend.Controllers
                 return NotFound();
             }
 
-            groceryItem.Checked = item.Checked;
+            groceryItem.Checked = itemDTO.Checked;
+            groceryItem.Quantity = itemDTO.Quantity;
+            groceryItem.Unit = itemDTO.Unit;
+            groceryItem.Name = itemDTO.Name;
+
+            _context.SaveChanges();
+
+            return Ok(new GroceryItemDTO
+            {
+                Id = groceryItem.Id,
+                Name = groceryItem.Name,
+                Quantity = groceryItem.Quantity,
+                Unit = groceryItem.Unit,
+                Checked = groceryItem.Checked
+            });
+        }
+
+        // POST: api/grocerylist/{id}/item
+        [HttpPost("{id}/item")]
+        public IActionResult AddGroceryItem(int id, [FromBody] GroceryItemDTO itemDTO)
+        {
+            var groceryList = _context.GroceryLists
+                .Include(gl => gl.Items)
+                .FirstOrDefault(gl => gl.Id == id);
+
+            if (groceryList == null)
+            {
+                return NotFound();
+            }
+
+            var newItem = new GroceryItem
+            {
+                Name = itemDTO.Name,
+                Quantity = itemDTO.Quantity,
+                Unit = itemDTO.Unit,
+                Checked = false,
+                GroceryList = groceryList
+            };
+
+            groceryList.Items.Add(newItem);
+            _context.SaveChanges();
+
+            return Ok(new GroceryItemDTO
+            {
+                Id = newItem.Id,
+                Name = newItem.Name,
+                Quantity = newItem.Quantity,
+                Unit = newItem.Unit,
+                Checked = newItem.Checked
+            });
+        }
+
+        // DELETE: api/grocerylist/{id}/item/{itemId}
+        [HttpDelete("{id}/item/{itemId}")]
+        public IActionResult RemoveGroceryItem(int id, int itemId)
+        {
+            var groceryList = _context.GroceryLists
+                .Include(gl => gl.Items)
+                .FirstOrDefault(gl => gl.Id == id);
+
+            if (groceryList == null)
+            {
+                return NotFound();
+            }
+
+            var item = groceryList.Items.FirstOrDefault(i => i.Id == itemId);
+
+            if (item == null)
+            {
+                return NotFound();
+            }
+
+            groceryList.Items.Remove(item);
             _context.SaveChanges();
 
             return NoContent();

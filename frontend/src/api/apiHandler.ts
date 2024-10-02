@@ -103,7 +103,7 @@ export const apiHandler = {
     return response.json();
   },
 
-  async updateGroceryItem(listId: number, itemId: number, item: GroceryItem): Promise<void> {
+  async updateGroceryItem(listId: number, itemId: number, item: GroceryItem): Promise<GroceryItem> {
     const response = await fetch(`${API_BASE_URL}/grocerylist/${listId}/item/${itemId}`, {
       method: 'PUT',
       headers: {
@@ -113,6 +113,30 @@ export const apiHandler = {
     });
     if (!response.ok) {
       throw new Error('Failed to update grocery item');
+    }
+    return response.json();
+  },
+
+  async addGroceryItem(listId: number, item: Omit<GroceryItem, 'id'>): Promise<GroceryItem> {
+    const response = await fetch(`${API_BASE_URL}/grocerylist/${listId}/item`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(item),
+    });
+    if (!response.ok) {
+      throw new Error('Failed to add grocery item');
+    }
+    return response.json();
+  },
+
+  async removeGroceryItem(listId: number, itemId: number): Promise<void> {
+    const response = await fetch(`${API_BASE_URL}/grocerylist/${listId}/item/${itemId}`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) {
+      throw new Error('Failed to remove grocery item');
     }
   },
 };

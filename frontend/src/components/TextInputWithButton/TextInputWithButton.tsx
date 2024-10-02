@@ -1,36 +1,33 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './TextInputWithButton.module.scss';
 
 type TextInputWithButtonProps = {
   buttonText: string;
   placeholder: string;
-  onClick: (inputValue: string) => void;
+  onClick: () => void;
+  value: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-export const TextInpuWithButton = ({buttonText, placeholder, onClick}: TextInputWithButtonProps) => {
-  const [inputValue, setInputValue] = useState('');
-  const inputRef = React.useRef<HTMLInputElement>(null);
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value.length < 1) return;
-    setInputValue(event.target.value);
-  };
-
+export const TextInputWithButton = ({
+  buttonText,
+  placeholder,
+  onClick,
+  value,
+  onChange
+}: TextInputWithButtonProps) => {
   const handleButtonClick = () => {
-    if (inputValue.length < 1) return;
-    onClick(inputValue);
-    setInputValue('');
-    inputRef.current?.focus();
+    if (value.length < 1) return;
+    onClick();
   };
 
   return (
     <div className="input-container">
       <input
-        ref={inputRef}
         type="text"
         placeholder={placeholder}
-        value={inputValue}
-        onChange={handleInputChange}
+        value={value}
+        onChange={onChange}
         aria-label="Add items to grocery list"
       />
       <button onClick={handleButtonClick} className="input-button">
@@ -40,4 +37,4 @@ export const TextInpuWithButton = ({buttonText, placeholder, onClick}: TextInput
   );
 };
 
-export default TextInpuWithButton;
+export default TextInputWithButton;

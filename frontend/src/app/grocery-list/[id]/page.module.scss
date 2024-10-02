@@ -25,3 +25,47 @@
     text-decoration: line-through;
   }
 }
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.title {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.itemList {
+  margin-top: 20px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.checkbox {
+  margin-right: 10px;
+}
+
+.itemLabel {
+  flex-grow: 1;
+  font-size: 16px;
+}
+
+.removeButton {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.removeButton:hover {
+  background-color: #ff3333;
+}
