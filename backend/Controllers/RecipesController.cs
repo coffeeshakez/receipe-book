@@ -24,7 +24,7 @@ namespace backend.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RecipeDTO>>> GetRecipes()
+        public async Task<ActionResult<IEnumerable<RecipeDto>>> GetRecipes()
         {
             var recipes = await _context.Recipes
                 .Include(r => r.Ingredients)
@@ -32,7 +32,7 @@ namespace backend.Controllers
                     .ThenInclude(i => i.Ingredients)
                 .ToListAsync();
 
-            var recipeDTOs = recipes.Select(r => new RecipeDTO
+            var recipeDtos = recipes.Select(r => new RecipeDto
             {
                 Id = r.Id,
                 Name = r.Name,
@@ -56,11 +56,11 @@ namespace backend.Controllers
                 }).ToList()
             }).ToList();
 
-            return Ok(recipeDTOs);
+            return Ok(recipeDtos);
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<RecipeDTO>> GetRecipe(int id)
+        public async Task<ActionResult<RecipeDto>> GetRecipe(int id)
         {
             _logger.LogInformation($"Fetching recipe with id: {id}");
 
@@ -76,7 +76,7 @@ namespace backend.Controllers
                 return NotFound($"Recipe with id {id} not found");
             }
 
-            var recipeDTO = new RecipeDTO
+            var recipeDto = new RecipeDto
             {
                 Id = recipe.Id,
                 Name = recipe.Name,
@@ -101,7 +101,7 @@ namespace backend.Controllers
             };
 
             _logger.LogInformation($"Successfully fetched recipe with id: {id}");
-            return Ok(recipeDTO);
+            return Ok(recipeDto);
         }
 
         // Add more CRUD operations as needed

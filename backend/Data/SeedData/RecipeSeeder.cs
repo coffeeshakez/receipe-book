@@ -7,14 +7,14 @@ namespace backend.Data.SeedData
     {
         public static void SeedRecipes(ApplicationDbContext context)
         {
-            if (!context.Recipes.Any())
+            var jsonString = File.ReadAllText("Data/SeedData/recipes.json");
+            var recipes = JsonSerializer.Deserialize<List<Recipe>>(jsonString, new JsonSerializerOptions
             {
-                var recipesJson = File.ReadAllText("Data/SeedData/recipes.json");
-                var recipes = JsonSerializer.Deserialize<List<Recipe>>(recipesJson, new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
+                PropertyNameCaseInsensitive = true
+            });
 
+            if (recipes != null)
+            {
                 context.Recipes.AddRange(recipes);
                 context.SaveChanges();
             }

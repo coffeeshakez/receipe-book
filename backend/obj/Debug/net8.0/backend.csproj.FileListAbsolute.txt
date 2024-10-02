@@ -1,7 +1,5 @@
 /Users/david/Documents/projects/personal/receipe-book/backend/bin/Debug/net8.0/appsettings.Development.json
 /Users/david/Documents/projects/personal/receipe-book/backend/bin/Debug/net8.0/appsettings.json
-/Users/david/Documents/projects/personal/receipe-book/backend/bin/Debug/net8.0/MockData/groceryList.json
-/Users/david/Documents/projects/personal/receipe-book/backend/bin/Debug/net8.0/MockData/recipes.json
 /Users/david/Documents/projects/personal/receipe-book/backend/bin/Debug/net8.0/backend
 /Users/david/Documents/projects/personal/receipe-book/backend/bin/Debug/net8.0/backend.deps.json
 /Users/david/Documents/projects/personal/receipe-book/backend/bin/Debug/net8.0/backend.runtimeconfig.json
@@ -129,3 +127,4 @@
 /Users/david/Documents/projects/personal/receipe-book/backend/obj/Debug/net8.0/backend.pdb
 /Users/david/Documents/projects/personal/receipe-book/backend/obj/Debug/net8.0/backend.genruntimeconfig.cache
 /Users/david/Documents/projects/personal/receipe-book/backend/obj/Debug/net8.0/ref/backend.dll
+/Users/david/Documents/projects/personal/receipe-book/backend/bin/Debug/net8.0/Data/SeedData/recipes.json

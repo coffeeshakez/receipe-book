@@ -1,6 +1,6 @@
 namespace backend.DTOs
 {
-    public class RecipeDTO
+    public class RecipeDto
     {
         public int Id { get; set; }
         public required string Name { get; set; }

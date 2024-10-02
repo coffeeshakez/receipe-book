@@ -12,7 +12,7 @@ import { Expand } from '@/components/Expand/Expand';
 import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
 
-export default function Receipe() {
+export default function Recipe() {
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -35,8 +35,14 @@ export default function Receipe() {
     fetchRecipe();
   }, [id]);
 
-  const handleClick = () => {
-    router.push(`/grocery-list/${id}`);
+  const handleCreateGroceryList = async () => {
+    try {
+      const groceryList = await apiHandler.createGroceryList(parseInt(id));
+      router.push(`/grocery-list/${groceryList.id}`);
+    } catch (error) {
+      console.error('Error creating grocery list:', error);
+      // You might want to show an error message to the user here
+    }
   };
 
   if (loading) return <div>Loading...</div>;
@@ -53,7 +59,7 @@ export default function Receipe() {
           <h1 className={`${styles.header} ${styles.center} ${styles.underline}`}>{recipe.name}</h1>
           <div className={styles.flexContainer}>
             <h2 className={styles.subHeader}>Ingredients</h2>
-            <Button onClick={handleClick}>!Lag handleliste!</Button>
+            <Button onClick={handleCreateGroceryList}>Lag handleliste</Button>
           </div>
 
           <ul>

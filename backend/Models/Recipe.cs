@@ -8,16 +8,15 @@ namespace backend.Models
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(200)]
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
-        [MaxLength(500)]
-        public string Img { get; set; }
+        [Required]
+        public required string Description { get; set; }
 
-        [MaxLength(1000)]
-        public string Description { get; set; }
+        [Required]
+        public required string Img { get; set; }
 
-        public virtual ICollection<Ingredient> Ingredients { get; set; }
-        public virtual ICollection<Instruction> Instructions { get; set; }
+        public List<Ingredient> Ingredients { get; set; }
+        public List<Instruction> Instructions { get; set; }
     }
 }

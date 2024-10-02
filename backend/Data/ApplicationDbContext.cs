@@ -13,27 +13,25 @@ namespace backend.Data
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<Instruction> Instructions { get; set; }
+        public DbSet<GroceryList> GroceryLists { get; set; }
+        public DbSet<GroceryItem> GroceryItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-
             modelBuilder.Entity<Recipe>()
                 .HasMany(r => r.Ingredients)
                 .WithOne(i => i.Recipe)
-                .HasForeignKey(i => i.RecipeId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(i => i.RecipeId);
 
             modelBuilder.Entity<Recipe>()
                 .HasMany(r => r.Instructions)
                 .WithOne(i => i.Recipe)
-                .HasForeignKey(i => i.RecipeId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(i => i.RecipeId);
 
             modelBuilder.Entity<Instruction>()
                 .HasMany(i => i.Ingredients)
-                .WithMany()
-                .UsingEntity(j => j.ToTable("InstructionIngredients"));
+                .WithMany(i => i.Instructions)
+                .UsingEntity(j => j.ToTable("IngredientInstruction"));
         }
     }
 }

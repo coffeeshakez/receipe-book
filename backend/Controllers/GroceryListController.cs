@@ -1,44 +1,119 @@
-// Controllers/GroceryListController.cs
 using Microsoft.AspNetCore.Mvc;
-using GroceryListApi.Models;
-using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
+using backend.Models;
+using backend.Data;
+using System;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
-namespace GroceryListApi.Controllers
+namespace backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class GroceryListController : ControllerBase
     {
-        private const string GroceryListFilePath = "MockData/groceryList.json";
+        private readonly ApplicationDbContext _context;
+        private readonly ILogger<GroceryListController> _logger;
 
-        // Load grocery items from the JSON file
-        private List<GroceryItem> LoadGroceryItems()
+        public GroceryListController(ApplicationDbContext context, ILogger<GroceryListController> logger)
         {
-            var json = System.IO.File.ReadAllText(GroceryListFilePath);
-            return JsonSerializer.Deserialize<List<GroceryItem>>(json);
+            _context = context;
+            _logger = logger;
         }
 
-        // Save grocery items to the JSON file
-        private void SaveGroceryItems(List<GroceryItem> items)
+        // POST: api/grocerylist/create/{recipeId}
+        [HttpPost("create/{recipeId}")]
+        public IActionResult CreateGroceryList(int recipeId)
         {
-            var json = JsonSerializer.Serialize(items);
-            System.IO.File.WriteAllText(GroceryListFilePath, json);
+            var recipe = _context.Recipes
+                .Include(r => r.Ingredients)
+                .FirstOrDefault(r => r.Id == recipeId);
+
+            if (recipe == null)
+            {
+                return NotFound($"Recipe with id {recipeId} not found");
+            }
+
+            var groceryList = new GroceryList
+            {
+                CreatedAt = DateTime.UtcNow,
+                Items = new List<GroceryItem>()
+            };
+
+            foreach (var ingredient in recipe.Ingredients)
+            {
+                var groceryItem = new GroceryItem
+                {
+                    Name = ingredient.Name,
+                    Quantity = ingredient.Quantity,
+                    Unit = ingredient.Measurement,
+                    Checked = false,
+                    GroceryList = groceryList
+                };
+                groceryList.Items.Add(groceryItem);
+            }
+
+            _context.GroceryLists.Add(groceryList);
+            _context.SaveChanges();
+
+            // Create a DTO to return
+            var groceryListDTO = new GroceryListDTO
+            {
+                Id = groceryList.Id,
+                CreatedAt = groceryList.CreatedAt,
+                Items = groceryList.Items.Select(item => new GroceryItemDTO
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    Quantity = item.Quantity,
+                    Unit = item.Unit,
+                    Checked = item.Checked
+                }).ToList()
+            };
+
+            return Ok(groceryListDTO);
         }
 
-        // GET: api/grocerylist/grocery-items
-        [HttpGet("grocery-items")]
-        public ActionResult<List<GroceryItem>> GetGroceryItems() => LoadGroceryItems();
-
-        // POST: api/grocerylist/grocery-items
-        [HttpPost("grocery-items")]
-        public ActionResult<GroceryItem> AddGroceryItem(GroceryItem item)
+        // GET: api/grocerylist/{id}
+        [HttpGet("{id}")]
+        public ActionResult<GroceryList> GetGroceryList(int id)
         {
-            var groceryItems = LoadGroceryItems();
-            groceryItems.Add(item);
-            SaveGroceryItems(groceryItems);
-            return CreatedAtAction(nameof(GetGroceryItems), new { name = item.Name }, item);
+            var groceryList = _context.GroceryLists
+                .Include(gl => gl.Items)
+                .FirstOrDefault(gl => gl.Id == id);
+
+            if (groceryList == null)
+            {
+                return NotFound();
+            }
+
+            return groceryList;
+        }
+
+        // PUT: api/grocerylist/{id}/item/{itemId}
+        [HttpPut("{id}/item/{itemId}")]
+        public IActionResult UpdateGroceryItem(int id, int itemId, GroceryItem item)
+        {
+            var groceryList = _context.GroceryLists
+                .Include(gl => gl.Items)
+                .FirstOrDefault(gl => gl.Id == id);
+
+            if (groceryList == null)
+            {
+                return NotFound();
+            }
+
+            var groceryItem = groceryList.Items.FirstOrDefault(i => i.Id == itemId);
+
+            if (groceryItem == null)
+            {
+                return NotFound();
+            }
+
+            groceryItem.Checked = item.Checked;
+            _context.SaveChanges();
+
+            return NoContent();
         }
     }
 }

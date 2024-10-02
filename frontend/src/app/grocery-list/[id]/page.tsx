@@ -2,64 +2,62 @@
 import styles from './page.module.scss';
 import { TextInpuWithButton } from '@/components/TextInputWithButton/TextInputWithButton';
 import { useEffect, useState } from 'react';
-import { apiHandler, GroceryItem } from '@/api/apiHandler';
+import { apiHandler, GroceryList, GroceryItem } from '@/api/apiHandler';
+import { useParams } from 'next/navigation';
 
-export default function GroceryListPage({ params }: { params: { id: number | string } }) {
-  const [groceryItems, setGroceryItems] = useState<GroceryItem[]>([]);
+export default function GroceryListPage() {
+  const [groceryList, setGroceryList] = useState<GroceryList | null>(null);
+  const params = useParams();
+  const listId = parseInt(params.id as string);
 
   useEffect(() => {
-    const fetchGroceryItems = async () => {
+    const fetchGroceryList = async () => {
       try {
-        const items = await apiHandler.getGroceryList();
-        setGroceryItems(items);
+        const list = await apiHandler.getGroceryList(listId);
+        setGroceryList(list);
       } catch (error) {
-        console.error('Error fetching grocery items:', error);
+        console.error('Error fetching grocery list:', error);
       }
     };
 
-    fetchGroceryItems();
-  }, []);
+    fetchGroceryList();
+  }, [listId]);
 
-  const addGroceryItem = async (value: string) => {
-    const newItem: GroceryItem = { name: value, quantity: 1, unit: 'grams', checked: false };
-    try {
-      const addedItem = await apiHandler.addGroceryItem(newItem);
-      setGroceryItems([...groceryItems, addedItem]);
-    } catch (error) {
-      console.error('Error adding grocery item:', error);
-    }
-  };
+  const handleCheckItem = async (itemId: number, checked: boolean) => {
+    if (!groceryList) return;
 
-  const handleCheckItem = async (index: number, checked: boolean) => {
-    const updatedItem = { ...groceryItems[index], checked };
+    const updatedItem = groceryList.items.find(item => item.id === itemId);
+    if (!updatedItem) return;
+
+    updatedItem.checked = checked;
+
     try {
-      await apiHandler.updateGroceryItem(index, updatedItem);
-      const updatedItems = groceryItems.map((item, i) => 
-        i === index ? updatedItem : item
-      );
-      setGroceryItems(updatedItems);
+      await apiHandler.updateGroceryItem(listId, itemId, updatedItem);
+      setGroceryList({
+        ...groceryList,
+        items: groceryList.items.map(item => item.id === itemId ? updatedItem : item)
+      });
     } catch (error) {
       console.error('Error updating grocery item:', error);
     }
   };
 
+  if (!groceryList) return <div>Loading...</div>;
+
   return (
     <div>
       <div className={styles.checkboxList}>
-        <h1>Grocery list</h1>
-        <div>
-          <TextInpuWithButton buttonText="add" onClick={value => addGroceryItem(value)} placeholder="Add item" />
-        </div>
-        {groceryItems.map((item, index) => (
-          <div key={index} className={styles.checkboxItem}>
+        <h1>Grocery list {listId}</h1>
+        {groceryList.items.map((item) => (
+          <div key={item.id} className={styles.checkboxItem}>
             <input
               type="checkbox"
-              id={`item-${index}`}
+              id={`item-${item.id}`}
               name={item.name}
               checked={item.checked}
-              onChange={() => handleCheckItem(index, !item.checked)}
+              onChange={() => handleCheckItem(item.id, !item.checked)}
             />
-            <label htmlFor={`item-${index}`}>{item.name}</label>
+            <label htmlFor={`item-${item.id}`}>{item.quantity} {item.unit} {item.name}</label>
           </div>
         ))}
       </div>

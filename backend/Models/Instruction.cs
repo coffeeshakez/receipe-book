@@ -9,11 +9,11 @@ namespace backend.Models
 
         [Required]
         [MaxLength(1000)]
-        public string InstructionText { get; set; }
+        public required string InstructionText { get; set; }
 
         public int RecipeId { get; set; }
-        public virtual Recipe Recipe { get; set; }
+        public Recipe Recipe { get; set; }
 
-        public virtual ICollection<Ingredient> Ingredients { get; set; }
+        public List<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
     }
 }

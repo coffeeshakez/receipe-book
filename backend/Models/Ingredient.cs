@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace backend.Models
 {
@@ -9,17 +9,18 @@ namespace backend.Models
 
         [Required]
         [MaxLength(100)]
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
         [Required]
-        public string Quantity { get; set; }
+        public required string Quantity { get; set; }
 
         [MaxLength(50)]
-        public string Measurement { get; set; }
+        public required string Measurement { get; set; }
 
-        [ForeignKey("Recipe")]
         public int RecipeId { get; set; }
+        public Recipe Recipe { get; set; }
 
-        public virtual Recipe Recipe { get; set; }
+        [JsonIgnore]
+        public List<Instruction> Instructions { get; set; } = new List<Instruction>();
     }
 }

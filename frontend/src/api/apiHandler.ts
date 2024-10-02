@@ -27,6 +27,12 @@ export interface GroceryItem {
   checked: boolean;
 }
 
+export interface GroceryList {
+  id: number;
+  createdAt: string;
+  items: GroceryItem[];
+}
+
 export const apiHandler = {
   async getRecipes(): Promise<Recipe[]> {
     const response = await fetch(`${API_BASE_URL}/recipes`);
@@ -44,8 +50,8 @@ export const apiHandler = {
     return response.json();
   },
 
-  async getGroceryList(): Promise<GroceryItem[]> {
-    const response = await fetch(`${API_BASE_URL}/grocerylist/grocery-items`);
+  async getGroceryList(recipeId: number): Promise<GroceryItem[]> {
+    const response = await fetch(`${API_BASE_URL}/grocerylist/${recipeId}`);
     if (!response.ok) {
       throw new Error('Failed to fetch grocery list');
     }
@@ -53,7 +59,7 @@ export const apiHandler = {
   },
 
   async addGroceryItem(item: GroceryItem): Promise<GroceryItem> {
-    const response = await fetch(`${API_BASE_URL}/grocerylist/grocery-items`, {
+    const response = await fetch(`${API_BASE_URL}/grocerylist`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -68,6 +74,37 @@ export const apiHandler = {
 
   async updateGroceryItem(id: number, item: GroceryItem): Promise<void> {
     const response = await fetch(`${API_BASE_URL}/grocerylist/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(item),
+    });
+    if (!response.ok) {
+      throw new Error('Failed to update grocery item');
+    }
+  },
+
+  async createGroceryList(recipeId: number): Promise<GroceryList> {
+    const response = await fetch(`${API_BASE_URL}/grocerylist/create/${recipeId}`, {
+      method: 'POST',
+    });
+    if (!response.ok) {
+      throw new Error('Failed to create grocery list');
+    }
+    return response.json();
+  },
+
+  async getGroceryList(id: number): Promise<GroceryList> {
+    const response = await fetch(`${API_BASE_URL}/grocerylist/${id}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch grocery list');
+    }
+    return response.json();
+  },
+
+  async updateGroceryItem(listId: number, itemId: number, item: GroceryItem): Promise<void> {
+    const response = await fetch(`${API_BASE_URL}/grocerylist/${listId}/item/${itemId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
