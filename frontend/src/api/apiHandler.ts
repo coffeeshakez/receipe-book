@@ -21,8 +21,9 @@ export interface Instruction {
 }
 
 export interface GroceryItem {
+  id: number;
   name: string;
-  quantity: number;
+  quantity: string;
   unit: string;
   checked: boolean;
 }
@@ -103,7 +104,7 @@ export const apiHandler = {
     return response.json();
   },
 
-  async updateGroceryItem(listId: number, itemId: number, item: GroceryItem): Promise<GroceryItem> {
+  async updateGroceryItem(listId: number, itemId: number, item: Omit<GroceryItem, 'id'>): Promise<GroceryItem> {
     const response = await fetch(`${API_BASE_URL}/grocerylist/${listId}/item/${itemId}`, {
       method: 'PUT',
       headers: {

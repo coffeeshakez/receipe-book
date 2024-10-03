@@ -110,10 +110,13 @@ namespace backend.Controllers
                 return NotFound();
             }
 
-            groceryItem.Checked = itemDTO.Checked;
+            groceryItem.Name = itemDTO.Name;
             groceryItem.Quantity = itemDTO.Quantity;
             groceryItem.Unit = itemDTO.Unit;
-            groceryItem.Name = itemDTO.Name;
+            groceryItem.Checked = itemDTO.Checked;
+
+            // We don't need to update the GroceryList property here
+            // as it's already associated with the correct GroceryList
 
             _context.SaveChanges();
 

@@ -8,6 +8,7 @@ import { useParams } from 'next/navigation';
 export default function GroceryListPage() {
   const [groceryList, setGroceryList] = useState<GroceryList | null>(null);
   const [newItemName, setNewItemName] = useState('');
+  const [error, setError] = useState<string | null>(null);
   const params = useParams();
   const listId = parseInt(params.id as string);
 
@@ -18,6 +19,7 @@ export default function GroceryListPage() {
         setGroceryList(list);
       } catch (error) {
         console.error('Error fetching grocery list:', error);
+        setError('Failed to fetch grocery list. Please try again.');
       }
     };
 
@@ -30,16 +32,25 @@ export default function GroceryListPage() {
     const updatedItem = groceryList.items.find(item => item.id === itemId);
     if (!updatedItem) return;
 
-    updatedItem.checked = checked;
+    const itemToUpdate = {
+      name: updatedItem.name,
+      quantity: updatedItem.quantity,
+      unit: updatedItem.unit,
+      checked: checked
+    };
 
     try {
-      const updatedItemFromServer = await apiHandler.updateGroceryItem(listId, itemId, updatedItem);
-      setGroceryList({
-        ...groceryList,
-        items: groceryList.items.map(item => item.id === itemId ? updatedItemFromServer : item)
+      const updatedItemFromServer = await apiHandler.updateGroceryItem(listId, itemId, itemToUpdate);
+      setGroceryList(prevList => {
+        if (!prevList) return null;
+        return {
+          ...prevList,
+          items: prevList.items.map(item => item.id === itemId ? updatedItemFromServer : item)
+        };
       });
     } catch (error) {
       console.error('Error updating grocery item:', error);
+      setError('Failed to update item. Please try again.');
     }
   };
 
@@ -49,17 +60,21 @@ export default function GroceryListPage() {
     try {
       const newItem = await apiHandler.addGroceryItem(listId, {
         name: newItemName,
-        quantity: '1',
-        unit: 'piece',
+        quantity: '',
+        unit: '',
         checked: false
       });
-      setGroceryList({
-        ...groceryList,
-        items: [...groceryList.items, newItem]
+      setGroceryList(prevList => {
+        if (!prevList) return null;
+        return {
+          ...prevList,
+          items: [...prevList.items, newItem]
+        };
       });
       setNewItemName('');
     } catch (error) {
       console.error('Error adding grocery item:', error);
+      setError('Failed to add item. Please try again.');
     }
   };
 
@@ -68,16 +83,27 @@ export default function GroceryListPage() {
 
     try {
       await apiHandler.removeGroceryItem(listId, itemId);
-      setGroceryList({
-        ...groceryList,
-        items: groceryList.items.filter(item => item.id !== itemId)
+      setGroceryList(prevList => {
+        if (!prevList) return null;
+        return {
+          ...prevList,
+          items: prevList.items.filter(item => item.id !== itemId)
+        };
       });
     } catch (error) {
       console.error('Error removing grocery item:', error);
+      setError('Failed to remove item. Please try again.');
     }
   };
 
+  if (error) {
+    return <div className={styles.error}>{error}</div>;
+  }
+
   if (!groceryList) return <div>Loading...</div>;
+
+  const uncheckedItems = groceryList.items.filter(item => !item.checked);
+  const checkedItems = groceryList.items.filter(item => item.checked);
 
   return (
     <div className={styles.container}>
@@ -90,7 +116,7 @@ export default function GroceryListPage() {
         onChange={(e) => setNewItemName(e.target.value)}
       />
       <div className={styles.itemList}>
-        {groceryList.items.map((item) => (
+        {uncheckedItems.map((item) => (
           <div key={item.id} className={styles.item}>
             <input
               type="checkbox"
@@ -108,6 +134,30 @@ export default function GroceryListPage() {
           </div>
         ))}
       </div>
+      {checkedItems.length > 0 && (
+        <>
+          <hr className={styles.divider} />
+          <div className={`${styles.itemList} ${styles.checkedItems}`}>
+            {checkedItems.map((item) => (
+              <div key={item.id} className={styles.item}>
+                <input
+                  type="checkbox"
+                  id={`item-${item.id}`}
+                  checked={item.checked}
+                  onChange={() => handleCheckItem(item.id, !item.checked)}
+                  className={styles.checkbox}
+                />
+                <label htmlFor={`item-${item.id}`} className={`${styles.itemLabel} ${styles.checkedLabel}`}>
+                  {item.quantity} {item.unit} {item.name}
+                </label>
+                <button onClick={() => handleRemoveItem(item.id)} className={styles.removeButton}>
+                  Remove
+                </button>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }

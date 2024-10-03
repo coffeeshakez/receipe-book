@@ -57,6 +57,11 @@
   font-size: 16px;
 }
 
+.checkedLabel {
+  text-decoration: line-through;
+  color: #888;
+}
+
 .removeButton {
   background-color: #ff4d4d;
   color: white;
@@ -68,4 +73,19 @@
 
 .removeButton:hover {
   background-color: #ff3333;
+}
+
+.divider {
+  margin: 20px 0;
+  border: none;
+  border-top: 1px solid #ccc;
+}
+
+.checkedItems {
+  opacity: 0.7;
+}
+
+.error {
+  color: #ff4d4d;
+  margin-top: 20px;
 }
