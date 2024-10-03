@@ -1,0 +1,128 @@
+{
+  "name": "Vegetable Stir Fry",
+  "img": "https://source.unsplash.com/random/800x600/?vegetable-stir-fry",
+  "description": "Sunn og rask wokrett med grønnsaker",
+  "ingredients": [
+    {
+      "name": "blandede grønnsaker",
+      "quantity": "500",
+      "measurement": "gram"
+    },
+    {
+      "name": "soyasaus",
+      "quantity": "2",
+      "measurement": "ss"
+    },
+    {
+      "name": "sesamolje",
+      "quantity": "1",
+      "measurement": "ss"
+    },
+    {
+      "name": "hvitløk",
+      "quantity": "2",
+      "measurement": "fedd"
+    },
+    {
+      "name": "ingefær",
+      "quantity": "1",
+      "measurement": "ss"
+    },
+    {
+      "name": "vegetabilsk olje",
+      "quantity": "2",
+      "measurement": "ss"
+    },
+    {
+      "name": "salt",
+      "quantity": "1/2",
+      "measurement": "ts"
+    },
+    {
+      "name": "pepper",
+      "quantity": "1/4",
+      "measurement": "ts"
+    }
+  ],
+  "instructions": [
+    {
+      "instructionText": "Vask og kutt grønnsakene i biter.",
+      "ingredients": [
+        {
+          "name": "blandede grønnsaker",
+          "quantity": "500",
+          "measurement": "gram"
+        }
+      ]
+    },
+    {
+      "instructionText": "Bland soyasaus og sesamolje i en liten bolle.",
+      "ingredients": [
+        {
+          "name": "soyasaus",
+          "quantity": "2",
+          "measurement": "ss"
+        },
+        {
+          "name": "sesamolje",
+          "quantity": "1",
+          "measurement": "ss"
+        }
+      ]
+    },
+    {
+      "instructionText": "Varm olje i en wok eller stor stekepanne over høy varme.",
+      "ingredients": [
+        {
+          "name": "vegetabilsk olje",
+          "quantity": "2",
+          "measurement": "ss"
+        }
+      ]
+    },
+    {
+      "instructionText": "Tilsett hvitløk og ingefær, og stek i 30 sekunder til det dufter.",
+      "ingredients": [
+        {
+          "name": "hvitløk",
+          "quantity": "2",
+          "measurement": "fedd"
+        },
+        {
+          "name": "ingefær",
+          "quantity": "1",
+          "measurement": "ss"
+        }
+      ]
+    },
+    {
+      "instructionText": "Tilsett grønnsakene og stek i 3-5 minutter til de er møre, men fortsatt sprø.",
+      "ingredients": [
+        {
+          "name": "blandede grønnsaker",
+          "quantity": "500",
+          "measurement": "gram"
+        }
+      ]
+    },
+    {
+      "instructionText": "Hell over soyasaus-blandingen og rør godt.",
+      "ingredients": []
+    },
+    {
+      "instructionText": "Krydre med salt og pepper, og server umiddelbart.",
+      "ingredients": [
+        {
+          "name": "salt",
+          "quantity": "1/2",
+          "measurement": "ts"
+        },
+        {
+          "name": "pepper",
+          "quantity": "1/4",
+          "measurement": "ts"
+        }
+      ]
+    }
+  ]
+}

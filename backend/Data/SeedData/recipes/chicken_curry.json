@@ -1,0 +1,148 @@
+{
+  "name": "Chicken Curry",
+  "img": "https://source.unsplash.com/random/800x600/?chicken-curry",
+  "description": "Krydret indisk kyllingrett med ris",
+  "ingredients": [
+    {
+      "name": "kyllingfileter",
+      "quantity": "500",
+      "measurement": "gram"
+    },
+    {
+      "name": "løk",
+      "quantity": "1",
+      "measurement": "stor"
+    },
+    {
+      "name": "hvitløk",
+      "quantity": "3",
+      "measurement": "fedd"
+    },
+    {
+      "name": "ingefær",
+      "quantity": "2",
+      "measurement": "cm"
+    },
+    {
+      "name": "garam masala",
+      "quantity": "2",
+      "measurement": "ss"
+    },
+    {
+      "name": "gurkemeie",
+      "quantity": "1",
+      "measurement": "ts"
+    },
+    {
+      "name": "hermetiske tomater",
+      "quantity": "400",
+      "measurement": "gram"
+    },
+    {
+      "name": "kokosmelk",
+      "quantity": "400",
+      "measurement": "ml"
+    },
+    {
+      "name": "salt",
+      "quantity": "1",
+      "measurement": "ts"
+    },
+    {
+      "name": "ris",
+      "quantity": "300",
+      "measurement": "gram"
+    }
+  ],
+  "instructions": [
+    {
+      "instructionText": "Kutt kyllingen i biter og mariner med krydder.",
+      "ingredients": [
+        {
+          "name": "kyllingfileter",
+          "quantity": "500",
+          "measurement": "gram"
+        },
+        {
+          "name": "garam masala",
+          "quantity": "1",
+          "measurement": "ss"
+        }
+      ]
+    },
+    {
+      "instructionText": "Finhakk løk, hvitløk og ingefær. Stek i olje til det er mykt.",
+      "ingredients": [
+        {
+          "name": "løk",
+          "quantity": "1",
+          "measurement": "stor"
+        },
+        {
+          "name": "hvitløk",
+          "quantity": "3",
+          "measurement": "fedd"
+        },
+        {
+          "name": "ingefær",
+          "quantity": "2",
+          "measurement": "cm"
+        }
+      ]
+    },
+    {
+      "instructionText": "Tilsett kyllingen og stek til den er gyllen.",
+      "ingredients": [
+        {
+          "name": "kyllingfileter",
+          "quantity": "500",
+          "measurement": "gram"
+        }
+      ]
+    },
+    {
+      "instructionText": "Tilsett resten av krydderet, hermetiske tomater og kokosmelk. La det småkoke i 20 minutter.",
+      "ingredients": [
+        {
+          "name": "garam masala",
+          "quantity": "1",
+          "measurement": "ss"
+        },
+        {
+          "name": "gurkemeie",
+          "quantity": "1",
+          "measurement": "ts"
+        },
+        {
+          "name": "hermetiske tomater",
+          "quantity": "400",
+          "measurement": "gram"
+        },
+        {
+          "name": "kokosmelk",
+          "quantity": "400",
+          "measurement": "ml"
+        },
+        {
+          "name": "salt",
+          "quantity": "1",
+          "measurement": "ts"
+        }
+      ]
+    },
+    {
+      "instructionText": "Kok risen etter anvisning på pakken.",
+      "ingredients": [
+        {
+          "name": "ris",
+          "quantity": "300",
+          "measurement": "gram"
+        }
+      ]
+    },
+    {
+      "instructionText": "Server curryen over risen.",
+      "ingredients": []
+    }
+  ]
+}

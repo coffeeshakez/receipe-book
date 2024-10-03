@@ -1,7 +1,7 @@
 'use client';
 import styles from './page.module.scss';
 import { TextInputWithButton } from '@/components/TextInputWithButton/TextInputWithButton';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { apiHandler, GroceryList, GroceryItem } from '@/api/apiHandler';
 import { useParams } from 'next/navigation';
 
@@ -9,6 +9,7 @@ export default function GroceryListPage() {
   const [groceryList, setGroceryList] = useState<GroceryList | null>(null);
   const [newItemName, setNewItemName] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [newItemId, setNewItemId] = useState<number | null>(null);
   const params = useParams();
   const listId = parseInt(params.id as string);
 
@@ -72,6 +73,8 @@ export default function GroceryListPage() {
         };
       });
       setNewItemName('');
+      setNewItemId(newItem.id);
+      setTimeout(() => setNewItemId(null), 800); // Reset after animation duration
     } catch (error) {
       console.error('Error adding grocery item:', error);
       setError('Failed to add item. Please try again.');
@@ -96,6 +99,30 @@ export default function GroceryListPage() {
     }
   };
 
+  const renderGroceryItem = (item: GroceryItem) => (
+    <div key={item.id} className={`${styles.item} ${item.id === newItemId ? styles.newItem : ''}`}>
+      <input
+        type="checkbox"
+        id={`item-${item.id}`}
+        checked={item.checked}
+        onChange={() => handleCheckItem(item.id, !item.checked)}
+        className={styles.checkbox}
+      />
+      <label 
+        htmlFor={`item-${item.id}`} 
+        className={`${styles.itemLabel} ${item.checked ? styles.checkedLabel : ''}`}
+      >
+        {item.quantity && item.unit
+          ? `${item.name} (${item.quantity} ${item.unit})`
+          : item.name
+        }
+      </label>
+      <button onClick={() => handleRemoveItem(item.id)} className={styles.removeButton}>
+        Remove
+      </button>
+    </div>
+  );
+
   if (error) {
     return <div className={styles.error}>{error}</div>;
   }
@@ -107,55 +134,36 @@ export default function GroceryListPage() {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Grocery list {listId}</h1>
-      <TextInputWithButton
-        buttonText="Add Item"
-        placeholder="Enter new item"
-        onClick={handleAddItem}
-        value={newItemName}
-        onChange={(e) => setNewItemName(e.target.value)}
-      />
-      <div className={styles.itemList}>
-        {uncheckedItems.map((item) => (
-          <div key={item.id} className={styles.item}>
-            <input
-              type="checkbox"
-              id={`item-${item.id}`}
-              checked={item.checked}
-              onChange={() => handleCheckItem(item.id, !item.checked)}
-              className={styles.checkbox}
-            />
-            <label htmlFor={`item-${item.id}`} className={styles.itemLabel}>
-              {item.quantity} {item.unit} {item.name}
-            </label>
-            <button onClick={() => handleRemoveItem(item.id)} className={styles.removeButton}>
-              Remove
-            </button>
-          </div>
-        ))}
+      <h1 className={styles.title}>Grocery List</h1>
+      <div className={styles.inputContainer}>
+        <input
+          type="text"
+          className={styles.input}
+          placeholder="Add a new item"
+          value={newItemName}
+          onChange={(e) => setNewItemName(e.target.value)}
+          onKeyPress={(e) => e.key === 'Enter' && handleAddItem()}
+        />
+        <button onClick={handleAddItem} className={styles.addButton}>
+          Add
+        </button>
       </div>
-      {checkedItems.length > 0 && (
+      {error && <div className={styles.error}>{error}</div>}
+      {!groceryList ? (
+        <div>Loading...</div>
+      ) : (
         <>
-          <hr className={styles.divider} />
-          <div className={`${styles.itemList} ${styles.checkedItems}`}>
-            {checkedItems.map((item) => (
-              <div key={item.id} className={styles.item}>
-                <input
-                  type="checkbox"
-                  id={`item-${item.id}`}
-                  checked={item.checked}
-                  onChange={() => handleCheckItem(item.id, !item.checked)}
-                  className={styles.checkbox}
-                />
-                <label htmlFor={`item-${item.id}`} className={`${styles.itemLabel} ${styles.checkedLabel}`}>
-                  {item.quantity} {item.unit} {item.name}
-                </label>
-                <button onClick={() => handleRemoveItem(item.id)} className={styles.removeButton}>
-                  Remove
-                </button>
-              </div>
-            ))}
+          <div className={styles.itemList}>
+            {uncheckedItems.map(renderGroceryItem)}
           </div>
+          {checkedItems.length > 0 && (
+            <>
+              <hr className={styles.divider} />
+              <div className={`${styles.itemList} ${styles.checkedItems}`}>
+                {checkedItems.map(renderGroceryItem)}
+              </div>
+            </>
+          )}
         </>
       )}
     </div>
