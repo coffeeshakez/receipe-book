@@ -1,0 +1,109 @@
+{
+  "name": "Chocolate Mousse",
+  "img": "https://source.unsplash.com/random/800x600/?chocolate-mousse",
+  "description": "Luftig og rik sjokolademousse",
+  "category": "Dessert",
+  "cuisine": "French",
+  "ingredients": [
+    {
+      "name": "mørk sjokolade",
+      "quantity": "200",
+      "measurement": "gram"
+    },
+    {
+      "name": "smør",
+      "quantity": "30",
+      "measurement": "gram"
+    },
+    {
+      "name": "egg",
+      "quantity": "4",
+      "measurement": "stk"
+    },
+    {
+      "name": "sukker",
+      "quantity": "50",
+      "measurement": "gram"
+    },
+    {
+      "name": "fløte",
+      "quantity": "200",
+      "measurement": "ml"
+    },
+    {
+      "name": "vaniljeekstrakt",
+      "quantity": "1",
+      "measurement": "ts"
+    },
+    {
+      "name": "salt",
+      "quantity": "1",
+      "measurement": "klype"
+    }
+  ],
+  "instructions": [
+    {
+      "instructionText": "Smelt sjokolade og smør i vannbad. La det avkjøles litt.",
+      "ingredients": [
+        {
+          "name": "mørk sjokolade",
+          "quantity": "200",
+          "measurement": "gram"
+        },
+        {
+          "name": "smør",
+          "quantity": "30",
+          "measurement": "gram"
+        }
+      ]
+    },
+    {
+      "instructionText": "Skill eggeplommer og eggehviter. Pisk eggehviter til myke topper, tilsett sukker gradvis og pisk til stive topper.",
+      "ingredients": [
+        {
+          "name": "egg",
+          "quantity": "4",
+          "measurement": "stk"
+        },
+        {
+          "name": "sukker",
+          "quantity": "50",
+          "measurement": "gram"
+        }
+      ]
+    },
+    {
+      "instructionText": "Pisk fløte til krem med vaniljeekstrakt.",
+      "ingredients": [
+        {
+          "name": "fløte",
+          "quantity": "200",
+          "measurement": "ml"
+        },
+        {
+          "name": "vaniljeekstrakt",
+          "quantity": "1",
+          "measurement": "ts"
+        }
+      ]
+    },
+    {
+      "instructionText": "Rør eggeplommene inn i den avkjølte sjokoladen. Vend inn pisket krem og en klype salt.",
+      "ingredients": [
+        {
+          "name": "salt",
+          "quantity": "1",
+          "measurement": "klype"
+        }
+      ]
+    },
+    {
+      "instructionText": "Vend forsiktig inn eggehvitene i sjokoladeblandingen til alt er godt blandet.",
+      "ingredients": []
+    },
+    {
+      "instructionText": "Fordel moussen i individuelle glass eller en stor bolle. Kjøl i minst 2 timer før servering.",
+      "ingredients": []
+    }
+  ]
+}

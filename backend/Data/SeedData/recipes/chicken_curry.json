@@ -2,6 +2,8 @@
   "name": "Chicken Curry",
   "img": "https://source.unsplash.com/random/800x600/?chicken-curry",
   "description": "Krydret indisk kyllingrett med ris",
+  "category": "MainCourse",
+  "cuisine": "Indian",
   "ingredients": [
     {
       "name": "kyllingfileter",

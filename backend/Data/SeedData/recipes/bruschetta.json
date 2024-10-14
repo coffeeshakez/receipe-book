@@ -1,0 +1,110 @@
+{
+  "name": "Bruschetta",
+  "img": "https://source.unsplash.com/random/800x600/?bruschetta",
+  "description": "Klassisk italiensk forrett med ristet brød og tomater",
+  "category": "Starter",
+  "cuisine": "Italian",
+  "ingredients": [
+    {
+      "name": "baguette",
+      "quantity": "1",
+      "measurement": "stk"
+    },
+    {
+      "name": "tomater",
+      "quantity": "4",
+      "measurement": "medium"
+    },
+    {
+      "name": "hvitløk",
+      "quantity": "2",
+      "measurement": "fedd"
+    },
+    {
+      "name": "fersk basilikum",
+      "quantity": "10",
+      "measurement": "blader"
+    },
+    {
+      "name": "olivenolje",
+      "quantity": "3",
+      "measurement": "ss"
+    },
+    {
+      "name": "balsamicoeddik",
+      "quantity": "1",
+      "measurement": "ss"
+    },
+    {
+      "name": "salt",
+      "quantity": "1/2",
+      "measurement": "ts"
+    },
+    {
+      "name": "pepper",
+      "quantity": "1/4",
+      "measurement": "ts"
+    }
+  ],
+  "instructions": [
+    {
+      "instructionText": "Skjær baguetten i skiver og rist dem i ovnen eller på en grill.",
+      "ingredients": [
+        {
+          "name": "baguette",
+          "quantity": "1",
+          "measurement": "stk"
+        }
+      ]
+    },
+    {
+      "instructionText": "Hakk tomater, hvitløk og basilikum fint.",
+      "ingredients": [
+        {
+          "name": "tomater",
+          "quantity": "4",
+          "measurement": "medium"
+        },
+        {
+          "name": "hvitløk",
+          "quantity": "2",
+          "measurement": "fedd"
+        },
+        {
+          "name": "fersk basilikum",
+          "quantity": "10",
+          "measurement": "blader"
+        }
+      ]
+    },
+    {
+      "instructionText": "Bland tomater, hvitløk, basilikum, olivenolje, balsamicoeddik, salt og pepper i en bolle.",
+      "ingredients": [
+        {
+          "name": "olivenolje",
+          "quantity": "3",
+          "measurement": "ss"
+        },
+        {
+          "name": "balsamicoeddik",
+          "quantity": "1",
+          "measurement": "ss"
+        },
+        {
+          "name": "salt",
+          "quantity": "1/2",
+          "measurement": "ts"
+        },
+        {
+          "name": "pepper",
+          "quantity": "1/4",
+          "measurement": "ts"
+        }
+      ]
+    },
+    {
+      "instructionText": "Fordel tomatblandingen på de ristede brødskivene og server umiddelbart.",
+      "ingredients": []
+    }
+  ]
+}

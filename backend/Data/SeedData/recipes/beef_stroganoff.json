@@ -1,0 +1,136 @@
+{
+  "name": "Beef Stroganoff",
+  "img": "https://source.unsplash.com/random/800x600/?beef-stroganoff",
+  "description": "Klassisk russisk rett med biff og soppstuing",
+  "category": "MainCourse",
+  "cuisine": "Russian",
+  "ingredients": [
+    {
+      "name": "biffkjøtt",
+      "quantity": "500",
+      "measurement": "gram"
+    },
+    {
+      "name": "sopp",
+      "quantity": "250",
+      "measurement": "gram"
+    },
+    {
+      "name": "løk",
+      "quantity": "1",
+      "measurement": "medium"
+    },
+    {
+      "name": "fløte",
+      "quantity": "200",
+      "measurement": "ml"
+    },
+    {
+      "name": "sennep",
+      "quantity": "1",
+      "measurement": "ss"
+    },
+    {
+      "name": "smør",
+      "quantity": "2",
+      "measurement": "ss"
+    },
+    {
+      "name": "salt",
+      "quantity": "1",
+      "measurement": "ts"
+    },
+    {
+      "name": "pepper",
+      "quantity": "1/2",
+      "measurement": "ts"
+    },
+    {
+      "name": "egg pasta",
+      "quantity": "400",
+      "measurement": "gram"
+    }
+  ],
+  "instructions": [
+    {
+      "instructionText": "Skjær biffkjøttet i tynne strimler.",
+      "ingredients": [
+        {
+          "name": "biffkjøtt",
+          "quantity": "500",
+          "measurement": "gram"
+        }
+      ]
+    },
+    {
+      "instructionText": "Stek kjøttet i smør i en stor stekepanne til det er brunet. Ta kjøttet ut av pannen.",
+      "ingredients": [
+        {
+          "name": "smør",
+          "quantity": "1",
+          "measurement": "ss"
+        }
+      ]
+    },
+    {
+      "instructionText": "I samme panne, stek sopp og løk til de er myke.",
+      "ingredients": [
+        {
+          "name": "sopp",
+          "quantity": "250",
+          "measurement": "gram"
+        },
+        {
+          "name": "løk",
+          "quantity": "1",
+          "measurement": "medium"
+        },
+        {
+          "name": "smør",
+          "quantity": "1",
+          "measurement": "ss"
+        }
+      ]
+    },
+    {
+      "instructionText": "Tilsett kjøttet tilbake i pannen sammen med fløte og sennep. La det småkoke i 5-10 minutter.",
+      "ingredients": [
+        {
+          "name": "fløte",
+          "quantity": "200",
+          "measurement": "ml"
+        },
+        {
+          "name": "sennep",
+          "quantity": "1",
+          "measurement": "ss"
+        }
+      ]
+    },
+    {
+      "instructionText": "Smak til med salt og pepper.",
+      "ingredients": [
+        {
+          "name": "salt",
+          "quantity": "1",
+          "measurement": "ts"
+        },
+        {
+          "name": "pepper",
+          "quantity": "1/2",
+          "measurement": "ts"
+        }
+      ]
+    },
+    {
+      "instructionText": "Kok egg pastaen etter anvisningen på pakken og server stroganoff over pastaen.",
+      "ingredients": [
+        {
+          "name": "egg pasta",
+          "quantity": "400",
+          "measurement": "gram"
+        }
+      ]
+    }
+  ]
+}

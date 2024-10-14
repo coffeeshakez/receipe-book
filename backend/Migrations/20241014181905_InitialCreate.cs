@@ -32,7 +32,9 @@ namespace backend.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: false),
-                    Img = table.Column<string>(type: "TEXT", nullable: false)
+                    Img = table.Column<string>(type: "TEXT", nullable: false),
+                    Category = table.Column<string>(type: "TEXT", nullable: false),
+                    Cuisine = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {

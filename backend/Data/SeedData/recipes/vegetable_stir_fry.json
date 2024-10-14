@@ -2,6 +2,8 @@
   "name": "Vegetable Stir Fry",
   "img": "https://source.unsplash.com/random/800x600/?vegetable-stir-fry",
   "description": "Sunn og rask wokrett med grønnsaker",
+  "category": "MainCourse",
+  "cuisine": "Chinese",
   "ingredients": [
     {
       "name": "blandede grønnsaker",

@@ -7,6 +7,5 @@ namespace backend.DTOs
         public string Quantity { get; set; }
         public string Unit { get; set; }
         public bool Checked { get; set; }
-        // Remove the GroceryList property if it exists
     }
 }

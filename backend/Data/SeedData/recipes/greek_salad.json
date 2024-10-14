@@ -1,0 +1,140 @@
+{
+  "name": "Greek Salad",
+  "img": "https://source.unsplash.com/random/800x600/?greek-salad",
+  "description": "Frisk og smakfull gresk salat med feta og oliven",
+  "category": "Starter",
+  "cuisine": "Greek",
+  "ingredients": [
+    {
+      "name": "tomater",
+      "quantity": "4",
+      "measurement": "medium"
+    },
+    {
+      "name": "agurk",
+      "quantity": "1",
+      "measurement": "medium"
+    },
+    {
+      "name": "rød løk",
+      "quantity": "1",
+      "measurement": "medium"
+    },
+    {
+      "name": "grønn paprika",
+      "quantity": "1",
+      "measurement": "medium"
+    },
+    {
+      "name": "fetaost",
+      "quantity": "200",
+      "measurement": "gram"
+    },
+    {
+      "name": "kalamataoliven",
+      "quantity": "100",
+      "measurement": "gram"
+    },
+    {
+      "name": "ekstra jomfru olivenolje",
+      "quantity": "4",
+      "measurement": "ss"
+    },
+    {
+      "name": "rødvinseddik",
+      "quantity": "2",
+      "measurement": "ss"
+    },
+    {
+      "name": "oregano",
+      "quantity": "1",
+      "measurement": "ts"
+    },
+    {
+      "name": "salt",
+      "quantity": "1/2",
+      "measurement": "ts"
+    },
+    {
+      "name": "svart pepper",
+      "quantity": "1/4",
+      "measurement": "ts"
+    }
+  ],
+  "instructions": [
+    {
+      "instructionText": "Skjær tomater og agurk i grove biter. Skjær løk og paprika i tynne skiver.",
+      "ingredients": [
+        {
+          "name": "tomater",
+          "quantity": "4",
+          "measurement": "medium"
+        },
+        {
+          "name": "agurk",
+          "quantity": "1",
+          "measurement": "medium"
+        },
+        {
+          "name": "rød løk",
+          "quantity": "1",
+          "measurement": "medium"
+        },
+        {
+          "name": "grønn paprika",
+          "quantity": "1",
+          "measurement": "medium"
+        }
+      ]
+    },
+    {
+      "instructionText": "Kombiner grønnsakene i en stor bolle. Tilsett fetaost i store biter og oliven.",
+      "ingredients": [
+        {
+          "name": "fetaost",
+          "quantity": "200",
+          "measurement": "gram"
+        },
+        {
+          "name": "kalamataoliven",
+          "quantity": "100",
+          "measurement": "gram"
+        }
+      ]
+    },
+    {
+      "instructionText": "I en liten bolle, pisk sammen olivenolje, rødvinseddik, oregano, salt og pepper.",
+      "ingredients": [
+        {
+          "name": "ekstra jomfru olivenolje",
+          "quantity": "4",
+          "measurement": "ss"
+        },
+        {
+          "name": "rødvinseddik",
+          "quantity": "2",
+          "measurement": "ss"
+        },
+        {
+          "name": "oregano",
+          "quantity": "1",
+          "measurement": "ts"
+        },
+        {
+          "name": "salt",
+          "quantity": "1/2",
+          "measurement": "ts"
+        },
+        {
+          "name": "svart pepper",
+          "quantity": "1/4",
+          "measurement": "ts"
+        }
+      ]
+    },
+    {
+      "instructionText": "Hell dressingen over salaten og bland forsiktig. Server umiddelbart.",
+      "ingredients": []
+    }
+  ]
+}

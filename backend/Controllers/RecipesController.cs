@@ -38,6 +38,8 @@ namespace backend.Controllers
                 Name = r.Name,
                 Img = r.Img,
                 Description = r.Description,
+                Category = r.Category,
+                Cuisine = r.Cuisine,
                 Ingredients = r.Ingredients.Select(i => new IngredientDTO
                 {
                     Name = i.Name,
@@ -82,6 +84,8 @@ namespace backend.Controllers
                 Name = recipe.Name,
                 Img = recipe.Img,
                 Description = recipe.Description,
+                Category = recipe.Category,
+                Cuisine = recipe.Cuisine,
                 Ingredients = recipe.Ingredients.Select(i => new IngredientDTO
                 {
                     Name = i.Name,
@@ -103,7 +107,5 @@ namespace backend.Controllers
             _logger.LogInformation($"Successfully fetched recipe with id: {id}");
             return Ok(recipeDto);
         }
-
-        // Add more CRUD operations as needed
     }
 }

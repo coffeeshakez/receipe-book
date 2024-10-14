@@ -1,0 +1,120 @@
+{
+  "name": "Tiramisu",
+  "img": "https://source.unsplash.com/random/800x600/?tiramisu",
+  "description": "Klassisk italiensk dessert med kaffe og mascarpone",
+  "category": "Dessert",
+  "cuisine": "Italian",
+  "ingredients": [
+    {
+      "name": "mascarpone",
+      "quantity": "500",
+      "measurement": "gram"
+    },
+    {
+      "name": "eggeplommer",
+      "quantity": "4",
+      "measurement": "stk"
+    },
+    {
+      "name": "sukker",
+      "quantity": "100",
+      "measurement": "gram"
+    },
+    {
+      "name": "ladyfingers",
+      "quantity": "200",
+      "measurement": "gram"
+    },
+    {
+      "name": "sterk kaffe",
+      "quantity": "250",
+      "measurement": "ml"
+    },
+    {
+      "name": "marsalavin",
+      "quantity": "60",
+      "measurement": "ml"
+    },
+    {
+      "name": "kakaopulver",
+      "quantity": "2",
+      "measurement": "ss"
+    }
+  ],
+  "instructions": [
+    {
+      "instructionText": "Pisk eggeplommer og sukker til en lys og luftig blanding.",
+      "ingredients": [
+        {
+          "name": "eggeplommer",
+          "quantity": "4",
+          "measurement": "stk"
+        },
+        {
+          "name": "sukker",
+          "quantity": "100",
+          "measurement": "gram"
+        }
+      ]
+    },
+    {
+      "instructionText": "Rør inn mascarpone til en jevn krem.",
+      "ingredients": [
+        {
+          "name": "mascarpone",
+          "quantity": "500",
+          "measurement": "gram"
+        }
+      ]
+    },
+    {
+      "instructionText": "Bland kaffe og marsalavin i en grunn skål.",
+      "ingredients": [
+        {
+          "name": "sterk kaffe",
+          "quantity": "250",
+          "measurement": "ml"
+        },
+        {
+          "name": "marsalavin",
+          "quantity": "60",
+          "measurement": "ml"
+        }
+      ]
+    },
+    {
+      "instructionText": "Dypp ladyfingers raskt i kaffeblandingen og legg et lag i bunnen av en form.",
+      "ingredients": [
+        {
+          "name": "ladyfingers",
+          "quantity": "100",
+          "measurement": "gram"
+        }
+      ]
+    },
+    {
+      "instructionText": "Spre et lag med mascarponekrem over kjeksene.",
+      "ingredients": []
+    },
+    {
+      "instructionText": "Gjenta lagene og avslutt med et lag mascarponekrem.",
+      "ingredients": [
+        {
+          "name": "ladyfingers",
+          "quantity": "100",
+          "measurement": "gram"
+        }
+      ]
+    },
+    {
+      "instructionText": "Dryss kakaopulver over toppen og kjøl i minst 4 timer før servering.",
+      "ingredients": [
+        {
+          "name": "kakaopulver",
+          "quantity": "2",
+          "measurement": "ss"
+        }
+      ]
+    }
+  ]
+}

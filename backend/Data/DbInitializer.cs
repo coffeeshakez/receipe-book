@@ -4,11 +4,10 @@ using System.Collections.Generic;
 using backend.Models;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using backend.Data.SeedData;
-using Microsoft.EntityFrameworkCore; // Add this line
-using Microsoft.Extensions.Logging; // Add this line
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.IO;
-using backend.DTOs; // Add this line
+using backend.DTOs;
 
 namespace backend.Data
 {
@@ -18,10 +17,15 @@ namespace backend.Data
         {
             context.Database.Migrate();
 
-            if (context.Recipes.Any())
-            {
-                return;   // DB has been seeded
-            }
+            // Remove or comment out this check to always seed the data
+            // if (context.Recipes.Any())
+            // {
+            //     return;   // DB has been seeded
+            // }
+
+            // Clear existing data
+            context.Recipes.RemoveRange(context.Recipes);
+            context.SaveChanges();
 
             var options = new JsonSerializerOptions
             {
@@ -29,23 +33,28 @@ namespace backend.Data
                 Converters = { new QuantityConverter() }
             };
 
-            var json = File.ReadAllText("Data/SeedData/recipes.json");
-            var recipeDto = JsonSerializer.Deserialize<List<RecipeDto>>(json, options);
+            string recipeFolder = Path.Combine("Data", "SeedData", "recipes");
+            string[] recipeFiles = Directory.GetFiles(recipeFolder, "*.json");
 
-            if (recipeDto != null)
+            foreach (string recipeFile in recipeFiles)
             {
-                foreach (var recipeDtoItem in recipeDto)
+                string json = File.ReadAllText(recipeFile);
+                var recipeDto = JsonSerializer.Deserialize<RecipeDto>(json, options);
+
+                if (recipeDto != null)
                 {
                     var recipe = new Recipe
                     {
-                        Name = recipeDtoItem.Name,
-                        Description = recipeDtoItem.Description,
-                        Img = recipeDtoItem.Img,
+                        Name = recipeDto.Name,
+                        Description = recipeDto.Description,
+                        Img = recipeDto.Img,
+                        Category = recipeDto.Category,
+                        Cuisine = recipeDto.Cuisine,
                         Ingredients = new List<Ingredient>(),
                         Instructions = new List<Instruction>()
                     };
 
-                    foreach (var ingredientDto in recipeDtoItem.Ingredients)
+                    foreach (var ingredientDto in recipeDto.Ingredients)
                     {
                         var ingredient = new Ingredient
                         {
@@ -57,7 +66,7 @@ namespace backend.Data
                         recipe.Ingredients.Add(ingredient);
                     }
 
-                    foreach (var instructionDto in recipeDtoItem.Instructions)
+                    foreach (var instructionDto in recipeDto.Instructions)
                     {
                         var instruction = new Instruction
                         {
@@ -79,17 +88,17 @@ namespace backend.Data
 
                     context.Recipes.Add(recipe);
                 }
+            }
 
-                try
-                {
-                    context.SaveChanges();
-                    logger.LogInformation("Database seeded successfully.");
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, "An error occurred while seeding the database.");
-                    throw;
-                }
+            try
+            {
+                context.SaveChanges();
+                logger.LogInformation("Database seeded successfully.");
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "An error occurred while seeding the database.");
+                throw;
             }
         }
     }

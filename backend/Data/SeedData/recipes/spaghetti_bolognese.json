@@ -2,6 +2,8 @@
   "name": "Spaghetti Bolognese",
   "img": "https://source.unsplash.com/random/800x600/?spaghetti-bolognese",
   "description": "Klassisk italiensk pastarett med kjøttsaus",
+  "category": "MainCourse",
+  "cuisine": "Italian",
   "ingredients": [
     {
       "name": "spaghetti",

@@ -1,0 +1,145 @@
+{
+  "name": "Sushi Rolls",
+  "img": "https://source.unsplash.com/random/800x600/?sushi-rolls",
+  "description": "Hjemmelaget sushi med laks og avokado",
+  "category": "MainCourse",
+  "cuisine": "Japanese",
+  "ingredients": [
+    {
+      "name": "sushiris",
+      "quantity": "300",
+      "measurement": "gram"
+    },
+    {
+      "name": "riseddik",
+      "quantity": "3",
+      "measurement": "ss"
+    },
+    {
+      "name": "sukker",
+      "quantity": "1",
+      "measurement": "ss"
+    },
+    {
+      "name": "salt",
+      "quantity": "1",
+      "measurement": "ts"
+    },
+    {
+      "name": "noriark",
+      "quantity": "4",
+      "measurement": "stk"
+    },
+    {
+      "name": "fersk laks",
+      "quantity": "200",
+      "measurement": "gram"
+    },
+    {
+      "name": "avokado",
+      "quantity": "1",
+      "measurement": "stk"
+    },
+    {
+      "name": "agurk",
+      "quantity": "1",
+      "measurement": "stk"
+    },
+    {
+      "name": "soyasaus",
+      "quantity": "til servering",
+      "measurement": ""
+    },
+    {
+      "name": "wasabi",
+      "quantity": "til servering",
+      "measurement": ""
+    },
+    {
+      "name": "syltet ingefær",
+      "quantity": "til servering",
+      "measurement": ""
+    }
+  ],
+  "instructions": [
+    {
+      "instructionText": "Kok sushiris etter anvisningen på pakken. Bland riseddik, sukker og salt i en liten kjele og varm opp til sukkeret er oppløst. Bland dette med den varme risen.",
+      "ingredients": [
+        {
+          "name": "sushiris",
+          "quantity": "300",
+          "measurement": "gram"
+        },
+        {
+          "name": "riseddik",
+          "quantity": "3",
+          "measurement": "ss"
+        },
+        {
+          "name": "sukker",
+          "quantity": "1",
+          "measurement": "ss"
+        },
+        {
+          "name": "salt",
+          "quantity": "1",
+          "measurement": "ts"
+        }
+      ]
+    },
+    {
+      "instructionText": "Skjær laks, avokado og agurk i tynne strimler.",
+      "ingredients": [
+        {
+          "name": "fersk laks",
+          "quantity": "200",
+          "measurement": "gram"
+        },
+        {
+          "name": "avokado",
+          "quantity": "1",
+          "measurement": "stk"
+        },
+        {
+          "name": "agurk",
+          "quantity": "1",
+          "measurement": "stk"
+        }
+      ]
+    },
+    {
+      "instructionText": "Legg et noriark på en bambusrullematte. Spre et tynt lag ris over nori, la en kant være fri. Legg laks, avokado og agurk på midten av risen.",
+      "ingredients": [
+        {
+          "name": "noriark",
+          "quantity": "4",
+          "measurement": "stk"
+        }
+      ]
+    },
+    {
+      "instructionText": "Rull sushien tett ved hjelp av bambusmatten. Skjær rullen i 6-8 biter med en skarp kniv.",
+      "ingredients": []
+    },
+    {
+      "instructionText": "Gjenta prosessen med resten av ingrediensene. Server med soyasaus, wasabi og syltet ingefær.",
+      "ingredients": [
+        {
+          "name": "soyasaus",
+          "quantity": "til servering",
+          "measurement": ""
+        },
+        {
+          "name": "wasabi",
+          "quantity": "til servering",
+          "measurement": ""
+        },
+        {
+          "name": "syltet ingefær",
+          "quantity": "til servering",
+          "measurement": ""
+        }
+      ]
+    }
+  ]
+}
