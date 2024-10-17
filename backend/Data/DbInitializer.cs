@@ -20,6 +20,7 @@ namespace backend.Data
             // Clear existing data
             context.Recipes.RemoveRange(context.Recipes);
             context.Cuisines.RemoveRange(context.Cuisines);
+            context.Categories.RemoveRange(context.Categories);
             await context.SaveChangesAsync();
 
             var options = new JsonSerializerOptions
@@ -32,6 +33,7 @@ namespace backend.Data
             string[] recipeFiles = Directory.GetFiles(recipeDirectory, "*.json");
 
             var cuisines = new Dictionary<string, Cuisine>();
+            var categories = new Dictionary<string, Category>();
 
             foreach (string recipeFile in recipeFiles)
             {
@@ -50,12 +52,20 @@ namespace backend.Data
                             cuisines[recipeDto.Cuisine] = cuisine;
                         }
 
+                        // Create or get existing Category
+                        if (!categories.ContainsKey(recipeDto.Category))
+                        {
+                            var category = new Category { Name = recipeDto.Category, Description = $"{recipeDto.Category} category" };
+                            context.Categories.Add(category);
+                            categories[recipeDto.Category] = category;
+                        }
+
                         var recipe = new Recipe
                         {
                             Name = recipeDto.Name,
                             Description = recipeDto.Description,
                             Img = recipeDto.Img,
-                            Category = recipeDto.Category,
+                            Category = categories[recipeDto.Category],
                             Cuisine = cuisines[recipeDto.Cuisine],
                             Ingredients = new List<Ingredient>(),
                             Instructions = new List<Instruction>()
@@ -104,7 +114,7 @@ namespace backend.Data
                 }
             }
 
-            logger.LogInformation($"Database seeding completed. {cuisines.Count} cuisines and {context.Recipes.Count()} recipes added.");
+            logger.LogInformation($"Database seeding completed. {cuisines.Count} cuisines, {categories.Count} categories, and {context.Recipes.Count()} recipes added.");
         }
     }
 

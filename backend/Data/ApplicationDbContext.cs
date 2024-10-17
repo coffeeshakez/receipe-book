@@ -17,6 +17,7 @@ namespace backend.Data
         public DbSet<GroceryItem> GroceryItems { get; set; }
         public DbSet<Menu> Menus { get; set; }
         public DbSet<Cuisine> Cuisines { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -41,6 +42,16 @@ namespace backend.Data
                     v => string.Join(',', v),
                     v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList()
                 );
+
+            modelBuilder.Entity<Recipe>()
+                .HasOne(r => r.Category)
+                .WithMany(c => c.Recipes)
+                .HasForeignKey(r => r.CategoryId);
+
+            modelBuilder.Entity<Recipe>()
+                .HasOne(r => r.Cuisine)
+                .WithMany(c => c.Recipes)
+                .HasForeignKey(r => r.CuisineId);
         }
     }
 }

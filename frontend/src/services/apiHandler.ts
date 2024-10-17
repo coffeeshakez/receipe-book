@@ -56,6 +56,16 @@ export interface Cuisine {
   description: string;
 }
 
+export interface CuisineWithRecipes {
+  id: number;
+  name: string;
+  description: string;
+  recipes: Recipe[];
+  totalRecipes: number;
+  currentPage: number;
+  totalPages: number;
+}
+
 export const apiHandler = {
   async getRecipes(): Promise<Recipe[]> {
     const response = await fetch(`${API_BASE_URL}/recipes`);
@@ -209,6 +219,14 @@ export const apiHandler = {
     const response = await fetch(`${API_BASE_URL}/cuisines`);
     if (!response.ok) {
       throw new Error('Failed to fetch cuisines');
+    }
+    return response.json();
+  },
+
+  getCuisineWithRecipes: async (id: number, page: number = 1, pageSize: number = 10, category: string = 'All'): Promise<CuisineWithRecipes> => {
+    const response = await fetch(`${API_BASE_URL}/cuisines/${id}?page=${page}&pageSize=${pageSize}&category=${category}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch cuisine with recipes');
     }
     return response.json();
   },

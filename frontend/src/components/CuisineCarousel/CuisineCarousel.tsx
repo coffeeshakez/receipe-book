@@ -22,9 +22,11 @@ export const CuisineCarousel: React.FC = () => {
   return (
     <div className={styles.cuisineCarousel}>
       {cuisines.map((cuisine) => (
-        <Link href={`/cuisine/${cuisine.id}`} key={cuisine.id} className={styles.cuisineCard}>
-          <h3 className={styles.cuisineName}>{cuisine.name}</h3>
-          <p className={styles.cuisineDescription}>{cuisine.description}</p>
+        <Link href={`/cuisine/${cuisine.id}`} key={cuisine.id}>
+          <div className={styles.cuisineCard}>
+            <h3 className={styles.cuisineName}>{cuisine.name}</h3>
+            <p className={styles.cuisineDescription}>{cuisine.description}</p>
+          </div>
         </Link>
       ))}
     </div>

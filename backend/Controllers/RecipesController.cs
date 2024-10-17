@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using System.Text.Json;
 
 namespace backend.Controllers
 {
@@ -26,11 +27,13 @@ namespace backend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RecipeDto>>> GetRecipes()
         {
+            _logger.LogInformation("GetRecipes method called");
             var recipes = await _context.Recipes
                 .Include(r => r.Ingredients)
                 .Include(r => r.Instructions)
                     .ThenInclude(i => i.Ingredients)
                 .Include(r => r.Cuisine)
+                .Include(r => r.Category)
                 .ToListAsync();
 
             return recipes.Select(r => new RecipeDto
@@ -39,7 +42,7 @@ namespace backend.Controllers
                 Name = r.Name,
                 Img = r.Img,
                 Description = r.Description,
-                Category = r.Category,
+                Category = r.Category.Name,
                 Cuisine = r.Cuisine.Name,
                 Ingredients = r.Ingredients.Select(i => new IngredientDTO
                 {
@@ -63,48 +66,58 @@ namespace backend.Controllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult<RecipeDto>> GetRecipe(int id)
         {
-            _logger.LogInformation($"Fetching recipe with id: {id}");
+            _logger.LogInformation($"GetRecipe method called with id: {id}");
 
-            var recipe = await _context.Recipes
-                .Include(r => r.Ingredients)
-                .Include(r => r.Instructions)
-                    .ThenInclude(i => i.Ingredients)
-                .FirstOrDefaultAsync(r => r.Id == id);
-
-            if (recipe == null)
+            try
             {
-                _logger.LogWarning($"Recipe with id {id} not found");
-                return NotFound($"Recipe with id {id} not found");
-            }
+                var recipe = await _context.Recipes
+                    .Include(r => r.Ingredients)
+                    .Include(r => r.Instructions)
+                        .ThenInclude(i => i.Ingredients)
+                    .Include(r => r.Category)
+                    .Include(r => r.Cuisine)
+                    .AsNoTracking() // Add this line to prevent tracking
+                    .FirstOrDefaultAsync(r => r.Id == id);
 
-            var recipeDto = new RecipeDto
-            {
-                Id = recipe.Id,
-                Name = recipe.Name,
-                Img = recipe.Img,
-                Description = recipe.Description,
-                Category = recipe.Category,
-                Cuisine = recipe.Cuisine.Name,
-                Ingredients = recipe.Ingredients.Select(i => new IngredientDTO
+                if (recipe == null)
                 {
-                    Name = i.Name,
-                    Quantity = i.Quantity,
-                    Measurement = i.Measurement
-                }).ToList(),
-                Instructions = recipe.Instructions.Select(i => new InstructionDTO
+                    _logger.LogWarning($"Recipe with id {id} not found");
+                    return NotFound($"Recipe with id {id} not found");
+                }
+
+                var recipeDto = new RecipeDto
                 {
-                    InstructionText = i.InstructionText,
-                    Ingredients = i.Ingredients.Select(ing => new IngredientDTO
+                    Id = recipe.Id,
+                    Name = recipe.Name ?? "Unknown Name",
+                    Img = recipe.Img ?? "No Image",
+                    Description = recipe.Description ?? "No Description",
+                    Category = recipe.Category?.Name ?? "Unknown Category",
+                    Cuisine = recipe.Cuisine?.Name ?? "Unknown Cuisine",
+                    Ingredients = recipe.Ingredients?.Select(i => new IngredientDTO
                     {
-                        Name = ing.Name,
-                        Quantity = ing.Quantity,
-                        Measurement = ing.Measurement
-                    }).ToList()
-                }).ToList()
-            };
+                        Name = i.Name ?? "Unknown Ingredient",
+                        Quantity = i.Quantity ?? "Unknown Quantity",
+                        Measurement = i.Measurement ?? "Unknown Measurement"
+                    }).ToList() ?? new List<IngredientDTO>(),
+                    Instructions = recipe.Instructions?.Select(i => new InstructionDTO
+                    {
+                        InstructionText = i.InstructionText ?? "No instruction text",
+                        Ingredients = i.Ingredients?.Select(ing => new IngredientDTO
+                        {
+                            Name = ing.Name ?? "Unknown Ingredient",
+                            Quantity = ing.Quantity ?? "Unknown Quantity",
+                            Measurement = ing.Measurement ?? "Unknown Measurement"
+                        }).ToList() ?? new List<IngredientDTO>()
+                    }).ToList() ?? new List<InstructionDTO>()
+                };
 
-            _logger.LogInformation($"Successfully fetched recipe with id: {id}");
-            return Ok(recipeDto);
+                return Ok(recipeDto);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error occurred while fetching recipe with id {id}");
+                return StatusCode(500, $"An error occurred while fetching the recipe: {ex.Message}");
+            }
         }
 
         [HttpGet("menu/{cuisine}")]
@@ -117,6 +130,7 @@ namespace backend.Controllers
                 .Include(r => r.Ingredients)
                 .Include(r => r.Instructions)
                     .ThenInclude(i => i.Ingredients)
+                .Include(r => r.Category)
                 .ToListAsync();
 
             _logger.LogInformation($"Found {recipes.Count} recipes for cuisine: {cuisine}");
@@ -128,9 +142,9 @@ namespace backend.Controllers
             }
 
             // Select multiple starters, main courses, and desserts
-            var starters = recipes.Where(r => r.Category == "Starter").Take(2).ToList();
-            var mainCourses = recipes.Where(r => r.Category == "MainCourse").Take(3).ToList();
-            var desserts = recipes.Where(r => r.Category == "Dessert").Take(2).ToList();
+            var starters = recipes.Where(r => r.Category.Name == "Starter").Take(2).ToList();
+            var mainCourses = recipes.Where(r => r.Category.Name == "MainCourse").Take(3).ToList();
+            var desserts = recipes.Where(r => r.Category.Name == "Dessert").Take(2).ToList();
 
             _logger.LogInformation($"Selected menu items - Starters: {starters.Count}, Main Courses: {mainCourses.Count}, Desserts: {desserts.Count}");
 
@@ -145,7 +159,7 @@ namespace backend.Controllers
                 Name = r.Name,
                 Img = r.Img,
                 Description = r.Description,
-                Category = r.Category,
+                Category = r.Category.Name,
                 Cuisine = r.Cuisine.Name,
                 Ingredients = r.Ingredients.Select(i => new IngredientDTO
                 {

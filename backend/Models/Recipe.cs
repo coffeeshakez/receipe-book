@@ -6,24 +6,14 @@ namespace backend.Models
     public class Recipe
     {
         public int Id { get; set; }
-
-        [Required]
-        public required string Name { get; set; }
-
-        [Required]
-        public required string Description { get; set; }
-
-        [Required]
-        public required string Img { get; set; }
-
-        [Required]
-        public required string Category { get; set; } // MainCourse, Dessert, Starter
-
+        public string Name { get; set; }
+        public string Img { get; set; }
+        public string Description { get; set; }
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
         public int CuisineId { get; set; }
         public Cuisine Cuisine { get; set; }
-
         public List<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
         public List<Instruction> Instructions { get; set; } = new List<Instruction>();
-        public List<Menu> Menus { get; set; } = new List<Menu>();
     }
 }

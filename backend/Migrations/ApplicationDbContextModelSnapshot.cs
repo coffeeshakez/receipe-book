@@ -32,6 +32,25 @@ namespace backend.Migrations
                     b.ToTable("IngredientInstruction", (string)null);
                 });
 
+            modelBuilder.Entity("backend.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("backend.Models.Cuisine", b =>
                 {
                     b.Property<int>("Id")
@@ -157,16 +176,11 @@ namespace backend.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("RecipeId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("RecipeIds")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RecipeId");
 
                     b.ToTable("Menus");
                 });
@@ -177,9 +191,8 @@ namespace backend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("CuisineId")
                         .HasColumnType("INTEGER");
@@ -197,6 +210,8 @@ namespace backend.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("CuisineId");
 
@@ -251,22 +266,28 @@ namespace backend.Migrations
                     b.Navigation("Recipe");
                 });
 
-            modelBuilder.Entity("backend.Models.Menu", b =>
-                {
-                    b.HasOne("backend.Models.Recipe", null)
-                        .WithMany("Menus")
-                        .HasForeignKey("RecipeId");
-                });
-
             modelBuilder.Entity("backend.Models.Recipe", b =>
                 {
+                    b.HasOne("backend.Models.Category", "Category")
+                        .WithMany("Recipes")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("backend.Models.Cuisine", "Cuisine")
                         .WithMany("Recipes")
                         .HasForeignKey("CuisineId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Category");
+
                     b.Navigation("Cuisine");
+                });
+
+            modelBuilder.Entity("backend.Models.Category", b =>
+                {
+                    b.Navigation("Recipes");
                 });
 
             modelBuilder.Entity("backend.Models.Cuisine", b =>
@@ -284,8 +305,6 @@ namespace backend.Migrations
                     b.Navigation("Ingredients");
 
                     b.Navigation("Instructions");
-
-                    b.Navigation("Menus");
                 });
 #pragma warning restore 612, 618
         }
