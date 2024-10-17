@@ -22,7 +22,8 @@ namespace backend.Models
         [Required]
         public required string Cuisine { get; set; } // Italian, Indian, etc.
 
-        public List<Ingredient> Ingredients { get; set; }
-        public List<Instruction> Instructions { get; set; }
+        public List<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
+        public List<Instruction> Instructions { get; set; } = new List<Instruction>();
+        public List<Menu> Menus { get; set; } = new List<Menu>();
     }
 }

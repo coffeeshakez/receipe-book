@@ -128,14 +128,17 @@ namespace backend.Controllers
                 return NotFound($"No recipes found for cuisine: {cuisine}");
             }
 
-            // Select one starter, one main course, and one dessert if available
-            var starter = recipes.FirstOrDefault(r => r.Category == "Starter");
-            var mainCourse = recipes.FirstOrDefault(r => r.Category == "MainCourse");
-            var dessert = recipes.FirstOrDefault(r => r.Category == "Dessert");
+            // Select multiple starters, main courses, and desserts
+            var starters = recipes.Where(r => r.Category == "Starter").Take(2).ToList();
+            var mainCourses = recipes.Where(r => r.Category == "MainCourse").Take(3).ToList();
+            var desserts = recipes.Where(r => r.Category == "Dessert").Take(2).ToList();
 
-            _logger.LogInformation($"Selected menu items - Starter: {starter?.Name ?? "None"}, Main Course: {mainCourse?.Name ?? "None"}, Dessert: {dessert?.Name ?? "None"}");
+            _logger.LogInformation($"Selected menu items - Starters: {starters.Count}, Main Courses: {mainCourses.Count}, Desserts: {desserts.Count}");
 
-            var menu = new List<Recipe> { starter, mainCourse, dessert }.Where(r => r != null).ToList();
+            var menu = new List<Recipe>();
+            menu.AddRange(starters);
+            menu.AddRange(mainCourses);
+            menu.AddRange(desserts);
 
             var menuDtos = menu.Select(r => new RecipeDto
             {

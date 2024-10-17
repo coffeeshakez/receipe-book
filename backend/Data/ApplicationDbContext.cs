@@ -15,6 +15,7 @@ namespace backend.Data
         public DbSet<Instruction> Instructions { get; set; }
         public DbSet<GroceryList> GroceryLists { get; set; }
         public DbSet<GroceryItem> GroceryItems { get; set; }
+        public DbSet<Menu> Menus { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -32,6 +33,11 @@ namespace backend.Data
                 .HasMany(i => i.Ingredients)
                 .WithMany(i => i.Instructions)
                 .UsingEntity(j => j.ToTable("IngredientInstruction"));
+
+            modelBuilder.Entity<Menu>()
+                .HasMany(m => m.Recipes)
+                .WithMany(r => r.Menus)
+                .UsingEntity(j => j.ToTable("MenuRecipe"));
         }
     }
 }

@@ -34,6 +34,21 @@ export interface GroceryList {
   items: GroceryItem[];
 }
 
+export interface Menu {
+  id: number;
+  name: string;
+  recipeIds: number[];
+}
+
+export interface CreateMenuDto {
+  name: string;
+}
+
+export interface UpdateMenuDto {
+  name: string;
+  recipeIds: number[];
+}
+
 export const apiHandler = {
   async getRecipes(): Promise<Recipe[]> {
     const response = await fetch(`${API_BASE_URL}/recipes`);
@@ -110,6 +125,53 @@ export const apiHandler = {
     const response = await fetch(`${API_BASE_URL}/recipes/menu/${cuisine}`);
     if (!response.ok) {
       throw new Error(`Failed to fetch menu for cuisine: ${cuisine}`);
+    }
+    return response.json();
+  },
+
+  async getMenus(): Promise<Menu[]> {
+    const response = await fetch(`${API_BASE_URL}/menus`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch menus');
+    }
+    return response.json();
+  },
+
+  async createMenu(createMenuDto: CreateMenuDto): Promise<Menu> {
+    const response = await fetch(`${API_BASE_URL}/menus`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(createMenuDto),
+    });
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Failed to create menu:', errorText);
+      throw new Error(`Failed to create menu: ${response.status} ${response.statusText}`);
+    }
+    return response.json();
+  },
+
+  async updateMenu(id: number, updateMenuDto: UpdateMenuDto): Promise<void> {
+    const response = await fetch(`${API_BASE_URL}/menus/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updateMenuDto),
+    });
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Failed to update menu:', errorText);
+      throw new Error(`Failed to update menu: ${response.status} ${response.statusText}`);
+    }
+  },
+
+  async getMenu(id: number): Promise<Menu> {
+    const response = await fetch(`${API_BASE_URL}/menus/${id}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch menu');
     }
     return response.json();
   },

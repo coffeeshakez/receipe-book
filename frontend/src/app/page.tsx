@@ -23,9 +23,13 @@ export default function Page() {
     fetchRecipes();
   }, []);
 
+  const handleMenuSelect = (selectedRecipes: Recipe[]) => {
+    setRecipes(selectedRecipes);
+  };
+
   return (
     <div className={styles.pageContainer}>
-      <Link href="/receipe">Receipes</Link>
+      <Link href="/receipe">Recipes</Link>
       <Menu
         menuSections={[
           {
@@ -39,7 +43,7 @@ export default function Page() {
           },
         ]}
       />
-      <CuisineMenu />
+      <CuisineMenu onMenuSelect={handleMenuSelect} />
     </div>
   );
 }

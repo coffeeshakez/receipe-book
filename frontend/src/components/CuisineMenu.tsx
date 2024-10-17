@@ -1,29 +1,37 @@
-import React, { useState } from 'react';
-import { Menu } from '@/components/Menu/Menu';
-import { Recipe } from '@/types/Recipe';
+import React, { useState, useEffect } from 'react';
+import { Recipe, Menu } from '@/types/Recipe';
 import { apiHandler } from '@/services/apiHandler';
 import styles from '@/styles/CuisineMenu.module.css';
 
-const cuisines = ['Italian', 'Indian', 'Chinese', 'Japanese', 'Greek', 'Russian', 'French'];
+interface CuisineMenuProps {
+    onMenuSelect: (recipes: Recipe[]) => void;
+}
 
-export const CuisineMenu: React.FC = () => {
-    const [selectedCuisine, setSelectedCuisine] = useState<string>('');
-    const [menu, setMenu] = useState<Recipe[]>([]);
-    const [error, setError] = useState<string>('');
+export const CuisineMenu: React.FC<CuisineMenuProps> = ({ onMenuSelect }) => {
+    const [menus, setMenus] = useState<Menu[]>([]);
+    const [selectedMenu, setSelectedMenu] = useState<Menu | null>(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleCuisineSelect = async (cuisine: string) => {
-        setSelectedCuisine(cuisine);
+    useEffect(() => {
+        fetchMenus();
+    }, []);
+
+    const fetchMenus = async () => {
+        const fetchedMenus = await apiHandler.getMenus();
+        setMenus(fetchedMenus);
+    };
+
+    const handleMenuSelect = async (menu: Menu) => {
+        setSelectedMenu(menu);
         setIsLoading(true);
-        setError('');
         try {
-            const data = await apiHandler.getMenuByCuisine(cuisine);
-            setMenu(data);
+            const menuDetails = await apiHandler.getMenu(menu.id);
+            const recipes = await Promise.all(menuDetails.recipeIds.map(id => apiHandler.getRecipe(id)));
+            onMenuSelect(recipes);
         } catch (err) {
             console.error('Error fetching menu:', err);
-            setError(`Failed to fetch menu: ${err.message}`);
-            setMenu([]);
+            onMenuSelect([]);
         } finally {
             setIsLoading(false);
         }
@@ -37,46 +45,22 @@ export const CuisineMenu: React.FC = () => {
         <>
             <div className={`${styles.cuisineMenuContainer} ${isMenuOpen ? styles.open : ''}`}>
                 <div className={styles.sideMenu}>
-                    <h2>Cuisines</h2>
+                    <h2>Menus</h2>
                     <ul>
-                        {cuisines.map((cuisine) => (
+                        {menus.map((menu) => (
                             <li
-                                key={cuisine}
-                                onClick={() => handleCuisineSelect(cuisine)}
-                                className={selectedCuisine === cuisine ? styles.selected : ''}
+                                key={menu.id}
+                                onClick={() => handleMenuSelect(menu)}
+                                className={selectedMenu?.id === menu.id ? styles.selected : ''}
                             >
-                                {cuisine}
+                                {menu.name}
                             </li>
                         ))}
                     </ul>
                 </div>
-                <div className={styles.mainContent}>
-                    {isLoading && <p>Loading...</p>}
-                    {error && <p className={styles.error}>{error}</p>}
-                    {!isLoading && menu.length > 0 && (
-                        <div>
-                            <h2>Suggested Menu for {selectedCuisine} Cuisine</h2>
-                            <Menu
-                                menuSections={[
-                                    {
-                                        heading: 'Menu',
-                                        menuItems: menu.map((recipe) => ({
-                                            link: `/receipe/${recipe.id}`,
-                                            name: recipe.name,
-                                            description: recipe.description,
-                                        })),
-                                    },
-                                ]}
-                            />
-                        </div>
-                    )}
-                    {!isLoading && menu.length === 0 && !error && (
-                        <p>No menu items found for this cuisine.</p>
-                    )}
-                </div>
             </div>
             <button className={styles.floatingButton} onClick={toggleMenu}>
-                {isMenuOpen ? 'Close' : 'Cuisines'}
+                {isMenuOpen ? 'Close' : 'Menus'}
             </button>
         </>
     );
