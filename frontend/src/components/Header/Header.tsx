@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import styles from './Header.module.css';  // Changed from .scss to .css
+import styles from './Header.module.scss';  // Changed back to .scss
 import { apiHandler, Menu } from '@/services/apiHandler';
 
 const Header: React.FC = () => {

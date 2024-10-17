@@ -3,13 +3,9 @@
 import { useState, useEffect } from 'react';
 import styles from '../page.module.scss';
 import { apiHandler, Recipe } from '@/services/apiHandler';
-import { Icons } from '@/components/Icons/Icons';
-import { classNames } from '@/util/styles';
 import { Button } from '@/components/Button/Button';
-import { Tag } from '@/components/Tag/Tag';
 import { TextWithIcon } from '@/components/TextWithIcon/TextWithIcon';
 import { Expand } from '@/components/Expand/Expand';
-import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
 import RecipeModal from '@/components/RecipeModal';
 
@@ -18,7 +14,6 @@ export default function Recipe() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
-  const router = useRouter();
   const params = useParams();
   const id = params.id as string;
 
@@ -46,7 +41,7 @@ export default function Recipe() {
   if (!recipe) return <div>No recipe found</div>;
 
   return (
-    <div>
+    <>
       <div>
         <img className={styles.headerImage} src={recipe.img} alt={recipe.name} />
       </div>
@@ -96,6 +91,6 @@ export default function Recipe() {
           onClose={() => setShowModal(false)}
         />
       )}
-    </div>
+    </>
   );
 }

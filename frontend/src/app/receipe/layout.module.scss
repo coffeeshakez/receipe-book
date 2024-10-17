@@ -4,3 +4,17 @@
   width: 100%;
   background-color: white;
 }
+
+.layoutContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: white;
+}
+
+.mainContent {
+  flex: 1;
+  padding-top: 60px; // Adjust this value based on your header height
+  overflow-y: auto;
+  background-color: white;
+}
