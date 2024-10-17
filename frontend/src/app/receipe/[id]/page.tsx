@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import styles from '../page.module.scss';
-import { apiHandler, Recipe } from '@/api/apiHandler';
+import { apiHandler, Recipe } from '@/services/apiHandler';
 import { Icons } from '@/components/Icons/Icons';
 import { classNames } from '@/util/styles';
 import { Button } from '@/components/Button/Button';

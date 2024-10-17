@@ -4,7 +4,7 @@ import Link from 'next/link';
 import styles from './page.module.css';
 import { Menu } from '@/components/Menu/Menu';
 import { CuisineMenu } from '@/components/CuisineMenu';
-import { apiHandler, Recipe } from '@/api/apiHandler';
+import { apiHandler, Recipe } from '@/services/apiHandler';
 import { useEffect, useState } from 'react';
 
 export default function Page() {

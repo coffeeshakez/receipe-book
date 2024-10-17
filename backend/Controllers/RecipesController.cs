@@ -111,6 +111,8 @@ namespace backend.Controllers
         [HttpGet("menu/{cuisine}")]
         public async Task<ActionResult<IEnumerable<RecipeDto>>> GetMenuByCuisine(string cuisine)
         {
+            _logger.LogInformation($"Fetching menu for cuisine: {cuisine}");
+
             var recipes = await _context.Recipes
                 .Where(r => r.Cuisine.ToLower() == cuisine.ToLower())
                 .Include(r => r.Ingredients)
@@ -118,8 +120,11 @@ namespace backend.Controllers
                     .ThenInclude(i => i.Ingredients)
                 .ToListAsync();
 
+            _logger.LogInformation($"Found {recipes.Count} recipes for cuisine: {cuisine}");
+
             if (!recipes.Any())
             {
+                _logger.LogWarning($"No recipes found for cuisine: {cuisine}");
                 return NotFound($"No recipes found for cuisine: {cuisine}");
             }
 
@@ -127,6 +132,8 @@ namespace backend.Controllers
             var starter = recipes.FirstOrDefault(r => r.Category == "Starter");
             var mainCourse = recipes.FirstOrDefault(r => r.Category == "MainCourse");
             var dessert = recipes.FirstOrDefault(r => r.Category == "Dessert");
+
+            _logger.LogInformation($"Selected menu items - Starter: {starter?.Name ?? "None"}, Main Course: {mainCourse?.Name ?? "None"}, Dessert: {dessert?.Name ?? "None"}");
 
             var menu = new List<Recipe> { starter, mainCourse, dessert }.Where(r => r != null).ToList();
 
@@ -155,6 +162,8 @@ namespace backend.Controllers
                     }).ToList()
                 }).ToList()
             }).ToList();
+
+            _logger.LogInformation($"Returning menu with {menuDtos.Count} items for cuisine: {cuisine}");
 
             return Ok(menuDtos);
         }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Menu } from '@/components/Menu/Menu';
 import { Recipe } from '@/types/Recipe';
-import { getMenuByCuisine } from '@/services/api';
+import { apiHandler } from '@/services/apiHandler';
 import styles from '@/styles/CuisineMenu.module.css';
 
 const cuisines = ['Italian', 'Indian', 'Chinese', 'Japanese', 'Greek', 'Russian', 'French'];
@@ -18,7 +18,7 @@ export const CuisineMenu: React.FC = () => {
         setIsLoading(true);
         setError('');
         try {
-            const data = await getMenuByCuisine(cuisine);
+            const data = await apiHandler.getMenuByCuisine(cuisine);
             setMenu(data);
         } catch (err) {
             console.error('Error fetching menu:', err);
