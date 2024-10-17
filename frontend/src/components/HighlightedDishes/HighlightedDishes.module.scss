@@ -1,0 +1,34 @@
+.highlightedDishes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.dishCard {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+}
+
+.dishImage {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.dishName {
+  font-size: 1.2rem;
+  margin: 10px;
+}
+
+.dishDescription {
+  font-size: 0.9rem;
+  margin: 0 10px 10px;
+  color: #666;
+}

@@ -32,12 +32,12 @@
     },
     {
       "name": "salt",
-      "quantity": "to taste",
+      "quantity": "1",
       "measurement": ""
     },
     {
       "name": "black pepper",
-      "quantity": "to taste",
+      "quantity": "1",
       "measurement": ""
     }
   ],
@@ -91,12 +91,12 @@
       "ingredients": [
         {
           "name": "salt",
-          "quantity": "to taste",
+          "quantity": "1",
           "measurement": ""
         },
         {
           "name": "black pepper",
-          "quantity": "to taste",
+          "quantity": "1",
           "measurement": ""
         }
       ]

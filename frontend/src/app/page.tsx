@@ -1,57 +1,67 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import styles from './page.module.css';
-import { Menu } from '@/components/Menu/Menu';
-import { CuisineMenu } from '@/components/CuisineMenu';
-import { apiHandler, Recipe } from '@/services/apiHandler';
-import { useEffect, useState } from 'react';
+import styles from './page.module.scss';
+import { HighlightedDishes } from '@/components/HighlightedDishes/HighlightedDishes';
+import { PopularMenus } from '@/components/PopularMenus/PopularMenus';
+import { SearchBar } from '@/components/SearchBar/SearchBar';
+import { CuisineCarousel } from '@/components/CuisineCarousel/CuisineCarousel';
+import { apiHandler, Recipe, Menu } from '@/services/apiHandler';
 
-export default function Page() {
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
+export default function HomePage() {
+  const [highlightedDishes, setHighlightedDishes] = useState<Recipe[]>([]);
+  const [popularMenus, setPopularMenus] = useState<Menu[]>([]);
 
   useEffect(() => {
-    const fetchRecipes = async () => {
+    const fetchData = async () => {
       try {
-        const fetchedRecipes = await apiHandler.getRecipes();
-        setRecipes(fetchedRecipes);
+        // Fetch highlighted dishes
+        const dishes = await apiHandler.getRecipes();
+        // For now, let's just use the first 4 recipes as highlighted dishes
+        setHighlightedDishes(dishes.slice(0, 4));
+
+        // Fetch popular menus
+        const menus = await apiHandler.getPopularMenus();
+        setPopularMenus(menus);
       } catch (error) {
-        console.error('Error fetching recipes:', error);
+        console.error('Error fetching data:', error);
       }
     };
 
-    fetchRecipes();
+    fetchData();
   }, []);
 
-  const handleMenuSelect = (selectedRecipes: Recipe[]) => {
-    setRecipes(selectedRecipes);
-  };
-
-  // Group recipes by category
-  const recipesByCategory = recipes.reduce((acc, recipe) => {
-    const category = recipe.category || 'Other';
-    if (!acc[category]) {
-      acc[category] = [];
-    }
-    acc[category].push(recipe);
-    return acc;
-  }, {} as Record<string, Recipe[]>);
-
-  // Create menu sections for each category
-  const menuSections = Object.entries(recipesByCategory).map(([category, categoryRecipes]) => ({
-    heading: category,
-    img: './burger.jpg', // You might want to use different images for each category
-    menuItems: categoryRecipes.map((recipe) => ({
-      link: `/receipe/${recipe.id}`,
-      name: recipe.name,
-      description: recipe.description,
-    })),
-  }));
-
   return (
-    <div className={styles.pageContainer}>
-      <Menu menuSections={menuSections} />
-      <CuisineMenu onMenuSelect={handleMenuSelect} />
+    <div className={styles.homePage}>
+      <section className={styles.hero}>
+        <h1>Welcome to Our Recipe Book</h1>
+        <p>Discover, cook, and enjoy delicious meals</p>
+        <SearchBar />
+      </section>
+
+      <section className={styles.highlightedDishes}>
+        <h2>Today's Highlighted Dishes</h2>
+        <HighlightedDishes dishes={highlightedDishes} />
+      </section>
+
+      <section className={styles.popularMenus}>
+        <h2>Popular Menus</h2>
+        <PopularMenus menus={popularMenus} />
+      </section>
+
+      <section className={styles.cuisineExplorer}>
+        <h2>Explore Cuisines</h2>
+        <CuisineCarousel />
+      </section>
+
+      <section className={styles.callToAction}>
+        <h2>Create Your Own Menu</h2>
+        <p>Mix and match your favorite recipes to create a personalized menu.</p>
+        <Link href="/create-menu" className={styles.ctaButton}>
+          Create Menu
+        </Link>
+      </section>
     </div>
   );
 }
