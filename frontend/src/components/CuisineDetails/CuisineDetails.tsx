@@ -41,40 +41,46 @@ export const CuisineDetails: React.FC = () => {
 
   return (
     <div className={styles.cuisineDetails}>
-      <h1>{cuisineData.name}</h1>
-      <p>{cuisineData.description}</p>
-      <div className={styles.categoryFilter}>
-        <button onClick={() => handleCategoryChange('All')} className={category === 'All' ? styles.active : ''}>All</button>
-        <button onClick={() => handleCategoryChange('Starter')} className={category === 'Starter' ? styles.active : ''}>Starters</button>
-        <button onClick={() => handleCategoryChange('MainCourse')} className={category === 'MainCourse' ? styles.active : ''}>Main Courses</button>
-        <button onClick={() => handleCategoryChange('Dessert')} className={category === 'Dessert' ? styles.active : ''}>Desserts</button>
+      <div className={styles.hero}>
+        <h1>{cuisineData.name}</h1>
+        <p>{cuisineData.description}</p>
       </div>
-      <div className={styles.recipeGrid}>
-        {cuisineData.recipes.map((recipe: Recipe) => (
-          <div key={recipe.id} className={styles.recipeCard}>
-            <img src={recipe.img} alt={recipe.name} />
-            <h3>{recipe.name}</h3>
-            <p>{recipe.description}</p>
-            <span>{recipe.category}</span>
-          </div>
-        ))}
-      </div>
-      <div className={styles.pagination}>
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
-        <span>
-          Page {currentPage} of {cuisineData.totalPages}
-        </span>
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === cuisineData.totalPages}
-        >
-          Next
-        </button>
+      <div className={styles.content}>
+        <div className={styles.categoryFilter}>
+          <button onClick={() => handleCategoryChange('All')} className={category === 'All' ? styles.active : ''}>All</button>
+          <button onClick={() => handleCategoryChange('Starter')} className={category === 'Starter' ? styles.active : ''}>Starters</button>
+          <button onClick={() => handleCategoryChange('MainCourse')} className={category === 'MainCourse' ? styles.active : ''}>Main Courses</button>
+          <button onClick={() => handleCategoryChange('Dessert')} className={category === 'Dessert' ? styles.active : ''}>Desserts</button>
+        </div>
+        <div className={styles.recipeGrid}>
+          {cuisineData.recipes.map((recipe: Recipe) => (
+            <div key={recipe.id} className={styles.recipeCard}>
+              <img src={recipe.img} alt={recipe.name} />
+              <div className={styles.recipeInfo}>
+                <h3>{recipe.name}</h3>
+                <p>{recipe.description}</p>
+                <span className={styles.category}>{recipe.category}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className={styles.pagination}>
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+          <span>
+            Page {currentPage} of {cuisineData.totalPages}
+          </span>
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === cuisineData.totalPages}
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );
