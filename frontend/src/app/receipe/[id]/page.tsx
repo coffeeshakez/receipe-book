@@ -11,11 +11,13 @@ import { TextWithIcon } from '@/components/TextWithIcon/TextWithIcon';
 import { Expand } from '@/components/Expand/Expand';
 import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
+import RecipeModal from '@/components/RecipeModal';
 
 export default function Recipe() {
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState(false);
   const router = useRouter();
   const params = useParams();
   const id = params.id as string;
@@ -35,14 +37,8 @@ export default function Recipe() {
     fetchRecipe();
   }, [id]);
 
-  const handleCreateGroceryList = async () => {
-    try {
-      const groceryList = await apiHandler.createGroceryList(parseInt(id));
-      router.push(`/grocery-list/${groceryList.id}`);
-    } catch (error) {
-      console.error('Error creating grocery list:', error);
-      // You might want to show an error message to the user here
-    }
+  const handleCreateGroceryList = () => {
+    setShowModal(true);
   };
 
   if (loading) return <div>Loading...</div>;
@@ -94,6 +90,12 @@ export default function Recipe() {
           </ul>
         </div>
       </div>
+      {showModal && (
+        <RecipeModal
+          recipe={recipe}
+          onClose={() => setShowModal(false)}
+        />
+      )}
     </div>
   );
 }

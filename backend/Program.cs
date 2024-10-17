@@ -8,6 +8,7 @@ using Microsoft.OpenApi.Models;
 using System.IO;
 using System;
 using Microsoft.Extensions.Logging;
+using backend.Services;  // Add this line at the top of the file
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,9 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
+
+// Add this line near the other service registrations
+builder.Services.AddScoped<IGroceryListService, GroceryListService>();
 
 var app = builder.Build();
 

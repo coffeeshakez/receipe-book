@@ -181,4 +181,16 @@ export const apiHandler = {
     }
     return response.json();
   },
+
+  async addRecipeToGroceryList(listId: number, recipeId: number): Promise<GroceryItem[]> {
+    const response = await fetch(`${API_BASE_URL}/grocerylist/${listId}/addrecipe/${recipeId}`, {
+      method: 'POST',
+    });
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Failed to add recipe items to grocery list:', errorText);
+      throw new Error(`Failed to add recipe items to grocery list: ${response.status} ${response.statusText}`);
+    }
+    return response.json();
+  },
 };

@@ -6,8 +6,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using backend.DTOs;  // Add this line at the top of the file
+using backend.DTOs;
 using System.Text.Json;
+using backend.Services;
+using System.Collections.Generic;
 
 namespace backend.Controllers
 {
@@ -17,11 +19,16 @@ namespace backend.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly ILogger<GroceryListController> _logger;
+        private readonly IGroceryListService _groceryListService;
 
-        public GroceryListController(ApplicationDbContext context, ILogger<GroceryListController> logger)
+        public GroceryListController(
+            ApplicationDbContext context, 
+            ILogger<GroceryListController> logger,
+            IGroceryListService groceryListService)
         {
             _context = context;
             _logger = logger;
+            _groceryListService = groceryListService;
         }
 
         // POST: api/grocerylist/create/{recipeId}
@@ -279,6 +286,16 @@ namespace backend.Controllers
                 _logger.LogError(ex, $"Error adding items to grocery list {id}");
                 return StatusCode(500, $"An error occurred while adding items: {ex.Message}");
             }
+        }
+
+        [HttpPost("{listId}/addrecipe/{recipeId}")]
+        public async Task<ActionResult<IEnumerable<GroceryItemDTO>>> AddRecipeToGroceryList(int listId, int recipeId)
+        {
+            var result = await _groceryListService.AddRecipeToGroceryListAsync(listId, recipeId);
+            return result.Match<ActionResult<IEnumerable<GroceryItemDTO>>>(
+                addedItems => Ok(addedItems),
+                error => NotFound(error)
+            );
         }
     }
 }
