@@ -47,12 +47,12 @@
     },
     {
       "name": "salt",
-      "quantity": "smak",
+      "quantity": "1",
       "measurement": ""
     },
     {
       "name": "pepper",
-      "quantity": "smak",
+      "quantity": "1",
       "measurement": ""
     },
     {
@@ -112,12 +112,12 @@
         },
         {
           "name": "salt",
-          "quantity": "smak",
+          "quantity": "1",
           "measurement": ""
         },
         {
           "name": "pepper",
-          "quantity": "smak",
+          "quantity": "1",
           "measurement": ""
         }
       ]
