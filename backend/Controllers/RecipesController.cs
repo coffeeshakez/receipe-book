@@ -107,5 +107,56 @@ namespace backend.Controllers
             _logger.LogInformation($"Successfully fetched recipe with id: {id}");
             return Ok(recipeDto);
         }
+
+        [HttpGet("menu/{cuisine}")]
+        public async Task<ActionResult<IEnumerable<RecipeDto>>> GetMenuByCuisine(string cuisine)
+        {
+            var recipes = await _context.Recipes
+                .Where(r => r.Cuisine.ToLower() == cuisine.ToLower())
+                .Include(r => r.Ingredients)
+                .Include(r => r.Instructions)
+                    .ThenInclude(i => i.Ingredients)
+                .ToListAsync();
+
+            if (!recipes.Any())
+            {
+                return NotFound($"No recipes found for cuisine: {cuisine}");
+            }
+
+            // Select one starter, one main course, and one dessert if available
+            var starter = recipes.FirstOrDefault(r => r.Category == "Starter");
+            var mainCourse = recipes.FirstOrDefault(r => r.Category == "MainCourse");
+            var dessert = recipes.FirstOrDefault(r => r.Category == "Dessert");
+
+            var menu = new List<Recipe> { starter, mainCourse, dessert }.Where(r => r != null).ToList();
+
+            var menuDtos = menu.Select(r => new RecipeDto
+            {
+                Id = r.Id,
+                Name = r.Name,
+                Img = r.Img,
+                Description = r.Description,
+                Category = r.Category,
+                Cuisine = r.Cuisine,
+                Ingredients = r.Ingredients.Select(i => new IngredientDTO
+                {
+                    Name = i.Name,
+                    Quantity = i.Quantity,
+                    Measurement = i.Measurement
+                }).ToList(),
+                Instructions = r.Instructions.Select(i => new InstructionDTO
+                {
+                    InstructionText = i.InstructionText,
+                    Ingredients = i.Ingredients.Select(ing => new IngredientDTO
+                    {
+                        Name = ing.Name,
+                        Quantity = ing.Quantity,
+                        Measurement = ing.Measurement
+                    }).ToList()
+                }).ToList()
+            }).ToList();
+
+            return Ok(menuDtos);
+        }
     }
 }
