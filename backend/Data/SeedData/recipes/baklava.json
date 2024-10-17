@@ -1,0 +1,139 @@
+{
+  "name": "Baklava",
+  "img": "https://source.unsplash.com/random/800x600/?baklava",
+  "description": "Sweet and flaky Middle Eastern pastry with layers of nuts and honey syrup",
+  "category": "Dessert",
+  "cuisine": "Turkish",
+  "ingredients": [
+    {
+      "name": "phyllo dough",
+      "quantity": "1",
+      "measurement": "package"
+    },
+    {
+      "name": "chopped nuts (walnuts, pistachios, or almonds)",
+      "quantity": "500",
+      "measurement": "grams"
+    },
+    {
+      "name": "unsalted butter",
+      "quantity": "250",
+      "measurement": "grams"
+    },
+    {
+      "name": "sugar",
+      "quantity": "200",
+      "measurement": "grams"
+    },
+    {
+      "name": "ground cinnamon",
+      "quantity": "1",
+      "measurement": "teaspoon"
+    },
+    {
+      "name": "honey",
+      "quantity": "250",
+      "measurement": "ml"
+    },
+    {
+      "name": "water",
+      "quantity": "150",
+      "measurement": "ml"
+    },
+    {
+      "name": "lemon juice",
+      "quantity": "1",
+      "measurement": "tablespoon"
+    }
+  ],
+  "instructions": [
+    {
+      "instructionText": "Preheat oven to 175°C (350°F). Butter a 9x13 inch baking dish.",
+      "ingredients": []
+    },
+    {
+      "instructionText": "Chop nuts and toss with cinnamon. Set aside.",
+      "ingredients": [
+        {
+          "name": "chopped nuts (walnuts, pistachios, or almonds)",
+          "quantity": "500",
+          "measurement": "grams"
+        },
+        {
+          "name": "ground cinnamon",
+          "quantity": "1",
+          "measurement": "teaspoon"
+        }
+      ]
+    },
+    {
+      "instructionText": "Unroll phyllo dough. Cut whole stack in half to fit pan. Cover phyllo with a dampened cloth to keep from drying out as you work.",
+      "ingredients": [
+        {
+          "name": "phyllo dough",
+          "quantity": "1",
+          "measurement": "package"
+        }
+      ]
+    },
+    {
+      "instructionText": "Place two sheets of dough in pan, butter thoroughly. Repeat until you have 8 sheets layered.",
+      "ingredients": [
+        {
+          "name": "unsalted butter",
+          "quantity": "250",
+          "measurement": "grams"
+        }
+      ]
+    },
+    {
+      "instructionText": "Sprinkle 2-3 tablespoons of nut mixture on top. Top with two sheets of dough, butter, nuts, layering as you go.",
+      "ingredients": []
+    },
+    {
+      "instructionText": "The top layer should be about 6-8 sheets deep.",
+      "ingredients": []
+    },
+    {
+      "instructionText": "Using a sharp knife cut into diamond or square shapes all the way to the bottom of the pan.",
+      "ingredients": []
+    },
+    {
+      "instructionText": "Bake for about 50 minutes until baklava is golden and crisp.",
+      "ingredients": []
+    },
+    {
+      "instructionText": "Make syrup while baklava is baking. Boil sugar and water until sugar is melted. Add honey and lemon juice. Simmer for about 20 minutes.",
+      "ingredients": [
+        {
+          "name": "sugar",
+          "quantity": "200",
+          "measurement": "grams"
+        },
+        {
+          "name": "water",
+          "quantity": "150",
+          "measurement": "ml"
+        },
+        {
+          "name": "honey",
+          "quantity": "250",
+          "measurement": "ml"
+        },
+        {
+          "name": "lemon juice",
+          "quantity": "1",
+          "measurement": "tablespoon"
+        }
+      ]
+    },
+    {
+      "instructionText": "Remove baklava from oven and immediately spoon syrup over it.",
+      "ingredients": []
+    },
+    {
+      "instructionText": "Let cool. Serve in cupcake papers. This freezes well. Leave it uncovered as it gets soggy if it is wrapped up.",
+      "ingredients": []
+    }
+  ]
+}

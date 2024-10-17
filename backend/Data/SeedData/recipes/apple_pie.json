@@ -1,0 +1,142 @@
+{
+  "name": "Apple Pie",
+  "img": "https://source.unsplash.com/random/800x600/?apple-pie",
+  "description": "Classic American dessert with sweet apple filling in a flaky pastry crust",
+  "category": "Dessert",
+  "cuisine": "American",
+  "ingredients": [
+    {
+      "name": "all-purpose flour",
+      "quantity": "300",
+      "measurement": "grams"
+    },
+    {
+      "name": "unsalted butter",
+      "quantity": "225",
+      "measurement": "grams"
+    },
+    {
+      "name": "ice water",
+      "quantity": "6-8",
+      "measurement": "tablespoons"
+    },
+    {
+      "name": "apples",
+      "quantity": "1",
+      "measurement": "kg"
+    },
+    {
+      "name": "sugar",
+      "quantity": "150",
+      "measurement": "grams"
+    },
+    {
+      "name": "cinnamon",
+      "quantity": "1",
+      "measurement": "teaspoon"
+    },
+    {
+      "name": "nutmeg",
+      "quantity": "1/4",
+      "measurement": "teaspoon"
+    },
+    {
+      "name": "lemon juice",
+      "quantity": "1",
+      "measurement": "tablespoon"
+    },
+    {
+      "name": "cornstarch",
+      "quantity": "2",
+      "measurement": "tablespoons"
+    },
+    {
+      "name": "egg",
+      "quantity": "1",
+      "measurement": "large"
+    }
+  ],
+  "instructions": [
+    {
+      "instructionText": "For the crust, mix flour and cold, cubed butter until crumbly. Add ice water and form into a dough. Chill for 1 hour.",
+      "ingredients": [
+        {
+          "name": "all-purpose flour",
+          "quantity": "300",
+          "measurement": "grams"
+        },
+        {
+          "name": "unsalted butter",
+          "quantity": "225",
+          "measurement": "grams"
+        },
+        {
+          "name": "ice water",
+          "quantity": "6-8",
+          "measurement": "tablespoons"
+        }
+      ]
+    },
+    {
+      "instructionText": "Peel, core, and slice apples. Mix with sugar, cinnamon, nutmeg, lemon juice, and cornstarch.",
+      "ingredients": [
+        {
+          "name": "apples",
+          "quantity": "1",
+          "measurement": "kg"
+        },
+        {
+          "name": "sugar",
+          "quantity": "150",
+          "measurement": "grams"
+        },
+        {
+          "name": "cinnamon",
+          "quantity": "1",
+          "measurement": "teaspoon"
+        },
+        {
+          "name": "nutmeg",
+          "quantity": "1/4",
+          "measurement": "teaspoon"
+        },
+        {
+          "name": "lemon juice",
+          "quantity": "1",
+          "measurement": "tablespoon"
+        },
+        {
+          "name": "cornstarch",
+          "quantity": "2",
+          "measurement": "tablespoons"
+        }
+      ]
+    },
+    {
+      "instructionText": "Roll out half the dough and line a 9-inch pie dish. Fill with apple mixture.",
+      "ingredients": []
+    },
+    {
+      "instructionText": "Roll out remaining dough and cover the pie. Trim and crimp edges. Cut slits in the top crust.",
+      "ingredients": []
+    },
+    {
+      "instructionText": "Beat egg and brush over the top crust.",
+      "ingredients": [
+        {
+          "name": "egg",
+          "quantity": "1",
+          "measurement": "large"
+        }
+      ]
+    },
+    {
+      "instructionText": "Bake at 425°F (220°C) for 45-50 minutes until crust is golden and filling is bubbly.",
+      "ingredients": []
+    },
+    {
+      "instructionText": "Cool before serving.",
+      "ingredients": []
+    }
+  ]
+}

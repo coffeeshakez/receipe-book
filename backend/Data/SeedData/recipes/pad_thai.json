@@ -1,0 +1,155 @@
+{
+  "name": "Pad Thai",
+  "img": "https://source.unsplash.com/random/800x600/?pad-thai",
+  "description": "Classic Thai stir-fried rice noodle dish",
+  "category": "MainCourse",
+  "cuisine": "Thai",
+  "ingredients": [
+    {
+      "name": "rice noodles",
+      "quantity": "200",
+      "measurement": "grams"
+    },
+    {
+      "name": "chicken breast",
+      "quantity": "200",
+      "measurement": "grams"
+    },
+    {
+      "name": "tofu",
+      "quantity": "100",
+      "measurement": "grams"
+    },
+    {
+      "name": "eggs",
+      "quantity": "2",
+      "measurement": "large"
+    },
+    {
+      "name": "bean sprouts",
+      "quantity": "100",
+      "measurement": "grams"
+    },
+    {
+      "name": "green onions",
+      "quantity": "4",
+      "measurement": "stalks"
+    },
+    {
+      "name": "peanuts",
+      "quantity": "50",
+      "measurement": "grams"
+    },
+    {
+      "name": "tamarind paste",
+      "quantity": "2",
+      "measurement": "tablespoons"
+    },
+    {
+      "name": "fish sauce",
+      "quantity": "2",
+      "measurement": "tablespoons"
+    },
+    {
+      "name": "palm sugar",
+      "quantity": "2",
+      "measurement": "tablespoons"
+    },
+    {
+      "name": "vegetable oil",
+      "quantity": "2",
+      "measurement": "tablespoons"
+    }
+  ],
+  "instructions": [
+    {
+      "instructionText": "Soak rice noodles in warm water for 30 minutes, then drain.",
+      "ingredients": [
+        {
+          "name": "rice noodles",
+          "quantity": "200",
+          "measurement": "grams"
+        }
+      ]
+    },
+    {
+      "instructionText": "Mix tamarind paste, fish sauce, and palm sugar to make the sauce.",
+      "ingredients": [
+        {
+          "name": "tamarind paste",
+          "quantity": "2",
+          "measurement": "tablespoons"
+        },
+        {
+          "name": "fish sauce",
+          "quantity": "2",
+          "measurement": "tablespoons"
+        },
+        {
+          "name": "palm sugar",
+          "quantity": "2",
+          "measurement": "tablespoons"
+        }
+      ]
+    },
+    {
+      "instructionText": "Heat oil in a wok. Add chicken and tofu, cook until chicken is nearly done.",
+      "ingredients": [
+        {
+          "name": "vegetable oil",
+          "quantity": "2",
+          "measurement": "tablespoons"
+        },
+        {
+          "name": "chicken breast",
+          "quantity": "200",
+          "measurement": "grams"
+        },
+        {
+          "name": "tofu",
+          "quantity": "100",
+          "measurement": "grams"
+        }
+      ]
+    },
+    {
+      "instructionText": "Push ingredients to the side and scramble eggs in the empty space.",
+      "ingredients": [
+        {
+          "name": "eggs",
+          "quantity": "2",
+          "measurement": "large"
+        }
+      ]
+    },
+    {
+      "instructionText": "Add drained noodles and sauce. Stir-fry until noodles are soft and sauce is absorbed.",
+      "ingredients": []
+    },
+    {
+      "instructionText": "Add bean sprouts and green onions. Stir-fry for another minute.",
+      "ingredients": [
+        {
+          "name": "bean sprouts",
+          "quantity": "100",
+          "measurement": "grams"
+        },
+        {
+          "name": "green onions",
+          "quantity": "4",
+          "measurement": "stalks"
+        }
+      ]
+    },
+    {
+      "instructionText": "Serve hot, garnished with crushed peanuts.",
+      "ingredients": [
+        {
+          "name": "peanuts",
+          "quantity": "50",
+          "measurement": "grams"
+        }
+      ]
+    }
+  ]
+}

@@ -13,19 +13,13 @@ namespace backend.Data
 {
     public static class DbInitializer
     {
-        public static void Initialize(ApplicationDbContext context, ILogger<ApplicationDbContext> logger)
+        public static async Task InitializeAsync(ApplicationDbContext context, ILogger<ApplicationDbContext> logger)
         {
-            context.Database.Migrate();
-
-            // Remove or comment out this check to always seed the data
-            // if (context.Recipes.Any())
-            // {
-            //     return;   // DB has been seeded
-            // }
+            await context.Database.MigrateAsync();
 
             // Clear existing data
             context.Recipes.RemoveRange(context.Recipes);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
 
             var options = new JsonSerializerOptions
             {
@@ -33,73 +27,73 @@ namespace backend.Data
                 Converters = { new QuantityConverter() }
             };
 
-            string recipeFolder = Path.Combine("Data", "SeedData", "recipes");
-            string[] recipeFiles = Directory.GetFiles(recipeFolder, "*.json");
+            string recipeDirectory = Path.Combine("Data", "SeedData", "recipes");
+            string[] recipeFiles = Directory.GetFiles(recipeDirectory, "*.json");
 
             foreach (string recipeFile in recipeFiles)
             {
-                string json = File.ReadAllText(recipeFile);
-                var recipeDto = JsonSerializer.Deserialize<RecipeDto>(json, options);
-
-                if (recipeDto != null)
+                try
                 {
-                    var recipe = new Recipe
-                    {
-                        Name = recipeDto.Name,
-                        Description = recipeDto.Description,
-                        Img = recipeDto.Img,
-                        Category = recipeDto.Category,
-                        Cuisine = recipeDto.Cuisine,
-                        Ingredients = new List<Ingredient>(),
-                        Instructions = new List<Instruction>()
-                    };
+                    string recipeJson = await File.ReadAllTextAsync(recipeFile);
+                    var recipeDto = JsonSerializer.Deserialize<RecipeDto>(recipeJson, options);
 
-                    foreach (var ingredientDto in recipeDto.Ingredients)
+                    if (recipeDto != null)
                     {
-                        var ingredient = new Ingredient
+                        var recipe = new Recipe
                         {
-                            Name = ingredientDto.Name,
-                            Quantity = ingredientDto.Quantity,
-                            Measurement = ingredientDto.Measurement,
-                            Recipe = recipe
+                            Name = recipeDto.Name,
+                            Description = recipeDto.Description,
+                            Img = recipeDto.Img,
+                            Category = recipeDto.Category,
+                            Cuisine = recipeDto.Cuisine,
+                            Ingredients = new List<Ingredient>(),
+                            Instructions = new List<Instruction>()
                         };
-                        recipe.Ingredients.Add(ingredient);
-                    }
 
-                    foreach (var instructionDto in recipeDto.Instructions)
-                    {
-                        var instruction = new Instruction
+                        foreach (var ingredientDto in recipeDto.Ingredients)
                         {
-                            InstructionText = instructionDto.InstructionText,
-                            Recipe = recipe
-                        };
-                        recipe.Instructions.Add(instruction);
-
-                        foreach (var ingredientDto in instructionDto.Ingredients)
-                        {
-                            var ingredient = recipe.Ingredients.FirstOrDefault(i => i.Name == ingredientDto.Name);
-                            if (ingredient != null)
+                            var ingredient = new Ingredient
                             {
-                                instruction.Ingredients.Add(ingredient);
-                                ingredient.Instructions.Add(instruction);
+                                Name = ingredientDto.Name,
+                                Quantity = ingredientDto.Quantity,
+                                Measurement = ingredientDto.Measurement,
+                                Recipe = recipe
+                            };
+                            recipe.Ingredients.Add(ingredient);
+                        }
+
+                        foreach (var instructionDto in recipeDto.Instructions)
+                        {
+                            var instruction = new Instruction
+                            {
+                                InstructionText = instructionDto.InstructionText,
+                                Recipe = recipe
+                            };
+                            recipe.Instructions.Add(instruction);
+
+                            foreach (var ingredientDto in instructionDto.Ingredients)
+                            {
+                                var ingredient = recipe.Ingredients.FirstOrDefault(i => i.Name == ingredientDto.Name);
+                                if (ingredient != null)
+                                {
+                                    instruction.Ingredients.Add(ingredient);
+                                    ingredient.Instructions.Add(instruction);
+                                }
                             }
                         }
-                    }
 
-                    context.Recipes.Add(recipe);
+                        context.Recipes.Add(recipe);
+                        await context.SaveChangesAsync();
+                        logger.LogInformation($"Recipe '{recipe.Name}' seeded successfully.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, $"An error occurred while seeding recipe from file {recipeFile}.");
                 }
             }
 
-            try
-            {
-                context.SaveChanges();
-                logger.LogInformation("Database seeded successfully.");
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "An error occurred while seeding the database.");
-                throw;
-            }
+            logger.LogInformation("Database seeding completed.");
         }
     }
 

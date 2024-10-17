@@ -15,7 +15,7 @@ namespace backend.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
 
             modelBuilder.Entity("IngredientInstruction", b =>
                 {
@@ -30,21 +30,6 @@ namespace backend.Migrations
                     b.HasIndex("InstructionsId");
 
                     b.ToTable("IngredientInstruction", (string)null);
-                });
-
-            modelBuilder.Entity("MenuRecipe", b =>
-                {
-                    b.Property<int>("MenusId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("RecipesId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("MenusId", "RecipesId");
-
-                    b.HasIndex("RecipesId");
-
-                    b.ToTable("MenuRecipe", (string)null);
                 });
 
             modelBuilder.Entity("backend.Models.GroceryItem", b =>
@@ -153,7 +138,16 @@ namespace backend.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("RecipeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("RecipeIds")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("RecipeId");
 
                     b.ToTable("Menus");
                 });
@@ -204,21 +198,6 @@ namespace backend.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MenuRecipe", b =>
-                {
-                    b.HasOne("backend.Models.Menu", null)
-                        .WithMany()
-                        .HasForeignKey("MenusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("backend.Models.Recipe", null)
-                        .WithMany()
-                        .HasForeignKey("RecipesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("backend.Models.GroceryItem", b =>
                 {
                     b.HasOne("backend.Models.GroceryList", "GroceryList")
@@ -252,6 +231,13 @@ namespace backend.Migrations
                     b.Navigation("Recipe");
                 });
 
+            modelBuilder.Entity("backend.Models.Menu", b =>
+                {
+                    b.HasOne("backend.Models.Recipe", null)
+                        .WithMany("Menus")
+                        .HasForeignKey("RecipeId");
+                });
+
             modelBuilder.Entity("backend.Models.GroceryList", b =>
                 {
                     b.Navigation("Items");
@@ -262,6 +248,8 @@ namespace backend.Migrations
                     b.Navigation("Ingredients");
 
                     b.Navigation("Instructions");
+
+                    b.Navigation("Menus");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { apiHandler, Recipe } from '@/services/apiHandler';
+import { Recipe } from '@/types/Recipe';
+import { apiHandler } from '@/services/apiHandler';
 import styles from './CreateMenu.module.css';
 
-export const CreateMenu: React.FC = () => {
-  const [menuName, setMenuName] = useState('');
+const CreateMenu: React.FC = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [selectedRecipes, setSelectedRecipes] = useState<number[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+  const [menuName, setMenuName] = useState('');
 
   useEffect(() => {
     const fetchRecipes = async () => {
@@ -16,46 +15,40 @@ export const CreateMenu: React.FC = () => {
         setRecipes(fetchedRecipes);
       } catch (error) {
         console.error('Error fetching recipes:', error);
-        setError('Failed to fetch recipes. Please try again.');
       }
     };
+
     fetchRecipes();
   }, []);
 
+  const handleRecipeToggle = (recipeId: number) => {
+    setSelectedRecipes(prevSelected =>
+      prevSelected.includes(recipeId)
+        ? prevSelected.filter(id => id !== recipeId)
+        : [...prevSelected, recipeId]
+    );
+  };
+
   const handleCreateMenu = async () => {
+    if (menuName.trim() === '') {
+      alert('Please enter a menu name.');
+      return;
+    }
+
+    if (selectedRecipes.length === 0) {
+      alert('Please select at least one recipe for the menu.');
+      return;
+    }
+
     try {
-      setError(null);
-      setSuccess(null);
-      if (!menuName.trim()) {
-        setError('Please enter a menu name.');
-        return;
-      }
-      if (selectedRecipes.length === 0) {
-        setError('Please select at least one recipe.');
-        return;
-      }
-      console.log('Creating menu:', menuName);
-      const createdMenu = await apiHandler.createMenu({ name: menuName });
-      console.log('Menu created:', createdMenu);
-      
-      await apiHandler.updateMenu(createdMenu.id, { name: menuName, recipeIds: selectedRecipes });
-      console.log('Menu updated with recipes');
-      
-      setSuccess('Menu created successfully!');
+      await apiHandler.createMenu({ name: menuName, recipeIds: selectedRecipes });
+      alert('Menu created successfully!');
       setMenuName('');
       setSelectedRecipes([]);
     } catch (error) {
       console.error('Error creating menu:', error);
-      setError('Failed to create menu. Please try again.');
+      alert('Failed to create menu. Please try again.');
     }
-  };
-
-  const handleRecipeToggle = (recipeId: number) => {
-    setSelectedRecipes(prev => 
-      prev.includes(recipeId) 
-        ? prev.filter(id => id !== recipeId)
-        : [...prev, recipeId]
-    );
   };
 
   const groupedRecipes = recipes.reduce((acc, recipe) => {
@@ -68,25 +61,21 @@ export const CreateMenu: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>Create New Menu</h2>
-      {error && <p className={styles.error}>{error}</p>}
-      {success && <p className={styles.success}>{success}</p>}
+      <h1 className={styles.title}>Create a New Menu</h1>
       <div className={styles.inputGroup}>
         <label htmlFor="menuName">Menu Name:</label>
         <input
-          id="menuName"
           type="text"
+          id="menuName"
           value={menuName}
           onChange={(e) => setMenuName(e.target.value)}
-          placeholder="Enter menu name"
           className={styles.input}
         />
       </div>
-      <h3 className={styles.subtitle}>Select Recipes:</h3>
       <div className={styles.recipeList}>
         {Object.entries(groupedRecipes).map(([category, categoryRecipes]) => (
           <div key={category} className={styles.categoryGroup}>
-            <h4 className={styles.categoryTitle}>{category}</h4>
+            <h2 className={styles.categoryTitle}>{category}</h2>
             {categoryRecipes.map(recipe => (
               <div key={recipe.id} className={styles.recipeItem}>
                 <label className={styles.checkboxLabel}>
@@ -97,13 +86,16 @@ export const CreateMenu: React.FC = () => {
                     className={styles.checkbox}
                   />
                   <span className={styles.recipeName}>{recipe.name}</span>
+                  <span className={styles.cuisineLabel}>{recipe.cuisine}</span>
                 </label>
               </div>
             ))}
           </div>
         ))}
       </div>
-      <button onClick={handleCreateMenu} className={styles.button}>Create Menu</button>
+      <button onClick={handleCreateMenu} className={styles.createButton}>Create Menu</button>
     </div>
   );
 };
+
+export default CreateMenu;

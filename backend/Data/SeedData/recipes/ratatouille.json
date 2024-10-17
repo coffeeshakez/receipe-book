@@ -1,0 +1,142 @@
+{
+  "name": "Ratatouille",
+  "img": "https://source.unsplash.com/random/800x600/?ratatouille",
+  "description": "Classic French vegetable stew from Provence",
+  "category": "MainCourse",
+  "cuisine": "French",
+  "ingredients": [
+    {
+      "name": "eggplant",
+      "quantity": "1",
+      "measurement": "large"
+    },
+    {
+      "name": "zucchini",
+      "quantity": "2",
+      "measurement": "medium"
+    },
+    {
+      "name": "bell peppers",
+      "quantity": "2",
+      "measurement": "medium"
+    },
+    {
+      "name": "tomatoes",
+      "quantity": "4",
+      "measurement": "medium"
+    },
+    {
+      "name": "onion",
+      "quantity": "1",
+      "measurement": "large"
+    },
+    {
+      "name": "garlic",
+      "quantity": "4",
+      "measurement": "cloves"
+    },
+    {
+      "name": "olive oil",
+      "quantity": "60",
+      "measurement": "ml"
+    },
+    {
+      "name": "herbes de Provence",
+      "quantity": "2",
+      "measurement": "teaspoons"
+    },
+    {
+      "name": "salt",
+      "quantity": "1",
+      "measurement": "teaspoon"
+    },
+    {
+      "name": "black pepper",
+      "quantity": "1/2",
+      "measurement": "teaspoon"
+    }
+  ],
+  "instructions": [
+    {
+      "instructionText": "Cut eggplant, zucchini, bell peppers, and tomatoes into 1-inch cubes. Slice onion and mince garlic.",
+      "ingredients": [
+        {
+          "name": "eggplant",
+          "quantity": "1",
+          "measurement": "large"
+        },
+        {
+          "name": "zucchini",
+          "quantity": "2",
+          "measurement": "medium"
+        },
+        {
+          "name": "bell peppers",
+          "quantity": "2",
+          "measurement": "medium"
+        },
+        {
+          "name": "tomatoes",
+          "quantity": "4",
+          "measurement": "medium"
+        },
+        {
+          "name": "onion",
+          "quantity": "1",
+          "measurement": "large"
+        },
+        {
+          "name": "garlic",
+          "quantity": "4",
+          "measurement": "cloves"
+        }
+      ]
+    },
+    {
+      "instructionText": "Heat olive oil in a large pot over medium heat. Add onion and garlic, cook until softened.",
+      "ingredients": [
+        {
+          "name": "olive oil",
+          "quantity": "60",
+          "measurement": "ml"
+        }
+      ]
+    },
+    {
+      "instructionText": "Add eggplant and zucchini. Cook for 5 minutes.",
+      "ingredients": []
+    },
+    {
+      "instructionText": "Add bell peppers, tomatoes, herbes de Provence, salt, and pepper. Stir well.",
+      "ingredients": [
+        {
+          "name": "herbes de Provence",
+          "quantity": "2",
+          "measurement": "teaspoons"
+        },
+        {
+          "name": "salt",
+          "quantity": "1",
+          "measurement": "teaspoon"
+        },
+        {
+          "name": "black pepper",
+          "quantity": "1/2",
+          "measurement": "teaspoon"
+        }
+      ]
+    },
+    {
+      "instructionText": "Cover and simmer for 30 minutes, stirring occasionally.",
+      "ingredients": []
+    },
+    {
+      "instructionText": "Uncover and cook for another 10 minutes to allow excess liquid to evaporate.",
+      "ingredients": []
+    },
+    {
+      "instructionText": "Serve hot or at room temperature.",
+      "ingredients": []
+    }
+  ]
+}

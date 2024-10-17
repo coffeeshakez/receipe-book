@@ -1,0 +1,96 @@
+{
+  "name": "Crème Brûlée",
+  "img": "https://source.unsplash.com/random/800x600/?creme-brulee",
+  "description": "Classic French dessert with rich custard and caramelized sugar topping",
+  "category": "Dessert",
+  "cuisine": "French",
+  "ingredients": [
+    {
+      "name": "heavy cream",
+      "quantity": "500",
+      "measurement": "ml"
+    },
+    {
+      "name": "vanilla bean",
+      "quantity": "1",
+      "measurement": "pod"
+    },
+    {
+      "name": "egg yolks",
+      "quantity": "5",
+      "measurement": "large"
+    },
+    {
+      "name": "sugar",
+      "quantity": "100",
+      "measurement": "grams"
+    },
+    {
+      "name": "extra sugar for topping",
+      "quantity": "4",
+      "measurement": "tablespoons"
+    }
+  ],
+  "instructions": [
+    {
+      "instructionText": "Preheat oven to 150°C (300°F).",
+      "ingredients": []
+    },
+    {
+      "instructionText": "In a saucepan, heat cream with split vanilla bean until it just starts to simmer. Remove from heat and let it infuse for 15 minutes.",
+      "ingredients": [
+        {
+          "name": "heavy cream",
+          "quantity": "500",
+          "measurement": "ml"
+        },
+        {
+          "name": "vanilla bean",
+          "quantity": "1",
+          "measurement": "pod"
+        }
+      ]
+    },
+    {
+      "instructionText": "In a bowl, whisk egg yolks with sugar until pale and creamy.",
+      "ingredients": [
+        {
+          "name": "egg yolks",
+          "quantity": "5",
+          "measurement": "large"
+        },
+        {
+          "name": "sugar",
+          "quantity": "100",
+          "measurement": "grams"
+        }
+      ]
+    },
+    {
+      "instructionText": "Remove vanilla bean from cream, then slowly whisk the warm cream into the egg mixture.",
+      "ingredients": []
+    },
+    {
+      "instructionText": "Pour mixture into ramekins and place them in a deep baking dish. Fill the dish with hot water halfway up the sides of the ramekins.",
+      "ingredients": []
+    },
+    {
+      "instructionText": "Bake for 30-35 minutes until the custards are set but still slightly jiggly in the center.",
+      "ingredients": []
+    },
+    {
+      "instructionText": "Chill the custards for at least 2 hours or overnight.",
+      "ingredients": []
+    },
+    {
+      "instructionText": "Before serving, sprinkle each custard with sugar and caramelize with a kitchen torch or under the broiler.",
+      "ingredients": [
+        {
+          "name": "extra sugar for topping",
+          "quantity": "4",
+          "measurement": "tablespoons"
+        }
+      ]
+    }
+  ]
+}

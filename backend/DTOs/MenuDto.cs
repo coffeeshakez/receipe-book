@@ -12,6 +12,7 @@ namespace backend.DTOs
     public class CreateMenuDto
     {
         public string Name { get; set; }
+        public List<int> RecipeIds { get; set; } = new List<int>();
     }
 
     public class UpdateMenuDto

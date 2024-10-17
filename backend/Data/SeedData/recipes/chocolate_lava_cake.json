@@ -1,0 +1,84 @@
+{
+  "name": "Chocolate Lava Cake",
+  "img": "https://source.unsplash.com/random/800x600/?chocolate-lava-cake",
+  "description": "Decadent chocolate cake with a gooey molten center",
+  "category": "Dessert",
+  "cuisine": "French",
+  "ingredients": [
+    {
+      "name": "dark chocolate",
+      "quantity": "200",
+      "measurement": "grams"
+    },
+    {
+      "name": "butter",
+      "quantity": "100",
+      "measurement": "grams"
+    },
+    {
+      "name": "eggs",
+      "quantity": "4",
+      "measurement": "large"
+    },
+    {
+      "name": "sugar",
+      "quantity": "100",
+      "measurement": "grams"
+    },
+    {
+      "name": "flour",
+      "quantity": "50",
+      "measurement": "grams"
+    }
+  ],
+  "instructions": [
+    {
+      "instructionText": "Melt chocolate and butter together in a double boiler.",
+      "ingredients": [
+        {
+          "name": "dark chocolate",
+          "quantity": "200",
+          "measurement": "grams"
+        },
+        {
+          "name": "butter",
+          "quantity": "100",
+          "measurement": "grams"
+        }
+      ]
+    },
+    {
+      "instructionText": "In a separate bowl, whisk eggs and sugar until light and fluffy.",
+      "ingredients": [
+        {
+          "name": "eggs",
+          "quantity": "4",
+          "measurement": "large"
+        },
+        {
+          "name": "sugar",
+          "quantity": "100",
+          "measurement": "grams"
+        }
+      ]
+    },
+    {
+      "instructionText": "Fold the melted chocolate mixture into the egg mixture.",
+      "ingredients": []
+    },
+    {
+      "instructionText": "Gently fold in the flour until just combined.",
+      "ingredients": [
+        {
+          "name": "flour",
+          "quantity": "50",
+          "measurement": "grams"
+        }
+      ]
+    },
+    {
+      "instructionText": "Pour into greased ramekins and bake at 200°C for 12-14 minutes until the edges are set but the center is still soft.",
+      "ingredients": []
+    }
+  ]
+}

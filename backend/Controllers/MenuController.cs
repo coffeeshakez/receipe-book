@@ -1,41 +1,36 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using backend.DTOs;
-using backend.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using backend.Data;
+using backend.Models;
+using backend.DTOs;
 
 namespace backend.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
-    public class MenusController : ControllerBase
+    [ApiController]
+    public class MenuController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public MenusController(ApplicationDbContext context)
+        public MenuController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Menus
+        // GET: api/Menu
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MenuDto>>> GetMenus()
+        public async Task<ActionResult<IEnumerable<Menu>>> GetMenus()
         {
-            var menus = await _context.Menus.ToListAsync();
-            return menus.Select(m => new MenuDto
-            {
-                Id = m.Id,
-                Name = m.Name,
-                RecipeIds = m.RecipeIds
-            }).ToList();
+            return await _context.Menus.ToListAsync();
         }
 
-        // GET: api/Menus/5
+        // GET: api/Menu/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<MenuDto>> GetMenu(int id)
+        public async Task<ActionResult<Menu>> GetMenu(int id)
         {
             var menu = await _context.Menus.FindAsync(id);
 
@@ -44,17 +39,12 @@ namespace backend.Controllers
                 return NotFound();
             }
 
-            return new MenuDto
-            {
-                Id = menu.Id,
-                Name = menu.Name,
-                RecipeIds = menu.RecipeIds
-            };
+            return menu;
         }
 
-        // POST: api/Menus
+        // POST: api/Menu
         [HttpPost]
-        public async Task<ActionResult<MenuDto>> PostMenu(CreateMenuDto createMenuDto)
+        public async Task<ActionResult<Menu>> PostMenu(CreateMenuDto createMenuDto)
         {
             var menu = new Menu
             {
@@ -65,15 +55,10 @@ namespace backend.Controllers
             _context.Menus.Add(menu);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetMenu), new { id = menu.Id }, new MenuDto
-            {
-                Id = menu.Id,
-                Name = menu.Name,
-                RecipeIds = menu.RecipeIds
-            });
+            return CreatedAtAction(nameof(GetMenu), new { id = menu.Id }, menu);
         }
 
-        // PUT: api/Menus/5
+        // PUT: api/Menu/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutMenu(int id, UpdateMenuDto updateMenuDto)
         {

@@ -1,0 +1,105 @@
+{
+  "name": "Caprese Salad",
+  "img": "https://source.unsplash.com/random/800x600/?caprese-salad",
+  "description": "Fresh Italian salad with tomatoes, mozzarella, and basil",
+  "category": "Starter",
+  "cuisine": "Italian",
+  "ingredients": [
+    {
+      "name": "ripe tomatoes",
+      "quantity": "4",
+      "measurement": "medium"
+    },
+    {
+      "name": "fresh mozzarella",
+      "quantity": "200",
+      "measurement": "grams"
+    },
+    {
+      "name": "fresh basil leaves",
+      "quantity": "20",
+      "measurement": "leaves"
+    },
+    {
+      "name": "extra virgin olive oil",
+      "quantity": "2",
+      "measurement": "tablespoons"
+    },
+    {
+      "name": "balsamic vinegar",
+      "quantity": "1",
+      "measurement": "tablespoon"
+    },
+    {
+      "name": "salt",
+      "quantity": "to taste",
+      "measurement": ""
+    },
+    {
+      "name": "black pepper",
+      "quantity": "to taste",
+      "measurement": ""
+    }
+  ],
+  "instructions": [
+    {
+      "instructionText": "Slice the tomatoes and mozzarella into 1/4 inch thick slices.",
+      "ingredients": [
+        {
+          "name": "ripe tomatoes",
+          "quantity": "4",
+          "measurement": "medium"
+        },
+        {
+          "name": "fresh mozzarella",
+          "quantity": "200",
+          "measurement": "grams"
+        }
+      ]
+    },
+    {
+      "instructionText": "Arrange the tomato and mozzarella slices alternately on a serving plate.",
+      "ingredients": []
+    },
+    {
+      "instructionText": "Tuck fresh basil leaves between the tomato and mozzarella slices.",
+      "ingredients": [
+        {
+          "name": "fresh basil leaves",
+          "quantity": "20",
+          "measurement": "leaves"
+        }
+      ]
+    },
+    {
+      "instructionText": "Drizzle with olive oil and balsamic vinegar.",
+      "ingredients": [
+        {
+          "name": "extra virgin olive oil",
+          "quantity": "2",
+          "measurement": "tablespoons"
+        },
+        {
+          "name": "balsamic vinegar",
+          "quantity": "1",
+          "measurement": "tablespoon"
+        }
+      ]
+    },
+    {
+      "instructionText": "Season with salt and pepper to taste.",
+      "ingredients": [
+        {
+          "name": "salt",
+          "quantity": "to taste",
+          "measurement": ""
+        },
+        {
+          "name": "black pepper",
+          "quantity": "to taste",
+          "measurement": ""
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,129 @@
+{
+  "name": "Spinach and Artichoke Dip",
+  "img": "https://source.unsplash.com/random/800x600/?spinach-artichoke-dip",
+  "description": "Creamy and cheesy dip with spinach and artichokes",
+  "category": "Starter",
+  "cuisine": "American",
+  "ingredients": [
+    {
+      "name": "frozen spinach",
+      "quantity": "300",
+      "measurement": "grams"
+    },
+    {
+      "name": "artichoke hearts",
+      "quantity": "400",
+      "measurement": "grams"
+    },
+    {
+      "name": "cream cheese",
+      "quantity": "250",
+      "measurement": "grams"
+    },
+    {
+      "name": "sour cream",
+      "quantity": "120",
+      "measurement": "ml"
+    },
+    {
+      "name": "mayonnaise",
+      "quantity": "60",
+      "measurement": "ml"
+    },
+    {
+      "name": "grated Parmesan cheese",
+      "quantity": "100",
+      "measurement": "grams"
+    },
+    {
+      "name": "minced garlic",
+      "quantity": "2",
+      "measurement": "cloves"
+    },
+    {
+      "name": "salt",
+      "quantity": "1/2",
+      "measurement": "teaspoon"
+    },
+    {
+      "name": "black pepper",
+      "quantity": "1/4",
+      "measurement": "teaspoon"
+    }
+  ],
+  "instructions": [
+    {
+      "instructionText": "Preheat oven to 180°C (350°F).",
+      "ingredients": []
+    },
+    {
+      "instructionText": "Thaw and drain the spinach, squeezing out excess water.",
+      "ingredients": [
+        {
+          "name": "frozen spinach",
+          "quantity": "300",
+          "measurement": "grams"
+        }
+      ]
+    },
+    {
+      "instructionText": "Chop the artichoke hearts.",
+      "ingredients": [
+        {
+          "name": "artichoke hearts",
+          "quantity": "400",
+          "measurement": "grams"
+        }
+      ]
+    },
+    {
+      "instructionText": "In a large bowl, mix cream cheese, sour cream, mayonnaise, Parmesan cheese, and minced garlic.",
+      "ingredients": [
+        {
+          "name": "cream cheese",
+          "quantity": "250",
+          "measurement": "grams"
+        },
+        {
+          "name": "sour cream",
+          "quantity": "120",
+          "measurement": "ml"
+        },
+        {
+          "name": "mayonnaise",
+          "quantity": "60",
+          "measurement": "ml"
+        },
+        {
+          "name": "grated Parmesan cheese",
+          "quantity": "100",
+          "measurement": "grams"
+        },
+        {
+          "name": "minced garlic",
+          "quantity": "2",
+          "measurement": "cloves"
+        }
+      ]
+    },
+    {
+      "instructionText": "Stir in spinach and artichoke hearts. Season with salt and pepper.",
+      "ingredients": [
+        {
+          "name": "salt",
+          "quantity": "1/2",
+          "measurement": "teaspoon"
+        },
+        {
+          "name": "black pepper",
+          "quantity": "1/4",
+          "measurement": "teaspoon"
+        }
+      ]
+    },
+    {
+      "instructionText": "Transfer to a baking dish and bake for 20-25 minutes until hot and bubbly.",
+      "ingredients": []
+    }
+  ]
+}

@@ -35,9 +35,11 @@ namespace backend.Data
                 .UsingEntity(j => j.ToTable("IngredientInstruction"));
 
             modelBuilder.Entity<Menu>()
-                .HasMany(m => m.Recipes)
-                .WithMany(r => r.Menus)
-                .UsingEntity(j => j.ToTable("MenuRecipe"));
+                .Property(m => m.RecipeIds)
+                .HasConversion(
+                    v => string.Join(',', v),
+                    v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList()
+                );
         }
     }
 }

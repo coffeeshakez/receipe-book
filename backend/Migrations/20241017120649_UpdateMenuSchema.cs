@@ -5,23 +5,58 @@
 namespace backend.Migrations
 {
     /// <inheritdoc />
-    public partial class AddMenuRecipeRelationship : Migration
+    public partial class UpdateMenuSchema : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Menus",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Menus", x => x.Id);
-                });
+            migrationBuilder.DropTable(
+                name: "MenuRecipe");
+
+            migrationBuilder.AddColumn<int>(
+                name: "RecipeId",
+                table: "Menus",
+                type: "INTEGER",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "RecipeIds",
+                table: "Menus",
+                type: "TEXT",
+                nullable: false,
+                defaultValue: "");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Menus_RecipeId",
+                table: "Menus",
+                column: "RecipeId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Menus_Recipes_RecipeId",
+                table: "Menus",
+                column: "RecipeId",
+                principalTable: "Recipes",
+                principalColumn: "Id");
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Menus_Recipes_RecipeId",
+                table: "Menus");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Menus_RecipeId",
+                table: "Menus");
+
+            migrationBuilder.DropColumn(
+                name: "RecipeId",
+                table: "Menus");
+
+            migrationBuilder.DropColumn(
+                name: "RecipeIds",
+                table: "Menus");
 
             migrationBuilder.CreateTable(
                 name: "MenuRecipe",
@@ -51,16 +86,6 @@ namespace backend.Migrations
                 name: "IX_MenuRecipe_RecipesId",
                 table: "MenuRecipe",
                 column: "RecipesId");
-        }
-
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropTable(
-                name: "MenuRecipe");
-
-            migrationBuilder.DropTable(
-                name: "Menus");
         }
     }
 }

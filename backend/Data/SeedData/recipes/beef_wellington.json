@@ -1,0 +1,130 @@
+{
+  "name": "Beef Wellington",
+  "img": "https://source.unsplash.com/random/800x600/?beef-wellington",
+  "description": "Classic British dish of tender beef wrapped in puff pastry",
+  "category": "MainCourse",
+  "cuisine": "British",
+  "ingredients": [
+    {
+      "name": "beef tenderloin",
+      "quantity": "1",
+      "measurement": "kg"
+    },
+    {
+      "name": "puff pastry",
+      "quantity": "500",
+      "measurement": "grams"
+    },
+    {
+      "name": "mushrooms",
+      "quantity": "400",
+      "measurement": "grams"
+    },
+    {
+      "name": "prosciutto",
+      "quantity": "100",
+      "measurement": "grams"
+    },
+    {
+      "name": "Dijon mustard",
+      "quantity": "2",
+      "measurement": "tablespoons"
+    },
+    {
+      "name": "egg",
+      "quantity": "1",
+      "measurement": "large"
+    },
+    {
+      "name": "olive oil",
+      "quantity": "2",
+      "measurement": "tablespoons"
+    },
+    {
+      "name": "salt",
+      "quantity": "1",
+      "measurement": "teaspoon"
+    },
+    {
+      "name": "black pepper",
+      "quantity": "1/2",
+      "measurement": "teaspoon"
+    }
+  ],
+  "instructions": [
+    {
+      "instructionText": "Season the beef tenderloin with salt and pepper. Sear in a hot pan with olive oil until browned on all sides. Let it cool.",
+      "ingredients": [
+        {
+          "name": "beef tenderloin",
+          "quantity": "1",
+          "measurement": "kg"
+        },
+        {
+          "name": "olive oil",
+          "quantity": "2",
+          "measurement": "tablespoons"
+        },
+        {
+          "name": "salt",
+          "quantity": "1",
+          "measurement": "teaspoon"
+        },
+        {
+          "name": "black pepper",
+          "quantity": "1/2",
+          "measurement": "teaspoon"
+        }
+      ]
+    },
+    {
+      "instructionText": "Finely chop mushrooms and cook until all moisture has evaporated. Let it cool.",
+      "ingredients": [
+        {
+          "name": "mushrooms",
+          "quantity": "400",
+          "measurement": "grams"
+        }
+      ]
+    },
+    {
+      "instructionText": "Spread Dijon mustard over the cooled beef.",
+      "ingredients": [
+        {
+          "name": "Dijon mustard",
+          "quantity": "2",
+          "measurement": "tablespoons"
+        }
+      ]
+    },
+    {
+      "instructionText": "Lay out plastic wrap and arrange prosciutto slices. Spread mushroom mixture over prosciutto and place beef in the center. Use the plastic wrap to roll tightly and chill.",
+      "ingredients": [
+        {
+          "name": "prosciutto",
+          "quantity": "100",
+          "measurement": "grams"
+        }
+      ]
+    },
+    {
+      "instructionText": "Roll out puff pastry and remove plastic from beef. Place beef in the center of pastry and fold pastry around it, sealing edges with egg wash.",
+      "ingredients": [
+        {
+          "name": "puff pastry",
+          "quantity": "500",
+          "measurement": "grams"
+        },
+        {
+          "name": "egg",
+          "quantity": "1",
+          "measurement": "large"
+        }
+      ]
+    },
+    {
+      "instructionText": "Brush with remaining egg wash and chill for 15 minutes. Bake at 200°C (400°F) for 40-45 minutes until golden brown and beef is cooked to desired doneness.",
+      "ingredients": []
+    }
+  ]
+}
