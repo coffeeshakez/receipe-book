@@ -1,7 +1,6 @@
 'use client';
 import styles from './page.module.scss';
-import { TextInputWithButton } from '@/components/TextInputWithButton/TextInputWithButton';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { apiHandler, GroceryList, GroceryItem } from '@/services/apiHandler';
 import { useParams } from 'next/navigation';
 
@@ -9,7 +8,7 @@ export default function GroceryListPage() {
   const [groceryList, setGroceryList] = useState<GroceryList | null>(null);
   const [newItemName, setNewItemName] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const [newItemId, setNewItemId] = useState<number | null>(null);
+  const [swipedItemId, setSwipedItemId] = useState<number | null>(null);
   const params = useParams();
   const listId = parseInt(params.id as string);
 
@@ -73,8 +72,6 @@ export default function GroceryListPage() {
         };
       });
       setNewItemName('');
-      setNewItemId(newItem.id);
-      setTimeout(() => setNewItemId(null), 800); // Reset after animation duration
     } catch (error) {
       console.error('Error adding grocery item:', error);
       setError('Failed to add item. Please try again.');
@@ -99,29 +96,66 @@ export default function GroceryListPage() {
     }
   };
 
-  const renderGroceryItem = (item: GroceryItem) => (
-    <div key={item.id} className={`${styles.item} ${item.id === newItemId ? styles.newItem : ''}`}>
-      <input
-        type="checkbox"
-        id={`item-${item.id}`}
-        checked={item.checked}
-        onChange={() => handleCheckItem(item.id, !item.checked)}
-        className={styles.checkbox}
-      />
-      <label 
-        htmlFor={`item-${item.id}`} 
-        className={`${styles.itemLabel} ${item.checked ? styles.checkedLabel : ''}`}
+  const handleSwipe = (itemId: number, direction: 'left' | 'right') => {
+    if (direction === 'left') {
+      setSwipedItemId(itemId);
+    } else {
+      setSwipedItemId(null);
+    }
+  };
+
+  const renderGroceryItem = (item: GroceryItem) => {
+    return (
+      <div
+        key={item.id}
+        className={`${styles.item} ${item.id === swipedItemId ? styles.swiped : ''}`}
+        onTouchStart={(e) => {
+          const touch = e.touches[0];
+          const startX = touch.clientX;
+          const handleTouchMove = (e: TouchEvent) => {
+            const touch = e.touches[0];
+            const diffX = touch.clientX - startX;
+            if (diffX < -50) {
+              handleSwipe(item.id, 'left');
+            } else if (diffX > 50) {
+              handleSwipe(item.id, 'right');
+            }
+          };
+          const handleTouchEnd = () => {
+            document.removeEventListener('touchmove', handleTouchMove);
+            document.removeEventListener('touchend', handleTouchEnd);
+          };
+          document.addEventListener('touchmove', handleTouchMove);
+          document.addEventListener('touchend', handleTouchEnd);
+        }}
       >
-        {item.quantity && item.unit
-          ? `${item.name} (${item.quantity} ${item.unit})`
-          : item.name
-        }
-      </label>
-      <button onClick={() => handleRemoveItem(item.id)} className={styles.removeButton}>
-        Remove
-      </button>
-    </div>
-  );
+        <div className={styles.itemContent}>
+          <input
+            type="checkbox"
+            id={`item-${item.id}`}
+            checked={item.checked}
+            onChange={() => handleCheckItem(item.id, !item.checked)}
+            className={styles.checkbox}
+          />
+          <label 
+            htmlFor={`item-${item.id}`} 
+            className={`${styles.itemLabel} ${item.checked ? styles.checkedLabel : ''}`}
+          >
+            {item.quantity && item.unit
+              ? `${item.name} (${item.quantity} ${item.unit})`
+              : item.name
+            }
+          </label>
+        </div>
+        <button
+          onClick={() => handleRemoveItem(item.id)}
+          className={`${styles.removeButton} ${item.id === swipedItemId ? styles.visible : ''}`}
+        >
+          Remove
+        </button>
+      </div>
+    );
+  };
 
   if (error) {
     return <div className={styles.error}>{error}</div>;
@@ -149,21 +183,15 @@ export default function GroceryListPage() {
         </button>
       </div>
       {error && <div className={styles.error}>{error}</div>}
-      {!groceryList ? (
-        <div>Loading...</div>
-      ) : (
+      <div className={styles.itemList}>
+        {uncheckedItems.map(renderGroceryItem)}
+      </div>
+      {checkedItems.length > 0 && (
         <>
-          <div className={styles.itemList}>
-            {uncheckedItems.map(renderGroceryItem)}
+          <hr className={styles.divider} />
+          <div className={`${styles.itemList} ${styles.checkedItems}`}>
+            {checkedItems.map(renderGroceryItem)}
           </div>
-          {checkedItems.length > 0 && (
-            <>
-              <hr className={styles.divider} />
-              <div className={`${styles.itemList} ${styles.checkedItems}`}>
-                {checkedItems.map(renderGroceryItem)}
-              </div>
-            </>
-          )}
         </>
       )}
     </div>

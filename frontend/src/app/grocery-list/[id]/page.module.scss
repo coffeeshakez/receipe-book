@@ -27,11 +27,12 @@
 }
 
 .container {
-  max-width: 600px;
+  max-width: 800px; // Increased from 600px
   margin: 0 auto;
   padding: 20px;
   font-family: Arial, sans-serif;
   color: #333;
+  width: 100%; // Added to ensure full width on smaller screens
 }
 
 .title {
@@ -49,11 +50,24 @@
   align-items: center;
   padding: 12px;
   border-bottom: 1px solid #f0f0f0;
-  transition: background-color 0.3s ease;
+  transition: transform 0.3s ease;
+  overflow: hidden;
+  position: relative;
 
   &:hover {
     background-color: #f9f9f9;
   }
+}
+
+.itemContent {
+  display: flex;
+  align-items: center;
+  width: calc(100% - 60px); // Adjust width to accommodate the always-visible remove button
+  transition: transform 0.3s ease;
+}
+
+.swiped .itemContent {
+  transform: translateX(-60px);
 }
 
 .checkbox {
@@ -95,22 +109,50 @@
 }
 
 .removeButton {
-  background-color: transparent;
-  color: #e74c3c;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 60px;
+  background-color: #e74c3c;
+  color: white;
   border: none;
-  padding: 6px 10px;
-  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
   cursor: pointer;
-  transition: all 0.3s ease;
-  opacity: 0;
+  opacity: 1; // Make it always visible on desktop
 
   &:hover {
-    background-color: rgba(231, 76, 60, 0.1);
+    background-color: darken(#e74c3c, 10%);
   }
 }
 
-.item:hover .removeButton {
+.swiped .removeButton {
+  right: 0;
   opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .itemContent {
+    width: 100%; // Full width on mobile
+  }
+
+  .removeButton {
+    right: -60px; // Hide it off-screen initially on mobile
+    opacity: 0;
+    transition: right 0.3s ease, opacity 0.3s ease;
+  }
+
+  .swiped .itemContent {
+    transform: translateX(-60px);
+  }
+
+  .swiped .removeButton {
+    right: 0;
+    opacity: 1;
+  }
 }
 
 .divider {
@@ -136,8 +178,13 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes swipeHint {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-20px); }
+}
+
 .newItem {
-  animation: fadeIn 0.5s ease;
+  animation: fadeIn 0.5s ease, swipeHint 1s ease 1s;
 }
 
 .inputContainer {
@@ -183,5 +230,13 @@
 
   &:hover {
     background-color: #2980b9;
+  }
+}
+
+// Add this media query at the end of the file
+@media (max-width: 840px) { // 840px to account for padding
+  .container {
+    max-width: 100%;
+    padding: 20px;
   }
 }
