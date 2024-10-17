@@ -50,6 +50,12 @@ export interface UpdateMenuDto {
   recipeIds: number[];
 }
 
+export interface Cuisine {
+  id: number;
+  name: string;
+  description: string;
+}
+
 export const apiHandler = {
   async getRecipes(): Promise<Recipe[]> {
     const response = await fetch(`${API_BASE_URL}/recipes`);
@@ -198,4 +204,12 @@ export const apiHandler = {
   // async getPopularMenus(): Promise<Menu[]> {
   //   ...
   // },
+
+  async getCuisines(): Promise<Cuisine[]> {
+    const response = await fetch(`${API_BASE_URL}/cuisines`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch cuisines');
+    }
+    return response.json();
+  },
 };

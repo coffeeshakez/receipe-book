@@ -2,34 +2,30 @@
   display: flex;
   overflow-x: auto;
   padding: 20px 0;
-  scroll-snap-type: x mandatory;
+  gap: 20px;
 }
 
 .cuisineCard {
-  flex: 0 0 auto;
-  width: 200px;
-  margin-right: 20px;
-  scroll-snap-align: start;
-  position: relative;
-  border-radius: 8px;
-  overflow: hidden;
+  min-width: 200px;
+  background-color: #ffffff;
+  border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
+  padding: 15px;
+  text-decoration: none;
+  color: #333;
+  transition: transform 0.3s ease;
 
-.cuisineImage {
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
+  &:hover {
+    transform: translateY(-5px);
+  }
 }
 
 .cuisineName {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: rgba(0, 0, 0, 0.7);
-  color: white;
-  padding: 10px;
-  margin: 0;
-  text-align: center;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.cuisineDescription {
+  font-size: 0.9rem;
+  color: #666;
 }

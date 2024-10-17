@@ -19,8 +19,8 @@ namespace backend.Models
         [Required]
         public required string Category { get; set; } // MainCourse, Dessert, Starter
 
-        [Required]
-        public required string Cuisine { get; set; } // Italian, Indian, etc.
+        public int CuisineId { get; set; }
+        public Cuisine Cuisine { get; set; }
 
         public List<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
         public List<Instruction> Instructions { get; set; } = new List<Instruction>();

@@ -19,6 +19,7 @@ namespace backend.Data
 
             // Clear existing data
             context.Recipes.RemoveRange(context.Recipes);
+            context.Cuisines.RemoveRange(context.Cuisines);
             await context.SaveChangesAsync();
 
             var options = new JsonSerializerOptions
@@ -30,6 +31,8 @@ namespace backend.Data
             string recipeDirectory = Path.Combine("Data", "SeedData", "recipes");
             string[] recipeFiles = Directory.GetFiles(recipeDirectory, "*.json");
 
+            var cuisines = new Dictionary<string, Cuisine>();
+
             foreach (string recipeFile in recipeFiles)
             {
                 try
@@ -39,13 +42,21 @@ namespace backend.Data
 
                     if (recipeDto != null)
                     {
+                        // Create or get existing Cuisine
+                        if (!cuisines.ContainsKey(recipeDto.Cuisine))
+                        {
+                            var cuisine = new Cuisine { Name = recipeDto.Cuisine, Description = $"{recipeDto.Cuisine} cuisine" };
+                            context.Cuisines.Add(cuisine);
+                            cuisines[recipeDto.Cuisine] = cuisine;
+                        }
+
                         var recipe = new Recipe
                         {
                             Name = recipeDto.Name,
                             Description = recipeDto.Description,
                             Img = recipeDto.Img,
                             Category = recipeDto.Category,
-                            Cuisine = recipeDto.Cuisine,
+                            Cuisine = cuisines[recipeDto.Cuisine],
                             Ingredients = new List<Ingredient>(),
                             Instructions = new List<Instruction>()
                         };
@@ -93,7 +104,7 @@ namespace backend.Data
                 }
             }
 
-            logger.LogInformation("Database seeding completed.");
+            logger.LogInformation($"Database seeding completed. {cuisines.Count} cuisines and {context.Recipes.Count()} recipes added.");
         }
     }
 

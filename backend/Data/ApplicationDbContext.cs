@@ -16,6 +16,7 @@ namespace backend.Data
         public DbSet<GroceryList> GroceryLists { get; set; }
         public DbSet<GroceryItem> GroceryItems { get; set; }
         public DbSet<Menu> Menus { get; set; }
+        public DbSet<Cuisine> Cuisines { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

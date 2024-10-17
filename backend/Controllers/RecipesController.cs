@@ -30,16 +30,17 @@ namespace backend.Controllers
                 .Include(r => r.Ingredients)
                 .Include(r => r.Instructions)
                     .ThenInclude(i => i.Ingredients)
+                .Include(r => r.Cuisine)
                 .ToListAsync();
 
-            var recipeDtos = recipes.Select(r => new RecipeDto
+            return recipes.Select(r => new RecipeDto
             {
                 Id = r.Id,
                 Name = r.Name,
                 Img = r.Img,
                 Description = r.Description,
                 Category = r.Category,
-                Cuisine = r.Cuisine,
+                Cuisine = r.Cuisine.Name,
                 Ingredients = r.Ingredients.Select(i => new IngredientDTO
                 {
                     Name = i.Name,
@@ -57,8 +58,6 @@ namespace backend.Controllers
                     }).ToList()
                 }).ToList()
             }).ToList();
-
-            return Ok(recipeDtos);
         }
 
         [HttpGet("{id:int}")]
@@ -85,7 +84,7 @@ namespace backend.Controllers
                 Img = recipe.Img,
                 Description = recipe.Description,
                 Category = recipe.Category,
-                Cuisine = recipe.Cuisine,
+                Cuisine = recipe.Cuisine.Name,
                 Ingredients = recipe.Ingredients.Select(i => new IngredientDTO
                 {
                     Name = i.Name,
@@ -114,7 +113,7 @@ namespace backend.Controllers
             _logger.LogInformation($"Fetching menu for cuisine: {cuisine}");
 
             var recipes = await _context.Recipes
-                .Where(r => r.Cuisine.ToLower() == cuisine.ToLower())
+                .Where(r => r.Cuisine.Name.ToLower() == cuisine.ToLower())
                 .Include(r => r.Ingredients)
                 .Include(r => r.Instructions)
                     .ThenInclude(i => i.Ingredients)
@@ -147,7 +146,7 @@ namespace backend.Controllers
                 Img = r.Img,
                 Description = r.Description,
                 Category = r.Category,
-                Cuisine = r.Cuisine,
+                Cuisine = r.Cuisine.Name,
                 Ingredients = r.Ingredients.Select(i => new IngredientDTO
                 {
                     Name = i.Name,

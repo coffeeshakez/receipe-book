@@ -11,14 +11,14 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241017120649_UpdateMenuSchema")]
-    partial class UpdateMenuSchema
+    [Migration("20241017184823_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
 
             modelBuilder.Entity("IngredientInstruction", b =>
                 {
@@ -33,6 +33,25 @@ namespace backend.Migrations
                     b.HasIndex("InstructionsId");
 
                     b.ToTable("IngredientInstruction", (string)null);
+                });
+
+            modelBuilder.Entity("backend.Models.Cuisine", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Cuisines");
                 });
 
             modelBuilder.Entity("backend.Models.GroceryItem", b =>
@@ -165,9 +184,8 @@ namespace backend.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Cuisine")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("CuisineId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -182,6 +200,8 @@ namespace backend.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CuisineId");
 
                     b.ToTable("Recipes");
                 });
@@ -239,6 +259,22 @@ namespace backend.Migrations
                     b.HasOne("backend.Models.Recipe", null)
                         .WithMany("Menus")
                         .HasForeignKey("RecipeId");
+                });
+
+            modelBuilder.Entity("backend.Models.Recipe", b =>
+                {
+                    b.HasOne("backend.Models.Cuisine", "Cuisine")
+                        .WithMany("Recipes")
+                        .HasForeignKey("CuisineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cuisine");
+                });
+
+            modelBuilder.Entity("backend.Models.Cuisine", b =>
+                {
+                    b.Navigation("Recipes");
                 });
 
             modelBuilder.Entity("backend.Models.GroceryList", b =>
