@@ -86,7 +86,7 @@ export const BookCarousel: React.FC<BookCarouselProps> = ({ dishes }) => {
       </button>
       <div className={styles.slideContainer} ref={carouselRef}>
         {dishes.map((dish, index) => (
-          <Link href={`/recipe/${dish.id}`} key={dish.id} className={styles.slide}>
+          <Link href={`/receipe/${dish.id}`} key={dish.id} className={styles.slide}>
             <div className={styles.card}>
               <div className={styles.dishImageContainer}>
                 <img src={'burger.jpg'} alt={dish.name} className={styles.dishImage} />

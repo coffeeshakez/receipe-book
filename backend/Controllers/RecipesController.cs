@@ -76,7 +76,7 @@ namespace backend.Controllers
                         .ThenInclude(i => i.Ingredients)
                     .Include(r => r.Category)
                     .Include(r => r.Cuisine)
-                    .AsNoTracking() // Add this line to prevent tracking
+                    .AsNoTracking()
                     .FirstOrDefaultAsync(r => r.Id == id);
 
                 if (recipe == null)
