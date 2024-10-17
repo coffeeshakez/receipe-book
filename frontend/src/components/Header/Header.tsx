@@ -3,12 +3,13 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import styles from './Header.module.scss';  // Changed back to .scss
+import styles from './Header.module.scss';
 import { apiHandler, Menu } from '@/services/apiHandler';
+import { FaHome, FaBars, FaTimes } from 'react-icons/fa';
 
 const Header: React.FC = () => {
   const [menus, setMenus] = useState<Menu[]>([]);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -24,7 +25,7 @@ const Header: React.FC = () => {
     fetchMenus();
   }, []);
 
-  const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const pathSegments = pathname?.split('/').filter(segment => segment !== '') || [];
 
@@ -32,9 +33,12 @@ const Header: React.FC = () => {
     <header className={styles.header}>
       <nav className={styles.nav}>
         <Link href="/" className={styles.logo}>
-          Recipe App
+          <FaHome size={24} />
         </Link>
-        <ul className={styles.navLinks}>
+        <button className={styles.menuToggle} onClick={toggleMenu}>
+          {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+        </button>
+        <ul className={`${styles.navLinks} ${isMenuOpen ? styles.open : ''}`}>
           <li>
             <Link href="/grocery-list">Shopping List</Link>
           </li>
@@ -42,18 +46,14 @@ const Header: React.FC = () => {
             <Link href="/recipes">All Food</Link>
           </li>
           <li className={styles.dropdown}>
-            <button onClick={toggleDropdown} className={styles.dropdownToggle}>
-              Menus
-            </button>
-            {isDropdownOpen && (
-              <ul className={styles.dropdownMenu}>
-                {menus.map(menu => (
-                  <li key={menu.id}>
-                    <Link href={`/menu/${menu.id}`}>{menu.name}</Link>
-                  </li>
-                ))}
-              </ul>
-            )}
+            <span className={styles.dropdownToggle}>Menus</span>
+            <ul className={styles.dropdownMenu}>
+              {menus.map(menu => (
+                <li key={menu.id}>
+                  <Link href={`/menu/${menu.id}`}>{menu.name}</Link>
+                </li>
+              ))}
+            </ul>
           </li>
         </ul>
       </nav>

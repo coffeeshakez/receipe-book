@@ -8,13 +8,13 @@
 .layoutContainer {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: calc(100vh - 48px);
   background-color: white;
 }
 
 .mainContent {
   flex: 1;
-  padding-top: 60px; // Adjust this value based on your header height
   overflow-y: auto;
   background-color: white;
+  color: #333;
 }

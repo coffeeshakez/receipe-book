@@ -1,31 +1,34 @@
 'use client';
 
-import Link from 'next/link';
-import styles from './page.module.css';
+import { useState, useEffect } from 'react';
+import { useParams } from 'next/navigation';
 import { Menu } from '@/components/Menu/Menu';
-import { CuisineMenu } from '@/components/CuisineMenu';
-import { apiHandler, Recipe } from '@/services/apiHandler';
-import { useEffect, useState } from 'react';
+import { apiHandler, Recipe, Menu as MenuType } from '@/services/apiHandler';
+import styles from './page.module.scss';
 
-export default function Page() {
+export default function MenuPage() {
+  const [menu, setMenu] = useState<MenuType | null>(null);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const params = useParams();
+  const id = params.id as string;
 
   useEffect(() => {
-    const fetchRecipes = async () => {
+    const fetchMenuAndRecipes = async () => {
       try {
-        const fetchedRecipes = await apiHandler.getRecipes();
+        const fetchedMenu = await apiHandler.getMenu(parseInt(id));
+        setMenu(fetchedMenu);
+
+        const fetchedRecipes = await Promise.all(
+          fetchedMenu.recipeIds.map(recipeId => apiHandler.getRecipe(recipeId))
+        );
         setRecipes(fetchedRecipes);
       } catch (error) {
-        console.error('Error fetching recipes:', error);
+        console.error('Error fetching menu and recipes:', error);
       }
     };
 
-    fetchRecipes();
-  }, []);
-
-  const handleMenuSelect = (selectedRecipes: Recipe[]) => {
-    setRecipes(selectedRecipes);
-  };
+    fetchMenuAndRecipes();
+  }, [id]);
 
   // Group recipes by category
   const recipesByCategory = recipes.reduce((acc, recipe) => {
@@ -48,10 +51,14 @@ export default function Page() {
     })),
   }));
 
+  if (!menu) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className={styles.pageContainer}>
+      <h1 className={styles.menuTitle}>{menu.name}</h1>
       <Menu menuSections={menuSections} />
-      <CuisineMenu onMenuSelect={handleMenuSelect} />
     </div>
   );
 }
