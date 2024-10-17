@@ -8,7 +8,7 @@
 .layoutContainer {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 48px);
+  min-height: calc(100vh - 120px); /* Adjusted to match new header height */
   background-color: white;
 }
 
@@ -17,4 +17,5 @@
   overflow-y: auto;
   background-color: white;
   color: #333;
+  padding: 20px;
 }
