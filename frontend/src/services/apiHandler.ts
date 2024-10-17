@@ -194,11 +194,8 @@ export const apiHandler = {
     return response.json();
   },
 
-  getPopularMenus: async (): Promise<Menu[]> => {
-    const response = await fetch('/api/menus/popular');
-    if (!response.ok) {
-      throw new Error('Failed to fetch popular menus');
-    }
-    return response.json();
-  },
+  // Remove or comment out the getPopularMenus method if it exists
+  // async getPopularMenus(): Promise<Menu[]> {
+  //   ...
+  // },
 };

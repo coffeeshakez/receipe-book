@@ -1,0 +1,316 @@
+.bookCarousel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 600px;
+  position: relative;
+}
+
+.book {
+  width: 800px;
+  height: 500px;
+  display: flex;
+  perspective: 2000px;
+  position: relative;
+}
+
+.page {
+  width: 50%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  transform-style: preserve-3d;
+  transition: transform 0.5s;
+  z-index: 1;
+}
+
+.leftPage {
+  left: 0;
+  transform-origin: right;
+}
+
+.rightPage {
+  right: 0;
+  transform-origin: left;
+}
+
+.front,
+.back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: white;
+  backface-visibility: hidden;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.back {
+  transform: rotateY(180deg);
+}
+
+.flippingLeft {
+  transform: rotateY(-180deg);
+}
+
+.flippingRight {
+  transform: rotateY(180deg);
+}
+
+.dishImage {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.dishName {
+  font-size: 1.5rem;
+  margin: 10px 0;
+}
+
+.dishDescription {
+  font-size: 1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  z-index: 2;
+}
+
+.leftArrow {
+  left: 10px;
+}
+
+.rightArrow {
+  right: 10px;
+}
+
+.dots {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #ccc;
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.activeDot {
+  background-color: #333;
+}
+
+.carousel {
+  position: relative;
+  width: 100%;
+  padding: 40px 0;
+  overflow: hidden;
+}
+
+.slideContainer {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  padding: 20px 0;
+}
+
+.slide {
+  flex: 0 0 calc(100% / 3.5);
+  scroll-snap-align: start;
+  padding: 0 10px;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.activeSlide {
+  transform: scale(1.05);
+}
+
+.emptySlide {
+  height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.card {
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 340px;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.dishImageContainer {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+.dishImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cardContent {
+  padding: 15px;
+  height: 160px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.dishName {
+  font-size: 1.1rem;
+  margin: 0 0 8px;
+  color: #333;
+}
+
+.dishDescription {
+  font-size: 0.9rem;
+  color: #666;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  flex-grow: 1;
+  line-height: 1.4;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  width: 50px;
+  height: 50px;
+  border: none;
+  cursor: pointer;
+  font-size: 1.8rem;
+  z-index: 2;
+  border-radius: 50%;
+  transition: background-color 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+  opacity: 0.7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    opacity: 1;
+    transform: translateY(-50%) scale(1.1);
+  }
+}
+
+.leftArrow {
+  left: 20px;
+}
+
+.rightArrow {
+  right: 20px;
+}
+
+.dots {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #ccc;
+  margin: 0 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+
+  &:hover {
+    background-color: #999;
+    transform: scale(1.2);
+  }
+}
+
+.activeDot {
+  background-color: #333;
+  transform: scale(1.2);
+}
+
+@media (max-width: 1024px) {
+  .slide {
+    flex: 0 0 calc(100% / 2.5);
+  }
+}
+
+@media (max-width: 768px) {
+  .slide {
+    flex: 0 0 calc(100% / 1.5);
+  }
+
+  .emptySlide {
+    flex: 0 0 calc(100% / 1.5);
+  }
+
+  .card {
+    height: 320px;
+  }
+
+  .dishImageContainer {
+    height: 160px;
+  }
+
+  .cardContent {
+    padding: 12px;
+    height: 160px;
+  }
+}
+
+@media (max-width: 480px) {
+  .slide {
+    flex: 0 0 90%;
+  }
+
+  .emptySlide {
+    flex: 0 0 90%;
+  }
+}

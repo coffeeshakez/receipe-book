@@ -4,31 +4,124 @@
   gap: 20px;
 }
 
+.menuList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+  padding: 20px;
+}
+
 .menuCard {
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  padding: 15px;
-  text-align: center;
-  transition: background-color 0.3s ease;
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-decoration: none;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 
   &:hover {
-    background-color: #e9ecef;
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
   }
 }
 
-.menuName {
-  font-size: 1.1rem;
+.menuHeader {
+  padding: 20px;
+  text-align: center;
+  position: relative;
+}
+
+.menuIcon {
+  font-size: 2rem;
+  color: #ffffff;
   margin-bottom: 10px;
+}
+
+.menuName {
+  color: #ffffff;
+  font-size: 1.6rem;
+  margin: 0;
+  font-weight: 600;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.menuContent {
+  padding: 25px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #f8f9fa;
 }
 
 .menuDescription {
-  font-size: 0.9rem;
-  color: #666;
-  margin-bottom: 10px;
+  font-size: 1.1rem;
+  color: #495057;
+  margin-bottom: 20px;
+  line-height: 1.5;
 }
 
-.recipeCount {
-  font-size: 0.8rem;
-  color: #007bff;
-  font-weight: bold;
+.menuInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.recipeCount,
+.estimatedTime {
+  color: #333;
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+}
+
+.infoIcon {
+  margin-right: 5px;
+  font-size: 1rem;
+}
+
+// Color schemes
+.blue {
+  .menuHeader {
+    background: linear-gradient(135deg, #2193b0, #6dd5ed);
+  }
+}
+
+.green {
+  .menuHeader {
+    background: linear-gradient(135deg, #56ab2f, #a8e063);
+  }
+}
+
+.purple {
+  .menuHeader {
+    background: linear-gradient(135deg, #834d9b, #d04ed6);
+  }
+}
+
+.orange {
+  .menuHeader {
+    background: linear-gradient(135deg, #ff8008, #ffc837);
+  }
+}
+
+.pink {
+  .menuHeader {
+    background: linear-gradient(135deg, #ff5f6d, #ffc371);
+  }
+}
+
+.teal {
+  .menuHeader {
+    background: linear-gradient(135deg, #11998e, #38ef7d);
+  }
 }

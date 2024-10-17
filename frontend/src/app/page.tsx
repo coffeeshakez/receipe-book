@@ -11,7 +11,7 @@ import { apiHandler, Recipe, Menu } from '@/services/apiHandler';
 
 export default function HomePage() {
   const [highlightedDishes, setHighlightedDishes] = useState<Recipe[]>([]);
-  const [popularMenus, setPopularMenus] = useState<Menu[]>([]);
+  const [menus, setMenus] = useState<Menu[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,9 +21,9 @@ export default function HomePage() {
         // For now, let's just use the first 4 recipes as highlighted dishes
         setHighlightedDishes(dishes.slice(0, 4));
 
-        // Fetch popular menus
-        const menus = await apiHandler.getPopularMenus();
-        setPopularMenus(menus);
+        // Fetch all menus instead of popular menus
+        const fetchedMenus = await apiHandler.getMenus();
+        setMenus(fetchedMenus);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -41,13 +41,12 @@ export default function HomePage() {
       </section>
 
       <section className={styles.highlightedDishes}>
-        <h2>Today's Highlighted Dishes</h2>
         <HighlightedDishes dishes={highlightedDishes} />
       </section>
 
       <section className={styles.popularMenus}>
-        <h2>Popular Menus</h2>
-        <PopularMenus menus={popularMenus} />
+        <h2>Our Menus</h2>
+        <PopularMenus menus={menus} />
       </section>
 
       <section className={styles.cuisineExplorer}>
