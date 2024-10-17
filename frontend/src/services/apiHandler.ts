@@ -75,8 +75,8 @@ export const apiHandler = {
     return response.json();
   },
 
-  async addGroceryItem(item: GroceryItem): Promise<GroceryItem> {
-    const response = await fetch(`${API_BASE_URL}/grocerylist`, {
+  async addGroceryItem(listId: number, item: Omit<GroceryItem, 'id'>): Promise<GroceryItem> {
+    const response = await fetch(`${API_BASE_URL}/grocerylist/${listId}/item`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -84,13 +84,15 @@ export const apiHandler = {
       body: JSON.stringify(item),
     });
     if (!response.ok) {
-      throw new Error('Failed to add grocery item');
+      const errorText = await response.text();
+      console.error('Failed to add grocery item:', errorText);
+      throw new Error(`Failed to add grocery item: ${response.status} ${response.statusText}`);
     }
     return response.json();
   },
 
-  async updateGroceryItem(id: number, item: GroceryItem): Promise<void> {
-    const response = await fetch(`${API_BASE_URL}/grocerylist/${id}`, {
+  async updateGroceryItem(listId: number, itemId: number, item: Omit<GroceryItem, 'id'>): Promise<GroceryItem> {
+    const response = await fetch(`${API_BASE_URL}/grocerylist/${listId}/item/${itemId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -98,8 +100,11 @@ export const apiHandler = {
       body: JSON.stringify(item),
     });
     if (!response.ok) {
-      throw new Error('Failed to update grocery item');
+      const errorText = await response.text();
+      console.error('Failed to update grocery item:', errorText);
+      throw new Error(`Failed to update grocery item: ${response.status} ${response.statusText}`);
     }
+    return response.json();
   },
 
   async createGroceryList(recipeId: number): Promise<GroceryList> {

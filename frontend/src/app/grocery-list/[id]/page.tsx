@@ -2,7 +2,7 @@
 import styles from './page.module.scss';
 import { TextInputWithButton } from '@/components/TextInputWithButton/TextInputWithButton';
 import { useEffect, useState, useRef } from 'react';
-import { apiHandler, GroceryList, GroceryItem } from '@/api/apiHandler';
+import { apiHandler, GroceryList, GroceryItem } from '@/services/apiHandler';
 import { useParams } from 'next/navigation';
 
 export default function GroceryListPage() {
@@ -61,7 +61,7 @@ export default function GroceryListPage() {
     try {
       const newItem = await apiHandler.addGroceryItem(listId, {
         name: newItemName,
-        quantity: '',
+        quantity: '1',
         unit: '',
         checked: false
       });
