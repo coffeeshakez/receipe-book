@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import styles from './page.module.css';
-import {Menu} from '@/components/Menu/Menu';
+import { Menu } from '@/components/Menu/Menu';
+import { CuisineMenu } from '@/components/CuisineMenu';
 import { apiHandler, Recipe } from '@/api/apiHandler';
 import { useEffect, useState } from 'react';
 
@@ -14,7 +15,6 @@ export default function Page() {
       try {
         const fetchedRecipes = await apiHandler.getRecipes();
         setRecipes(fetchedRecipes);
-        console.log(fetchedRecipes);
       } catch (error) {
         console.error('Error fetching recipes:', error);
       }
@@ -39,6 +39,7 @@ export default function Page() {
           },
         ]}
       />
+      <CuisineMenu />
     </div>
   );
 }
