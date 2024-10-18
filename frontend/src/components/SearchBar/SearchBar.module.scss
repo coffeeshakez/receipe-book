@@ -8,6 +8,7 @@
 .searchBar {
   display: flex;
   width: 100%;
+  transition: all 0.3s ease;
 }
 
 .searchInput {
@@ -17,6 +18,12 @@
   border: 1px solid #ccc;
   border-radius: 4px 0 0 4px;
   outline: none;
+  transition: all 0.3s ease;
+
+  &:focus {
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+    border-color: #4CAF50;
+  }
 }
 
 .searchButton {
@@ -27,10 +34,15 @@
   border: none;
   border-radius: 0 4px 4px 0;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
 
   &:hover {
     background-color: #45a049;
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.95);
   }
 }
 
@@ -39,6 +51,7 @@
   padding: 10px;
   font-style: italic;
   color: #666;
+  animation: pulse 1.5s infinite;
 }
 
 .searchResults {
@@ -54,35 +67,57 @@
   z-index: 10;
   max-height: 300px;
   overflow-y: auto;
+  animation: slideDown 0.3s ease;
 
   li {
     padding: 10px 15px;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
     &:hover {
       background-color: #f0f0f0;
+      transform: translateX(5px);
     }
 
     &:not(:last-child) {
       border-bottom: 1px solid #eee;
     }
 
-    // Add these new styles
-    display: flex;
-    align-items: center;
-
-    &::before {
-      content: '🔍';
-      margin-right: 10px;
-      font-size: 14px;
-    }
-
     &::after {
       content: '→';
-      margin-left: auto;
       color: #999;
       font-size: 18px;
+      transition: transform 0.2s ease;
     }
+
+    &:hover::after {
+      transform: translateX(5px);
+    }
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
   }
 }

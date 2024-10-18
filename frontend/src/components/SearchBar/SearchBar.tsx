@@ -12,15 +12,18 @@ export const SearchBar: React.FC = () => {
 
   const debouncedSearch = useCallback(
     debounce(async (term: string) => {
-      if (term.length > 1) {  // Changed from 2 to 1 to search on shorter terms
+      if (term.length > 1) {
         setIsLoading(true);
         try {
           const results = await apiHandler.searchRecipes(term);
-          setSearchResults(results);
+          // Add a small delay before showing results
+          setTimeout(() => {
+            setSearchResults(results);
+            setIsLoading(false);
+          }, 300);
         } catch (error) {
           console.error('Error searching recipes:', error);
           setSearchResults([]);
-        } finally {
           setIsLoading(false);
         }
       } else {
@@ -61,7 +64,6 @@ export const SearchBar: React.FC = () => {
           Search
         </button>
       </form>
-      {isLoading && <div className={styles.loading}>Loading...</div>}
       {!isLoading && searchResults.length > 0 && (
         <ul className={styles.searchResults}>
           {searchResults.map((recipe) => (
