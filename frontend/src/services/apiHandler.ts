@@ -5,7 +5,8 @@ export interface Recipe {
   name: string;
   img: string;
   description: string;
-  category: string; // Add this line
+  category: string;
+  cuisine: string;
   ingredients: Ingredient[];
   instructions: Instruction[];
 }
@@ -66,13 +67,22 @@ export interface CuisineWithRecipes {
   totalPages: number;
 }
 
+export interface Category {
+  id: number;
+  name: string;
+}
+
 export const apiHandler = {
-  async getRecipes(): Promise<Recipe[]> {
-    const response = await fetch(`${API_BASE_URL}/recipes`);
+  async getRecipes(categoryIds: number[] = [], cuisineIds: number[] = []): Promise<Recipe[]> {
+    const params = new URLSearchParams();
+    categoryIds.forEach(id => params.append('categoryId', id.toString()));
+    cuisineIds.forEach(id => params.append('cuisineId', id.toString()));
+    
+    const response = await fetch(`${API_BASE_URL}/recipes?${params.toString()}`);
     if (!response.ok) {
       throw new Error('Failed to fetch recipes');
     }
-    return response.json();
+    return await response.json();
   },
 
   async getRecipe(id: number): Promise<Recipe> {
@@ -240,11 +250,23 @@ export const apiHandler = {
   },
 
   // Add this method to the existing apiHandler object
-  getRandomRecipe: async (): Promise<Recipe> => {
-    const response = await fetch(`${API_BASE_URL}/recipes/random`);
+  getRandomRecipe: async (categoryIds: number[] = [], cuisineIds: number[] = []): Promise<Recipe> => {
+    const params = new URLSearchParams();
+    categoryIds.forEach(id => params.append('categoryId', id.toString()));
+    cuisineIds.forEach(id => params.append('cuisineId', id.toString()));
+    
+    const response = await fetch(`${API_BASE_URL}/api/recipes/random?${params.toString()}`);
     if (!response.ok) {
       throw new Error('Failed to fetch random recipe');
     }
-    return response.json();
+    return await response.json();
+  },
+
+  getCategories: async (): Promise<Category[]> => {
+    const response = await fetch(`${API_BASE_URL}/categories`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch categories');
+    }
+    return await response.json();
   },
 };

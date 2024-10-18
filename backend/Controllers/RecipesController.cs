@@ -26,18 +26,35 @@ namespace backend.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RecipeDto>>> GetRecipes()
+        public async Task<ActionResult<IEnumerable<RecipeDto>>> GetRecipes(
+            [FromQuery] List<int> categoryId = null, 
+            [FromQuery] List<int> cuisineId = null)
         {
             _logger.LogInformation("GetRecipes method called");
-            var recipes = await _context.Recipes
+
+            var query = _context.Recipes
                 .Include(r => r.Ingredients)
                 .Include(r => r.Instructions)
                     .ThenInclude(i => i.Ingredients)
                 .Include(r => r.Cuisine)
                 .Include(r => r.Category)
-                .ToListAsync();
+                .AsQueryable();
 
-            return recipes.Select(r => new RecipeDto
+            if (categoryId != null && categoryId.Any())
+            {
+                query = query.Where(r => categoryId.Contains(r.CategoryId));
+            }
+
+            if (cuisineId != null && cuisineId.Any())
+            {
+                query = query.Where(r => cuisineId.Contains(r.CuisineId));
+            }
+
+            var recipes = await query.ToListAsync();
+
+            _logger.LogInformation($"Found {recipes.Count} recipes");
+
+            var recipeDtos = recipes.Select(r => new RecipeDto
             {
                 Id = r.Id,
                 Name = r.Name,
@@ -62,6 +79,8 @@ namespace backend.Controllers
                     }).ToList()
                 }).ToList()
             }).ToList();
+
+            return Ok(recipeDtos);
         }
 
         [HttpGet("{id:int}")]
@@ -234,20 +253,36 @@ namespace backend.Controllers
         }
 
         [HttpGet("random")]
-        public async Task<ActionResult<RecipeDto>> GetRandomRecipe()
+        public async Task<ActionResult<RecipeDto>> GetRandomRecipe([FromQuery] List<int> categoryId, [FromQuery] List<int> cuisineId)
         {
-            var count = await _context.Recipes.CountAsync();
-            var random = new Random();
-            var index = random.Next(0, count);
-
-            var recipe = await _context.Recipes
+            var query = _context.Recipes
                 .Include(r => r.Ingredients)
                 .Include(r => r.Instructions)
                     .ThenInclude(i => i.Ingredients)
                 .Include(r => r.Cuisine)
                 .Include(r => r.Category)
-                .Skip(index)
-                .FirstOrDefaultAsync();
+                .AsQueryable();
+
+            if (categoryId.Any())
+            {
+                query = query.Where(r => categoryId.Contains(r.CategoryId));
+            }
+
+            if (cuisineId.Any())
+            {
+                query = query.Where(r => cuisineId.Contains(r.CuisineId));
+            }
+
+            var count = await query.CountAsync();
+            if (count == 0)
+            {
+                return NotFound("No recipes found matching the specified criteria.");
+            }
+
+            var random = new Random();
+            var index = random.Next(0, count);
+
+            var recipe = await query.Skip(index).FirstOrDefaultAsync();
 
             if (recipe == null)
             {
