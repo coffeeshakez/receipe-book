@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
+using System;
 
 namespace backend.Controllers
 {
@@ -230,6 +231,54 @@ namespace backend.Controllers
             }).ToList();
 
             return Ok(recipeDtos);
+        }
+
+        [HttpGet("random")]
+        public async Task<ActionResult<RecipeDto>> GetRandomRecipe()
+        {
+            var count = await _context.Recipes.CountAsync();
+            var random = new Random();
+            var index = random.Next(0, count);
+
+            var recipe = await _context.Recipes
+                .Include(r => r.Ingredients)
+                .Include(r => r.Instructions)
+                    .ThenInclude(i => i.Ingredients)
+                .Include(r => r.Cuisine)
+                .Include(r => r.Category)
+                .Skip(index)
+                .FirstOrDefaultAsync();
+
+            if (recipe == null)
+            {
+                return NotFound();
+            }
+
+            return new RecipeDto
+            {
+                Id = recipe.Id,
+                Name = recipe.Name,
+                Img = recipe.Img,
+                Description = recipe.Description,
+                Category = recipe.Category.Name,
+                Cuisine = recipe.Cuisine.Name,
+                Ingredients = recipe.Ingredients.Select(i => new IngredientDTO
+                {
+                    Name = i.Name,
+                    Quantity = i.Quantity,
+                    Measurement = i.Measurement
+                }).ToList(),
+                Instructions = recipe.Instructions.Select(i => new InstructionDTO
+                {
+                    InstructionText = i.InstructionText,
+                    Ingredients = i.Ingredients.Select(ing => new IngredientDTO
+                    {
+                        Name = ing.Name,
+                        Quantity = ing.Quantity,
+                        Measurement = ing.Measurement
+                    }).ToList()
+                }).ToList()
+            };
         }
     }
 }

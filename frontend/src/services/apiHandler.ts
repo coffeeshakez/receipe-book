@@ -238,4 +238,13 @@ export const apiHandler = {
     }
     return response.json();
   },
+
+  // Add this method to the existing apiHandler object
+  getRandomRecipe: async (): Promise<Recipe> => {
+    const response = await fetch(`${API_BASE_URL}/recipes/random`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch random recipe');
+    }
+    return response.json();
+  },
 };

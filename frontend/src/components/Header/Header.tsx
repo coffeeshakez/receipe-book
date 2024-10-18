@@ -55,6 +55,9 @@ const Header: React.FC = () => {
               ))}
             </ul>
           </li>
+          <li>
+            <Link href="/explore">Explore</Link>
+          </li>
         </ul>
       </nav>
       <div className={styles.breadcrumbs}>
