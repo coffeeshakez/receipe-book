@@ -183,5 +183,53 @@ namespace backend.Controllers
 
             return Ok(menuDtos);
         }
+
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<RecipeDto>>> SearchRecipes([FromQuery] string query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+                return BadRequest("Search query cannot be empty.");
+
+            query = query.ToLower();
+
+            var recipes = await _context.Recipes
+                .Include(r => r.Category)
+                .Include(r => r.Cuisine)
+                .Include(r => r.Ingredients)
+                .Include(r => r.Instructions)
+                    .ThenInclude(i => i.Ingredients)
+                .Where(r => r.Name.ToLower().Contains(query) 
+                    || r.Description.ToLower().Contains(query) 
+                    || r.Ingredients.Any(i => i.Name.ToLower().Contains(query)))
+                .ToListAsync();
+
+            var recipeDtos = recipes.Select(r => new RecipeDto
+            {
+                Id = r.Id,
+                Name = r.Name,
+                Img = r.Img,
+                Description = r.Description,
+                Category = r.Category.Name,
+                Cuisine = r.Cuisine.Name,
+                Ingredients = r.Ingredients.Select(i => new IngredientDTO
+                {
+                    Name = i.Name,
+                    Quantity = i.Quantity,
+                    Measurement = i.Measurement
+                }).ToList(),
+                Instructions = r.Instructions.Select(i => new InstructionDTO
+                {
+                    InstructionText = i.InstructionText,
+                    Ingredients = i.Ingredients.Select(ing => new IngredientDTO
+                    {
+                        Name = ing.Name,
+                        Quantity = ing.Quantity,
+                        Measurement = ing.Measurement
+                    }).ToList()
+                }).ToList()
+            }).ToList();
+
+            return Ok(recipeDtos);
+        }
     }
 }

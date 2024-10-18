@@ -230,4 +230,12 @@ export const apiHandler = {
     }
     return response.json();
   },
+
+  searchRecipes: async (query: string): Promise<Recipe[]> => {
+    const response = await fetch(`${API_BASE_URL}/recipes/search?query=${encodeURIComponent(query)}`);
+    if (!response.ok) {
+      throw new Error('Failed to search recipes');
+    }
+    return response.json();
+  },
 };

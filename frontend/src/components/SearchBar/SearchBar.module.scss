@@ -1,23 +1,28 @@
+.searchBarContainer {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
 .searchBar {
   display: flex;
-  max-width: 600px;
-  margin: 0 auto;
+  width: 100%;
 }
 
 .searchInput {
   flex-grow: 1;
   padding: 10px 15px;
-  font-size: 1rem;
-  border: 2px solid #007bff;
-  border-right: none;
+  font-size: 16px;
+  border: 1px solid #ccc;
   border-radius: 4px 0 0 4px;
   outline: none;
 }
 
 .searchButton {
   padding: 10px 20px;
-  font-size: 1rem;
-  background-color: #007bff;
+  font-size: 16px;
+  background-color: #4CAF50;
   color: white;
   border: none;
   border-radius: 0 4px 4px 0;
@@ -25,6 +30,59 @@
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #0056b3;
+    background-color: #45a049;
+  }
+}
+
+.loading {
+  text-align: center;
+  padding: 10px;
+  font-style: italic;
+  color: #666;
+}
+
+.searchResults {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  max-height: 300px;
+  overflow-y: auto;
+
+  li {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #f0f0f0;
+    }
+
+    &:not(:last-child) {
+      border-bottom: 1px solid #eee;
+    }
+
+    // Add these new styles
+    display: flex;
+    align-items: center;
+
+    &::before {
+      content: '🔍';
+      margin-right: 10px;
+      font-size: 14px;
+    }
+
+    &::after {
+      content: '→';
+      margin-left: auto;
+      color: #999;
+      font-size: 18px;
+    }
   }
 }

@@ -1,0 +1,37 @@
+.searchResults {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.resultsList {
+  list-style-type: none;
+  padding: 0;
+}
+
+.resultItem {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  h2 {
+    margin: 0 0 10px;
+    font-size: 1.2rem;
+  }
+
+  p {
+    margin: 0;
+    color: #666;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+}
