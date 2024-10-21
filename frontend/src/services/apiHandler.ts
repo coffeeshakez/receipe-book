@@ -269,4 +269,20 @@ export const apiHandler = {
     }
     return await response.json();
   },
+
+  async addRecipe(recipe: Recipe): Promise<Recipe> {
+    const response = await fetch(`${API_BASE_URL}/recipes`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(recipe),
+    });
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Failed to add recipe:', errorText);
+      throw new Error(`Failed to add recipe: ${response.status} ${response.statusText}`);
+    }
+    return response.json();
+  },
 };
