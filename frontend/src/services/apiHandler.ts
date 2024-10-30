@@ -93,16 +93,24 @@ export const apiHandler = {
     return response.json();
   },
 
-  async getGroceryList(recipeId: number): Promise<GroceryItem[]> {
-    const response = await fetch(`${API_BASE_URL}/grocerylist/${recipeId}`);
+  async getGroceryList(id: number): Promise<GroceryList> {
+    const response = await fetch(`${API_BASE_URL}/grocerylist/${id}`);
     if (!response.ok) {
       throw new Error('Failed to fetch grocery list');
     }
     return response.json();
   },
 
+  async getGroceryLists(): Promise<GroceryList[]> {
+    const response = await fetch(`${API_BASE_URL}/grocerylist`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch grocery lists');
+    }
+    return response.json();
+  },
+
   async addGroceryItem(listId: number, item: Omit<GroceryItem, 'id'>): Promise<GroceryItem> {
-    const response = await fetch(`${API_BASE_URL}/grocerylist/${listId}/item`, {
+    const response = await fetch(`${API_BASE_URL}/grocerylist/${listId}/items`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -110,15 +118,22 @@ export const apiHandler = {
       body: JSON.stringify(item),
     });
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Failed to add grocery item:', errorText);
-      throw new Error(`Failed to add grocery item: ${response.status} ${response.statusText}`);
+      throw new Error('Failed to add grocery item');
     }
     return response.json();
   },
 
+  async removeGroceryItem(listId: number, itemId: number): Promise<void> {
+    const response = await fetch(`${API_BASE_URL}/grocerylist/${listId}/items/${itemId}`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) {
+      throw new Error('Failed to remove grocery item');
+    }
+  },
+
   async updateGroceryItem(listId: number, itemId: number, item: Omit<GroceryItem, 'id'>): Promise<GroceryItem> {
-    const response = await fetch(`${API_BASE_URL}/grocerylist/${listId}/item/${itemId}`, {
+    const response = await fetch(`${API_BASE_URL}/grocerylist/${listId}/items/${itemId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -126,14 +141,12 @@ export const apiHandler = {
       body: JSON.stringify(item),
     });
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Failed to update grocery item:', errorText);
-      throw new Error(`Failed to update grocery item: ${response.status} ${response.statusText}`);
+      throw new Error('Failed to update grocery item');
     }
     return response.json();
   },
 
-  async createGroceryList(recipeId: number): Promise<GroceryList> {
+  async createGroceryListFromRecipe(recipeId: number): Promise<GroceryList> {
     const response = await fetch(`${API_BASE_URL}/grocerylist/create/${recipeId}`, {
       method: 'POST',
     });
@@ -143,14 +156,14 @@ export const apiHandler = {
     return response.json();
   },
 
-
-  async removeGroceryItem(listId: number, itemId: number): Promise<void> {
-    const response = await fetch(`${API_BASE_URL}/grocerylist/${listId}/item/${itemId}`, {
-      method: 'DELETE',
+  async addRecipeToGroceryList(listId: number, recipeId: number): Promise<GroceryItem[]> {
+    const response = await fetch(`${API_BASE_URL}/grocerylist/${listId}/addrecipe/${recipeId}`, {
+      method: 'POST',
     });
     if (!response.ok) {
-      throw new Error('Failed to remove grocery item');
+      throw new Error('Failed to add recipe to grocery list');
     }
+    return response.json();
   },
 
   async getMenuByCuisine(cuisine: string): Promise<Recipe[]> {

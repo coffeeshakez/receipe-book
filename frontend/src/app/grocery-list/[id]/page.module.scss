@@ -27,150 +27,122 @@
 }
 
 .container {
-  max-width: 800px; // Increased from 600px
+  max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  font-family: Arial, sans-serif;
-  color: #333;
-  width: 100%; // Added to ensure full width on smaller screens
 }
 
 .title {
-  font-size: 28px;
-  margin-bottom: 24px;
-  color: #2c3e50;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #333;
 }
 
 .itemList {
-  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
 .item {
   display: flex;
   align-items: center;
-  padding: 12px;
-  border-bottom: 1px solid #f0f0f0;
-  transition: transform 0.3s ease;
-  overflow: hidden;
+  padding: 0.75rem;
+  border-bottom: 1px solid #eee;
   position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease;
 
-  &:hover {
-    background-color: #f9f9f9;
+  &.swiped {
+    .itemContent {
+      transform: translateX(-60px);
+    }
   }
 }
 
 .itemContent {
   display: flex;
   align-items: center;
-  width: calc(100% - 60px); // Adjust width to accommodate the always-visible remove button
+  gap: 1rem;
+  width: 100%;
   transition: transform 0.3s ease;
-}
+  background: white;
 
-.swiped .itemContent {
-  transform: translateX(-60px);
-}
-
-.checkbox {
-  margin-right: 12px;
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  border: 2px solid #bdc3c7;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-
-  &:checked {
-    border-color: #3498db;
-    background-color: #3498db;
-
-    &::after {
-      content: '\2714';
-      font-size: 14px;
-      color: white;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
+  input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
   }
 }
 
-.itemLabel {
-  flex-grow: 1;
-  font-size: 16px;
-  transition: color 0.3s ease;
+.itemName {
+  flex: 1;
+  font-size: 1.1rem;
 }
 
-.checkedLabel {
+.itemQuantity {
+  color: #666;
+}
+
+.checked {
   text-decoration: line-through;
-  color: #95a5a6;
+  color: #999;
 }
 
-.removeButton {
+.deleteButton {
   position: absolute;
   right: 0;
   top: 0;
   bottom: 0;
   width: 60px;
-  background-color: #e74c3c;
+  background-color: #ff4444;
   color: white;
   border: none;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.3s ease;
-  cursor: pointer;
-  opacity: 1; // Make it always visible on desktop
 
   &:hover {
-    background-color: darken(#e74c3c, 10%);
+    background-color: #cc0000;
   }
-}
-
-.swiped .removeButton {
-  right: 0;
-  opacity: 1;
-}
-
-@media (max-width: 768px) {
-  .itemContent {
-    width: 100%; // Full width on mobile
-  }
-
-  .removeButton {
-    right: -60px; // Hide it off-screen initially on mobile
-    opacity: 0;
-    transition: right 0.3s ease, opacity 0.3s ease;
-  }
-
-  .swiped .itemContent {
-    transform: translateX(-60px);
-  }
-
-  .swiped .removeButton {
-    right: 0;
-    opacity: 1;
-  }
-}
-
-.divider {
-  margin: 24px 0;
-  border: none;
-  border-top: 1px solid #ecf0f1;
 }
 
 .checkedItems {
-  opacity: 0.7;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 2px solid #eee;
+
+  h2 {
+    font-size: 1.5rem;
+    color: #666;
+    margin-bottom: 1rem;
+  }
 }
 
 .error {
   color: #e74c3c;
-  margin-top: 20px;
-  padding: 12px;
-  background-color: #fadbd8;
-  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  background-color: #fdf0ed;
+  border-radius: 4px;
+  margin: 1rem 0;
+}
+
+@media (hover: hover) {
+  .item:hover .deleteButton {
+    display: flex;
+  }
+}
+
+@media (hover: none) {
+  .deleteButton {
+    display: none;
+  }
+  
+  .swiped .deleteButton {
+    display: flex;
+  }
 }
 
 @keyframes fadeIn {
@@ -238,5 +210,48 @@
   .container {
     max-width: 100%;
     padding: 20px;
+  }
+}
+
+.addItemForm {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.addItemInput {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  font-size: 1rem;
+
+  &:focus {
+    outline: none;
+    border-color: #0066cc;
+    box-shadow: 0 0 0 2px rgba(0,102,204,0.2);
+  }
+}
+
+.addItemButton {
+  padding: 0.75rem 1.5rem;
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover:not(:disabled) {
+    background-color: #0052a3;
+  }
+
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
   }
 }

@@ -2,32 +2,40 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import styles from './Header.module.scss';
-import { apiHandler, Menu } from '@/services/apiHandler';
+import { apiHandler, Menu, GroceryList } from '@/services/apiHandler';
 import { FaHome, FaBars, FaTimes } from 'react-icons/fa';
 
 const Header: React.FC = () => {
   const [menus, setMenus] = useState<Menu[]>([]);
+  const [groceryLists, setGroceryLists] = useState<GroceryList[]>([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
-    const fetchMenus = async () => {
+    const fetchData = async () => {
       try {
-        const fetchedMenus = await apiHandler.getMenus();
+        const [fetchedMenus, fetchedLists] = await Promise.all([
+          apiHandler.getMenus(),
+          apiHandler.getGroceryLists()
+        ]);
         setMenus(fetchedMenus);
+        setGroceryLists(fetchedLists);
       } catch (error) {
-        console.error('Error fetching menus:', error);
+        console.error('Error fetching data:', error);
       }
     };
 
-    fetchMenus();
+    fetchData();
   }, []);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
-  const pathSegments = pathname?.split('/').filter(segment => segment !== '') || [];
+  const handleGroceryListSelect = (listId: number) => {
+    router.push(`/grocery-list/${listId}`);
+  };
 
   return (
     <header className={styles.header}>
@@ -39,8 +47,24 @@ const Header: React.FC = () => {
           {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
         </button>
         <ul className={`${styles.navLinks} ${isMenuOpen ? styles.open : ''}`}>
-          <li>
-            <Link href="/grocery-list">Shopping List</Link>
+          <li className={styles.dropdown}>
+            <span className={styles.dropdownToggle}>Shopping Lists</span>
+            <ul className={styles.dropdownMenu}>
+              {groceryLists.length === 0 ? (
+                <li className={styles.dropdownItem}>No lists yet</li>
+              ) : (
+                groceryLists.map(list => (
+                  <li key={list.id} className={styles.dropdownItem}>
+                    <button onClick={() => handleGroceryListSelect(list.id)}>
+                      List {list.id} ({list.items.length} items)
+                      <span className={styles.listDate}>
+                        {new Date(list.createdAt).toLocaleDateString()}
+                      </span>
+                    </button>
+                  </li>
+                ))
+              )}
+            </ul>
           </li>
           <li>
             <Link href="/recipes">All Food</Link>
@@ -60,17 +84,6 @@ const Header: React.FC = () => {
           </li>
         </ul>
       </nav>
-      <div className={styles.breadcrumbs}>
-        <Link href="/">Home</Link>
-        {pathSegments.map((segment, index) => (
-          <React.Fragment key={index}>
-            <span> / </span>
-            <Link href={`/${pathSegments.slice(0, index + 1).join('/')}`}>
-              {segment}
-            </Link>
-          </React.Fragment>
-        ))}
-      </div>
     </header>
   );
 };

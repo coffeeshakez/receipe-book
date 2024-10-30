@@ -166,5 +166,128 @@ namespace backend.Controllers
                 return StatusCode(500, "An error occurred while adding the recipe to the grocery list");
             }
         }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<GroceryListDTO>>> GetGroceryLists()
+        {
+            var groceryLists = await _context.GroceryLists
+                .Include(gl => gl.Items)
+                .OrderByDescending(gl => gl.CreatedAt)
+                .ToListAsync();
+
+            var groceryListDTOs = groceryLists.Select(gl => new backend.DTOs.GroceryListDTO
+            {
+                Id = gl.Id,
+                CreatedAt = gl.CreatedAt,
+                Items = gl.Items.Select(item => new backend.DTOs.GroceryItemDTO
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    Quantity = item.Quantity,
+                    Unit = item.Unit,
+                    Checked = item.Checked
+                }).ToList()
+            }).ToList();
+
+            return Ok(groceryListDTOs);
+        }
+
+        [HttpPost("{listId}/items")]
+        public async Task<ActionResult<GroceryItemDTO>> AddGroceryItem(int listId, [FromBody] GroceryItemDTO itemDTO)
+        {
+            var groceryList = await _context.GroceryLists
+                .Include(gl => gl.Items)
+                .FirstOrDefaultAsync(gl => gl.Id == listId);
+
+            if (groceryList == null)
+            {
+                return NotFound($"Grocery list with id {listId} not found");
+            }
+
+            var newItem = new GroceryItem
+            {
+                Name = itemDTO.Name,
+                Quantity = itemDTO.Quantity,
+                Unit = itemDTO.Unit,
+                Checked = itemDTO.Checked,
+                GroceryList = groceryList
+            };
+
+            groceryList.Items.Add(newItem);
+            await _context.SaveChangesAsync();
+
+            var newItemDTO = new GroceryItemDTO
+            {
+                Id = newItem.Id,
+                Name = newItem.Name,
+                Quantity = newItem.Quantity,
+                Unit = newItem.Unit,
+                Checked = newItem.Checked
+            };
+
+            return Ok(newItemDTO);
+        }
+
+        [HttpDelete("{listId}/items/{itemId}")]
+        public async Task<ActionResult> RemoveGroceryItem(int listId, int itemId)
+        {
+            var groceryList = await _context.GroceryLists
+                .Include(gl => gl.Items)
+                .FirstOrDefaultAsync(gl => gl.Id == listId);
+
+            if (groceryList == null)
+            {
+                return NotFound($"Grocery list with id {listId} not found");
+            }
+
+            var item = groceryList.Items.FirstOrDefault(i => i.Id == itemId);
+            if (item == null)
+            {
+                return NotFound($"Item with id {itemId} not found in list {listId}");
+            }
+
+            groceryList.Items.Remove(item);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpPut("{listId}/items/{itemId}")]
+        public async Task<ActionResult<GroceryItemDTO>> UpdateGroceryItem(int listId, int itemId, [FromBody] GroceryItemDTO itemDTO)
+        {
+            var groceryList = await _context.GroceryLists
+                .Include(gl => gl.Items)
+                .FirstOrDefaultAsync(gl => gl.Id == listId);
+
+            if (groceryList == null)
+            {
+                return NotFound($"Grocery list with id {listId} not found");
+            }
+
+            var item = groceryList.Items.FirstOrDefault(i => i.Id == itemId);
+            if (item == null)
+            {
+                return NotFound($"Item with id {itemId} not found in list {listId}");
+            }
+
+            // Update item properties
+            item.Name = itemDTO.Name;
+            item.Quantity = itemDTO.Quantity;
+            item.Unit = itemDTO.Unit;
+            item.Checked = itemDTO.Checked;
+
+            await _context.SaveChangesAsync();
+
+            var updatedItemDTO = new GroceryItemDTO
+            {
+                Id = item.Id,
+                Name = item.Name,
+                Quantity = item.Quantity,
+                Unit = item.Unit,
+                Checked = item.Checked
+            };
+
+            return Ok(updatedItemDTO);
+        }
     }
 }
