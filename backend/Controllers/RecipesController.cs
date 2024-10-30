@@ -33,9 +33,11 @@ namespace backend.Controllers
             _logger.LogInformation("GetRecipes method called");
 
             var query = _context.Recipes
-                .Include(r => r.Ingredients)
+                .Include(r => r.RecipeIngredients)
+                    .ThenInclude(ri => ri.Ingredient)
                 .Include(r => r.Instructions)
-                    .ThenInclude(i => i.Ingredients)
+                    .ThenInclude(i => i.RecipeIngredients)
+                        .ThenInclude(ri => ri.Ingredient)
                 .Include(r => r.Cuisine)
                 .Include(r => r.Category)
                 .AsQueryable();
@@ -51,34 +53,7 @@ namespace backend.Controllers
             }
 
             var recipes = await query.ToListAsync();
-
-            _logger.LogInformation($"Found {recipes.Count} recipes");
-
-            var recipeDtos = recipes.Select(r => new RecipeDto
-            {
-                Id = r.Id,
-                Name = r.Name,
-                Img = r.Img,
-                Description = r.Description,
-                Category = r.Category.Name,
-                Cuisine = r.Cuisine.Name,
-                Ingredients = r.Ingredients.Select(i => new IngredientDTO
-                {
-                    Name = i.Name,
-                    Quantity = i.Quantity,
-                    Measurement = i.Measurement
-                }).ToList(),
-                Instructions = r.Instructions.Select(i => new InstructionDTO
-                {
-                    InstructionText = i.InstructionText,
-                    Ingredients = i.Ingredients.Select(ing => new IngredientDTO
-                    {
-                        Name = ing.Name,
-                        Quantity = ing.Quantity,
-                        Measurement = ing.Measurement
-                    }).ToList()
-                }).ToList()
-            }).ToList();
+            var recipeDtos = recipes.Select(r => ConvertToDto(r)).ToList();
 
             return Ok(recipeDtos);
         }
@@ -91,9 +66,11 @@ namespace backend.Controllers
             try
             {
                 var recipe = await _context.Recipes
-                    .Include(r => r.Ingredients)
+                    .Include(r => r.RecipeIngredients)
+                        .ThenInclude(ri => ri.Ingredient)
                     .Include(r => r.Instructions)
-                        .ThenInclude(i => i.Ingredients)
+                        .ThenInclude(i => i.RecipeIngredients)
+                            .ThenInclude(ri => ri.Ingredient)
                     .Include(r => r.Category)
                     .Include(r => r.Cuisine)
                     .AsNoTracking()
@@ -113,22 +90,26 @@ namespace backend.Controllers
                     Description = recipe.Description ?? "No Description",
                     Category = recipe.Category?.Name ?? "Unknown Category",
                     Cuisine = recipe.Cuisine?.Name ?? "Unknown Cuisine",
-                    Ingredients = recipe.Ingredients?.Select(i => new IngredientDTO
-                    {
-                        Name = i.Name ?? "Unknown Ingredient",
-                        Quantity = i.Quantity ?? "Unknown Quantity",
-                        Measurement = i.Measurement ?? "Unknown Measurement"
-                    }).ToList() ?? new List<IngredientDTO>(),
-                    Instructions = recipe.Instructions?.Select(i => new InstructionDTO
+                    Ingredients = recipe.RecipeIngredients
+                        .Where(ri => ri.Ingredient != null)
+                        .Select(ri => new IngredientDTO
+                        {
+                            Name = ri.Ingredient.Name ?? "Unknown Ingredient",
+                            Quantity = ri.Quantity ?? "Unknown Quantity",
+                            Measurement = ri.Measurement ?? "Unknown Measurement"
+                        }).ToList(),
+                    Instructions = recipe.Instructions.Select(i => new InstructionDTO
                     {
                         InstructionText = i.InstructionText ?? "No instruction text",
-                        Ingredients = i.Ingredients?.Select(ing => new IngredientDTO
-                        {
-                            Name = ing.Name ?? "Unknown Ingredient",
-                            Quantity = ing.Quantity ?? "Unknown Quantity",
-                            Measurement = ing.Measurement ?? "Unknown Measurement"
-                        }).ToList() ?? new List<IngredientDTO>()
-                    }).ToList() ?? new List<InstructionDTO>()
+                        Ingredients = i.RecipeIngredients
+                            .Where(ri => ri.Ingredient != null)
+                            .Select(ri => new IngredientDTO
+                            {
+                                Name = ri.Ingredient.Name ?? "Unknown Ingredient",
+                                Quantity = ri.Quantity ?? "Unknown Quantity",
+                                Measurement = ri.Measurement ?? "Unknown Measurement"
+                            }).ToList()
+                    }).ToList()
                 };
 
                 return Ok(recipeDto);
@@ -147,9 +128,10 @@ namespace backend.Controllers
 
             var recipes = await _context.Recipes
                 .Where(r => r.Cuisine.Name.ToLower() == cuisine.ToLower())
-                .Include(r => r.Ingredients)
+                .Include(r => r.RecipeIngredients)
                 .Include(r => r.Instructions)
-                    .ThenInclude(i => i.Ingredients)
+                    .ThenInclude(i => i.RecipeIngredients)
+                        .ThenInclude(ri => ri.Ingredient)
                 .Include(r => r.Category)
                 .ToListAsync();
 
@@ -181,20 +163,20 @@ namespace backend.Controllers
                 Description = r.Description,
                 Category = r.Category.Name,
                 Cuisine = r.Cuisine.Name,
-                Ingredients = r.Ingredients.Select(i => new IngredientDTO
+                Ingredients = r.RecipeIngredients.Select(ri => new IngredientDTO
                 {
-                    Name = i.Name,
-                    Quantity = i.Quantity,
-                    Measurement = i.Measurement
+                    Name = ri.Ingredient.Name ?? "Unknown Ingredient",
+                    Quantity = ri.Quantity ?? "Unknown Quantity",
+                    Measurement = ri.Measurement ?? "Unknown Measurement"
                 }).ToList(),
                 Instructions = r.Instructions.Select(i => new InstructionDTO
                 {
-                    InstructionText = i.InstructionText,
-                    Ingredients = i.Ingredients.Select(ing => new IngredientDTO
+                    InstructionText = i.InstructionText ?? "No instruction text",
+                    Ingredients = i.RecipeIngredients.Select(ri => new IngredientDTO
                     {
-                        Name = ing.Name,
-                        Quantity = ing.Quantity,
-                        Measurement = ing.Measurement
+                        Name = ri.Ingredient.Name ?? "Unknown Ingredient",
+                        Quantity = ri.Quantity ?? "Unknown Quantity",
+                        Measurement = ri.Measurement ?? "Unknown Measurement"
                     }).ToList()
                 }).ToList()
             }).ToList();
@@ -215,40 +197,17 @@ namespace backend.Controllers
             var recipes = await _context.Recipes
                 .Include(r => r.Category)
                 .Include(r => r.Cuisine)
-                .Include(r => r.Ingredients)
+                .Include(r => r.RecipeIngredients)
+                    .ThenInclude(ri => ri.Ingredient)
                 .Include(r => r.Instructions)
-                    .ThenInclude(i => i.Ingredients)
+                    .ThenInclude(i => i.RecipeIngredients)
+                        .ThenInclude(ri => ri.Ingredient)
                 .Where(r => r.Name.ToLower().Contains(query) 
                     || r.Description.ToLower().Contains(query) 
-                    || r.Ingredients.Any(i => i.Name.ToLower().Contains(query)))
+                    || r.RecipeIngredients.Any(ri => ri.Ingredient.Name.ToLower().Contains(query)))
                 .ToListAsync();
 
-            var recipeDtos = recipes.Select(r => new RecipeDto
-            {
-                Id = r.Id,
-                Name = r.Name,
-                Img = r.Img,
-                Description = r.Description,
-                Category = r.Category.Name,
-                Cuisine = r.Cuisine.Name,
-                Ingredients = r.Ingredients.Select(i => new IngredientDTO
-                {
-                    Name = i.Name,
-                    Quantity = i.Quantity,
-                    Measurement = i.Measurement
-                }).ToList(),
-                Instructions = r.Instructions.Select(i => new InstructionDTO
-                {
-                    InstructionText = i.InstructionText,
-                    Ingredients = i.Ingredients.Select(ing => new IngredientDTO
-                    {
-                        Name = ing.Name,
-                        Quantity = ing.Quantity,
-                        Measurement = ing.Measurement
-                    }).ToList()
-                }).ToList()
-            }).ToList();
-
+            var recipeDtos = recipes.Select(r => ConvertToDto(r)).ToList();
             return Ok(recipeDtos);
         }
 
@@ -256,9 +215,11 @@ namespace backend.Controllers
         public async Task<ActionResult<RecipeDto>> GetRandomRecipe([FromQuery] List<int> categoryId, [FromQuery] List<int> cuisineId)
         {
             var query = _context.Recipes
-                .Include(r => r.Ingredients)
+                .Include(r => r.RecipeIngredients)
+                    .ThenInclude(ri => ri.Ingredient)
                 .Include(r => r.Instructions)
-                    .ThenInclude(i => i.Ingredients)
+                    .ThenInclude(i => i.RecipeIngredients)
+                        .ThenInclude(ri => ri.Ingredient)
                 .Include(r => r.Cuisine)
                 .Include(r => r.Category)
                 .AsQueryable();
@@ -297,20 +258,49 @@ namespace backend.Controllers
                 Description = recipe.Description,
                 Category = recipe.Category.Name,
                 Cuisine = recipe.Cuisine.Name,
-                Ingredients = recipe.Ingredients.Select(i => new IngredientDTO
+                Ingredients = recipe.RecipeIngredients.Select(ri => new IngredientDTO
                 {
-                    Name = i.Name,
-                    Quantity = i.Quantity,
-                    Measurement = i.Measurement
+                    Name = ri.Ingredient.Name ?? "Unknown Ingredient",
+                    Quantity = ri.Quantity ?? "Unknown Quantity",
+                    Measurement = ri.Measurement ?? "Unknown Measurement"
                 }).ToList(),
                 Instructions = recipe.Instructions.Select(i => new InstructionDTO
                 {
-                    InstructionText = i.InstructionText,
-                    Ingredients = i.Ingredients.Select(ing => new IngredientDTO
+                    InstructionText = i.InstructionText ?? "No instruction text",
+                    Ingredients = i.RecipeIngredients.Select(ri => new IngredientDTO
                     {
-                        Name = ing.Name,
-                        Quantity = ing.Quantity,
-                        Measurement = ing.Measurement
+                        Name = ri.Ingredient.Name ?? "Unknown Ingredient",
+                        Quantity = ri.Quantity ?? "Unknown Quantity",
+                        Measurement = ri.Measurement ?? "Unknown Measurement"
+                    }).ToList()
+                }).ToList()
+            };
+        }
+
+        private RecipeDto ConvertToDto(Recipe recipe)
+        {
+            return new RecipeDto
+            {
+                Id = recipe.Id,
+                Name = recipe.Name ?? "Unknown Name",
+                Img = recipe.Img ?? "No Image",
+                Description = recipe.Description ?? "No Description",
+                Category = recipe.Category?.Name ?? "Unknown Category",
+                Cuisine = recipe.Cuisine?.Name ?? "Unknown Cuisine",
+                Ingredients = recipe.RecipeIngredients.Select(ri => new IngredientDTO
+                {
+                    Name = ri.Ingredient.Name ?? "Unknown Ingredient",
+                    Quantity = ri.Quantity ?? "Unknown Quantity",
+                    Measurement = ri.Measurement ?? "Unknown Measurement"
+                }).ToList(),
+                Instructions = recipe.Instructions.Select(i => new InstructionDTO
+                {
+                    InstructionText = i.InstructionText ?? "No instruction text",
+                    Ingredients = i.RecipeIngredients.Select(ri => new IngredientDTO
+                    {
+                        Name = ri.Ingredient.Name ?? "Unknown Ingredient",
+                        Quantity = ri.Quantity ?? "Unknown Quantity",
+                        Measurement = ri.Measurement ?? "Unknown Measurement"
                     }).ToList()
                 }).ToList()
             };

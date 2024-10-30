@@ -22,6 +22,29 @@ namespace backend.Services
             _logger = logger;
         }
 
+        private double ParseQuantity(string quantity)
+        {
+            if (string.IsNullOrWhiteSpace(quantity)) return 0;
+
+            // Handle fractions like "1/2"
+            if (quantity.Contains('/'))
+            {
+                var parts = quantity.Split('/');
+                if (parts.Length == 2 && double.TryParse(parts[0], out double numerator) && double.TryParse(parts[1], out double denominator))
+                {
+                    return numerator / denominator;
+                }
+            }
+
+            // Handle regular numbers
+            if (double.TryParse(quantity, out double result))
+            {
+                return result;
+            }
+
+            return 0;
+        }
+
         public async Task<OneOf<IEnumerable<GroceryItemDTO>, string>> AddRecipeToGroceryListAsync(int listId, int recipeId)
         {
             var groceryList = await _context.GroceryLists
@@ -34,7 +57,8 @@ namespace backend.Services
             }
 
             var recipe = await _context.Recipes
-                .Include(r => r.Ingredients)
+                .Include(r => r.RecipeIngredients)
+                    .ThenInclude(ri => ri.Ingredient)
                 .FirstOrDefaultAsync(r => r.Id == recipeId);
 
             if (recipe == null)
@@ -44,23 +68,30 @@ namespace backend.Services
 
             var newItems = new List<GroceryItem>();
 
-            foreach (var ingredient in recipe.Ingredients)
+            foreach (var recipeIngredient in recipe.RecipeIngredients)
             {
-                var existingItem = groceryList.Items.FirstOrDefault(i => i.Name.ToLower() == ingredient.Name.ToLower());
+                var existingItem = groceryList.Items
+                    .FirstOrDefault(i => i.Name.ToLower() == recipeIngredient.Ingredient.Name.ToLower());
 
                 if (existingItem != null)
                 {
-                    // If the item already exists, update the quantity
-                    existingItem.Quantity = (Convert.ToDouble(existingItem.Quantity) + Convert.ToDouble(ingredient.Quantity)).ToString();
+                    // Parse both quantities and add them
+                    var existingQuantity = ParseQuantity(existingItem.Quantity);
+                    var newQuantity = ParseQuantity(recipeIngredient.Quantity);
+                    var totalQuantity = existingQuantity + newQuantity;
+
+                    // If it's a whole number, remove the decimal point
+                    existingItem.Quantity = totalQuantity % 1 == 0 
+                        ? ((int)totalQuantity).ToString() 
+                        : totalQuantity.ToString();
                 }
                 else
                 {
-                    // If the item doesn't exist, add a new one
                     var newItem = new GroceryItem
                     {
-                        Name = ingredient.Name,
-                        Quantity = ingredient.Quantity,
-                        Unit = ingredient.Measurement,
+                        Name = recipeIngredient.Ingredient.Name,
+                        Quantity = recipeIngredient.Quantity,
+                        Unit = recipeIngredient.Measurement,
                         Checked = false,
                         GroceryList = groceryList
                     };

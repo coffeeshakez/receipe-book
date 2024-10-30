@@ -12,6 +12,7 @@ namespace backend.Data
 
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
+        public DbSet<RecipeIngredient> RecipeIngredients { get; set; }
         public DbSet<Instruction> Instructions { get; set; }
         public DbSet<GroceryList> GroceryLists { get; set; }
         public DbSet<GroceryItem> GroceryItems { get; set; }
@@ -21,27 +22,11 @@ namespace backend.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Recipe>()
-                .HasMany(r => r.Ingredients)
-                .WithOne(i => i.Recipe)
-                .HasForeignKey(i => i.RecipeId);
-
+            // Recipe relationships
             modelBuilder.Entity<Recipe>()
                 .HasMany(r => r.Instructions)
                 .WithOne(i => i.Recipe)
                 .HasForeignKey(i => i.RecipeId);
-
-            modelBuilder.Entity<Instruction>()
-                .HasMany(i => i.Ingredients)
-                .WithMany(i => i.Instructions)
-                .UsingEntity(j => j.ToTable("IngredientInstruction"));
-
-            modelBuilder.Entity<Menu>()
-                .Property(m => m.RecipeIds)
-                .HasConversion(
-                    v => string.Join(',', v),
-                    v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList()
-                );
 
             modelBuilder.Entity<Recipe>()
                 .HasOne(r => r.Category)
@@ -52,6 +37,38 @@ namespace backend.Data
                 .HasOne(r => r.Cuisine)
                 .WithMany(c => c.Recipes)
                 .HasForeignKey(r => r.CuisineId);
+
+            // RecipeIngredient relationships
+            modelBuilder.Entity<RecipeIngredient>()
+                .HasOne(ri => ri.Recipe)
+                .WithMany(r => r.RecipeIngredients)
+                .HasForeignKey(ri => ri.RecipeId);
+
+            modelBuilder.Entity<RecipeIngredient>()
+                .HasOne(ri => ri.Ingredient)
+                .WithMany(i => i.RecipeIngredients)
+                .HasForeignKey(ri => ri.IngredientId);
+
+            // Instruction-RecipeIngredient many-to-many relationship
+            modelBuilder.Entity<Instruction>()
+                .HasMany(i => i.RecipeIngredients)
+                .WithMany(ri => ri.Instructions)
+                .UsingEntity(j => j.ToTable("InstructionRecipeIngredient"));
+
+            // Menu RecipeIds conversion
+            modelBuilder.Entity<Menu>()
+                .Property(m => m.RecipeIds)
+                .HasConversion(
+                    v => string.Join(',', v),
+                    v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList()
+                );
+
+            // GroceryList - GroceryItem relationship
+            modelBuilder.Entity<GroceryList>()
+                .HasMany(gl => gl.Items)
+                .WithOne(gi => gi.GroceryList)
+                .HasForeignKey(gi => gi.GroceryListId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

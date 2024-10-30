@@ -14,6 +14,6 @@ namespace backend.Models
         public int RecipeId { get; set; }
         public Recipe Recipe { get; set; }
 
-        public List<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
+        public List<RecipeIngredient> RecipeIngredients { get; set; } = new List<RecipeIngredient>();
     }
 }

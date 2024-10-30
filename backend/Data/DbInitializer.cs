@@ -35,6 +35,9 @@ namespace backend.Data
             var cuisines = new Dictionary<string, Cuisine>();
             var categories = new Dictionary<string, Category>();
 
+            // Create dictionary to track ingredients
+            var ingredients = new Dictionary<string, Ingredient>();
+
             foreach (string recipeFile in recipeFiles)
             {
                 try
@@ -67,20 +70,31 @@ namespace backend.Data
                             Img = recipeDto.Img,
                             Category = categories[recipeDto.Category],
                             Cuisine = cuisines[recipeDto.Cuisine],
-                            Ingredients = new List<Ingredient>(),
-                            Instructions = new List<Instruction>()
+                            RecipeIngredients = new List<RecipeIngredient>()
                         };
 
                         foreach (var ingredientDto in recipeDto.Ingredients)
                         {
-                            var ingredient = new Ingredient
+                            // Get or create ingredient
+                            if (!ingredients.ContainsKey(ingredientDto.Name.ToLower()))
                             {
-                                Name = ingredientDto.Name,
+                                var ingredient = new Ingredient
+                                {
+                                    Name = ingredientDto.Name,
+                                    Category = "Uncategorized" // You might want to set this differently
+                                };
+                                context.Ingredients.Add(ingredient);
+                                ingredients[ingredientDto.Name.ToLower()] = ingredient;
+                            }
+
+                            var recipeIngredient = new RecipeIngredient
+                            {
+                                Recipe = recipe,
+                                Ingredient = ingredients[ingredientDto.Name.ToLower()],
                                 Quantity = ingredientDto.Quantity,
-                                Measurement = ingredientDto.Measurement,
-                                Recipe = recipe
+                                Measurement = ingredientDto.Measurement
                             };
-                            recipe.Ingredients.Add(ingredient);
+                            recipe.RecipeIngredients.Add(recipeIngredient);
                         }
 
                         foreach (var instructionDto in recipeDto.Instructions)
@@ -94,11 +108,14 @@ namespace backend.Data
 
                             foreach (var ingredientDto in instructionDto.Ingredients)
                             {
-                                var ingredient = recipe.Ingredients.FirstOrDefault(i => i.Name == ingredientDto.Name);
-                                if (ingredient != null)
+                                // Find the matching RecipeIngredient instead of Ingredient
+                                var recipeIngredient = recipe.RecipeIngredients
+                                    .FirstOrDefault(ri => ri.Ingredient.Name.ToLower() == ingredientDto.Name.ToLower());
+                                
+                                if (recipeIngredient != null)
                                 {
-                                    instruction.Ingredients.Add(ingredient);
-                                    ingredient.Instructions.Add(instruction);
+                                    instruction.RecipeIngredients.Add(recipeIngredient);
+                                    recipeIngredient.Instructions.Add(instruction);
                                 }
                             }
                         }

@@ -51,7 +51,6 @@ namespace backend.Controllers
                 Name = createMenuDto.Name,
                 RecipeIds = createMenuDto.RecipeIds
             };
-
             _context.Menus.Add(menu);
             await _context.SaveChangesAsync();
 

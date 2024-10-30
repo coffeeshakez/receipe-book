@@ -53,6 +53,25 @@ namespace backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Ingredients",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Category = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: true),
+                    NutritionalInfo = table.Column<string>(type: "TEXT", nullable: true),
+                    IsAllergenic = table.Column<bool>(type: "INTEGER", nullable: false),
+                    AllergenType = table.Column<string>(type: "TEXT", nullable: true),
+                    CommonUnit = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ingredients", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Menus",
                 columns: table => new
                 {
@@ -119,28 +138,6 @@ namespace backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Ingredients",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    Quantity = table.Column<string>(type: "TEXT", nullable: false),
-                    Measurement = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    RecipeId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Ingredients", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Ingredients_Recipes_RecipeId",
-                        column: x => x.RecipeId,
-                        principalTable: "Recipes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Instructions",
                 columns: table => new
                 {
@@ -161,25 +158,53 @@ namespace backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "IngredientInstruction",
+                name: "RecipeIngredients",
                 columns: table => new
                 {
-                    IngredientsId = table.Column<int>(type: "INTEGER", nullable: false),
-                    InstructionsId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    RecipeId = table.Column<int>(type: "INTEGER", nullable: false),
+                    IngredientId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Quantity = table.Column<string>(type: "TEXT", nullable: false),
+                    Measurement = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_IngredientInstruction", x => new { x.IngredientsId, x.InstructionsId });
+                    table.PrimaryKey("PK_RecipeIngredients", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_IngredientInstruction_Ingredients_IngredientsId",
-                        column: x => x.IngredientsId,
+                        name: "FK_RecipeIngredients_Ingredients_IngredientId",
+                        column: x => x.IngredientId,
                         principalTable: "Ingredients",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_IngredientInstruction_Instructions_InstructionsId",
+                        name: "FK_RecipeIngredients_Recipes_RecipeId",
+                        column: x => x.RecipeId,
+                        principalTable: "Recipes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "InstructionRecipeIngredient",
+                columns: table => new
+                {
+                    InstructionsId = table.Column<int>(type: "INTEGER", nullable: false),
+                    RecipeIngredientsId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InstructionRecipeIngredient", x => new { x.InstructionsId, x.RecipeIngredientsId });
+                    table.ForeignKey(
+                        name: "FK_InstructionRecipeIngredient_Instructions_InstructionsId",
                         column: x => x.InstructionsId,
                         principalTable: "Instructions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_InstructionRecipeIngredient_RecipeIngredients_RecipeIngredientsId",
+                        column: x => x.RecipeIngredientsId,
+                        principalTable: "RecipeIngredients",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -190,18 +215,23 @@ namespace backend.Migrations
                 column: "GroceryListId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_IngredientInstruction_InstructionsId",
-                table: "IngredientInstruction",
-                column: "InstructionsId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Ingredients_RecipeId",
-                table: "Ingredients",
-                column: "RecipeId");
+                name: "IX_InstructionRecipeIngredient_RecipeIngredientsId",
+                table: "InstructionRecipeIngredient",
+                column: "RecipeIngredientsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Instructions_RecipeId",
                 table: "Instructions",
+                column: "RecipeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecipeIngredients_IngredientId",
+                table: "RecipeIngredients",
+                column: "IngredientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecipeIngredients_RecipeId",
+                table: "RecipeIngredients",
                 column: "RecipeId");
 
             migrationBuilder.CreateIndex(
@@ -222,7 +252,7 @@ namespace backend.Migrations
                 name: "GroceryItems");
 
             migrationBuilder.DropTable(
-                name: "IngredientInstruction");
+                name: "InstructionRecipeIngredient");
 
             migrationBuilder.DropTable(
                 name: "Menus");
@@ -231,10 +261,13 @@ namespace backend.Migrations
                 name: "GroceryLists");
 
             migrationBuilder.DropTable(
-                name: "Ingredients");
+                name: "Instructions");
 
             migrationBuilder.DropTable(
-                name: "Instructions");
+                name: "RecipeIngredients");
+
+            migrationBuilder.DropTable(
+                name: "Ingredients");
 
             migrationBuilder.DropTable(
                 name: "Recipes");

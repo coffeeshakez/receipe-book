@@ -31,13 +31,13 @@ namespace backend.Controllers
             _groceryListService = groceryListService;
         }
 
-        // POST: api/grocerylist/create/{recipeId}
         [HttpPost("create/{recipeId}")]
-        public IActionResult CreateGroceryList(int recipeId)
+        public async Task<ActionResult<GroceryListDTO>> CreateGroceryList(int recipeId)
         {
-            var recipe = _context.Recipes
-                .Include(r => r.Ingredients)
-                .FirstOrDefault(r => r.Id == recipeId);
+            var recipe = await _context.Recipes
+                .Include(r => r.RecipeIngredients)
+                    .ThenInclude(ri => ri.Ingredient)
+                .FirstOrDefaultAsync(r => r.Id == recipeId);
 
             if (recipe == null)
             {
@@ -50,28 +50,26 @@ namespace backend.Controllers
                 Items = new List<GroceryItem>()
             };
 
-            foreach (var ingredient in recipe.Ingredients)
+            foreach (var ri in recipe.RecipeIngredients)
             {
-                var groceryItem = new GroceryItem
+                groceryList.Items.Add(new GroceryItem
                 {
-                    Name = ingredient.Name,
-                    Quantity = ingredient.Quantity,
-                    Unit = ingredient.Measurement,
+                    Name = ri.Ingredient.Name,
+                    Quantity = ri.Quantity,
+                    Unit = ri.Measurement,
                     Checked = false,
                     GroceryList = groceryList
-                };
-                groceryList.Items.Add(groceryItem);
+                });
             }
 
             _context.GroceryLists.Add(groceryList);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            // Create a DTO to return
             var groceryListDTO = new GroceryListDTO
             {
                 Id = groceryList.Id,
                 CreatedAt = groceryList.CreatedAt,
-                Items = groceryList.Items.Select(item => new GroceryItemDTO
+                Items = groceryList.Items.Select(item => new backend.DTOs.GroceryItemDTO
                 {
                     Id = item.Id,
                     Name = item.Name,
@@ -84,25 +82,37 @@ namespace backend.Controllers
             return Ok(groceryListDTO);
         }
 
-        // GET: api/grocerylist/{id}
         [HttpGet("{id}")]
-        public ActionResult<GroceryList> GetGroceryList(int id)
+        public async Task<ActionResult<GroceryListDTO>> GetGroceryList(int id)
         {
-            var groceryList = _context.GroceryLists
+            var groceryList = await _context.GroceryLists
                 .Include(gl => gl.Items)
-                .FirstOrDefault(gl => gl.Id == id);
+                .FirstOrDefaultAsync(gl => gl.Id == id);
 
             if (groceryList == null)
             {
                 return NotFound();
             }
 
-            return groceryList;
+            var groceryListDTO = new GroceryListDTO
+            {
+                Id = groceryList.Id,
+                CreatedAt = groceryList.CreatedAt,
+                Items = groceryList.Items.Select(item => new backend.DTOs.GroceryItemDTO
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    Quantity = item.Quantity,
+                    Unit = item.Unit,
+                    Checked = item.Checked
+                }).ToList()
+            };
+
+            return groceryListDTO;
         }
 
-        // PUT: api/grocerylist/{id}/item/{itemId}
         [HttpPut("{listId}/item/{itemId}")]
-        public async Task<ActionResult<GroceryItemDTO>> UpdateGroceryItem(int listId, int itemId, [FromBody] GroceryItemDTO itemDTO)
+        public async Task<ActionResult<backend.DTOs.GroceryItemDTO>> UpdateGroceryItem(int listId, int itemId, [FromBody] backend.DTOs.GroceryItemDTO itemDTO)
         {
             var groceryList = await _context.GroceryLists
                 .Include(gl => gl.Items)
@@ -127,7 +137,7 @@ namespace backend.Controllers
 
             await _context.SaveChangesAsync();
 
-            var updatedItemDTO = new GroceryItemDTO
+            var updatedItemDTO = new backend.DTOs.GroceryItemDTO
             {
                 Id = groceryItem.Id,
                 Name = groceryItem.Name,
@@ -139,163 +149,22 @@ namespace backend.Controllers
             return Ok(updatedItemDTO);
         }
 
-        // POST: api/grocerylist/{id}/item
-        [HttpPost("{id}/item")]
-        public async Task<ActionResult<GroceryItemDTO>> AddGroceryItem(int id, [FromBody] GroceryItemDTO itemDTO)
+        [HttpPost("{listId}/addrecipe/{recipeId}")]
+        public async Task<ActionResult<IEnumerable<backend.DTOs.GroceryItemDTO>>> AddRecipeToGroceryList(int listId, int recipeId)
         {
-            _logger.LogInformation($"Received request to add item to grocery list {id}. Item: {JsonSerializer.Serialize(itemDTO)}");
-
-            var groceryList = await _context.GroceryLists
-                .Include(gl => gl.Items)
-                .FirstOrDefaultAsync(gl => gl.Id == id);
-
-            if (groceryList == null)
-            {
-                _logger.LogWarning($"Grocery list with id {id} not found");
-                return NotFound($"Grocery list with id {id} not found");
-            }
-
-            var newItem = new GroceryItem
-            {
-                Name = itemDTO.Name,
-                Quantity = string.IsNullOrEmpty(itemDTO.Quantity) ? "1" : itemDTO.Quantity,
-                Unit = itemDTO.Unit ?? string.Empty,
-                Checked = itemDTO.Checked,
-                GroceryList = groceryList
-            };
-
-            groceryList.Items.Add(newItem);
-            await _context.SaveChangesAsync();
-
-            _logger.LogInformation($"Successfully added item to grocery list {id}. New item id: {newItem.Id}");
-
-            var createdItemDTO = new GroceryItemDTO
-            {
-                Id = newItem.Id,
-                Name = newItem.Name,
-                Quantity = newItem.Quantity,
-                Unit = newItem.Unit,
-                Checked = newItem.Checked
-            };
-
-            return CreatedAtAction(nameof(GetGroceryList), new { id = groceryList.Id }, createdItemDTO);
-        }
-
-        // DELETE: api/grocerylist/{id}/item/{itemId}
-        [HttpDelete("{id}/item/{itemId}")]
-        public async Task<IActionResult> RemoveGroceryItem(int id, int itemId)
-        {
-            var groceryList = await _context.GroceryLists
-                .Include(gl => gl.Items)
-                .FirstOrDefaultAsync(gl => gl.Id == id);
-
-            if (groceryList == null)
-            {
-                return NotFound($"Grocery list with id {id} not found");
-            }
-
-            var item = groceryList.Items.FirstOrDefault(i => i.Id == itemId);
-
-            if (item == null)
-            {
-                return NotFound($"Grocery item with id {itemId} not found in list {id}");
-            }
-
-            groceryList.Items.Remove(item);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        // Add this new method at the end of the GroceryListController class
-
-        // POST: api/grocerylist/{id}/items
-        [HttpPost("{id}/items")]
-        public async Task<ActionResult<IEnumerable<GroceryItemDTO>>> AddGroceryItems(int id, [FromBody] JsonElement payload)
-        {
-            _logger.LogInformation($"Received request to add items to grocery list {id}. Payload: {payload}");
-
-            List<GroceryItemDTO> itemDTOs;
-
             try
             {
-                if (payload.ValueKind == JsonValueKind.Array)
-                {
-                    itemDTOs = JsonSerializer.Deserialize<List<GroceryItemDTO>>(payload.GetRawText(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                }
-                else if (payload.ValueKind == JsonValueKind.Object)
-                {
-                    var singleItem = JsonSerializer.Deserialize<GroceryItemDTO>(payload.GetRawText(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                    itemDTOs = new List<GroceryItemDTO> { singleItem };
-                }
-                else
-                {
-                    _logger.LogWarning("Invalid payload format");
-                    return BadRequest("Invalid payload format");
-                }
-
-                if (itemDTOs == null || !itemDTOs.Any())
-                {
-                    _logger.LogWarning("No valid items provided in the request body");
-                    return BadRequest("No valid items provided");
-                }
-
-                var groceryList = await _context.GroceryLists
-                    .Include(gl => gl.Items)
-                    .FirstOrDefaultAsync(gl => gl.Id == id);
-
-                if (groceryList == null)
-                {
-                    _logger.LogWarning($"Grocery list with id {id} not found");
-                    return NotFound($"Grocery list with id {id} not found");
-                }
-
-                var newItems = new List<GroceryItem>();
-
-                foreach (var itemDTO in itemDTOs)
-                {
-                    var newItem = new GroceryItem
-                    {
-                        Name = itemDTO.Name,
-                        Quantity = string.IsNullOrEmpty(itemDTO.Quantity) ? "1" : itemDTO.Quantity,
-                        Unit = itemDTO.Unit ?? string.Empty,
-                        Checked = itemDTO.Checked,
-                        GroceryList = groceryList
-                    };
-
-                    newItems.Add(newItem);
-                    groceryList.Items.Add(newItem);
-                }
-
-                await _context.SaveChangesAsync();
-                _logger.LogInformation($"Successfully added {newItems.Count} items to grocery list {id}");
-
-                var createdItemDTOs = newItems.Select(item => new GroceryItemDTO
-                {
-                    Id = item.Id,
-                    Name = item.Name,
-                    Quantity = item.Quantity,
-                    Unit = item.Unit,
-                    Checked = item.Checked
-                }).ToList();
-
-                return CreatedAtAction(nameof(GetGroceryList), new { id = groceryList.Id }, createdItemDTOs);
+                var result = await _groceryListService.AddRecipeToGroceryListAsync(listId, recipeId);
+                return result.Match<ActionResult<IEnumerable<backend.DTOs.GroceryItemDTO>>>(
+                    addedItems => Ok(addedItems),
+                    error => NotFound(error)
+                );
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error adding items to grocery list {id}");
-                return StatusCode(500, $"An error occurred while adding items: {ex.Message}");
+                _logger.LogError(ex, $"Error adding recipe {recipeId} to grocery list {listId}");
+                return StatusCode(500, "An error occurred while adding the recipe to the grocery list");
             }
-        }
-
-        [HttpPost("{listId}/addrecipe/{recipeId}")]
-        public async Task<ActionResult<IEnumerable<GroceryItemDTO>>> AddRecipeToGroceryList(int listId, int recipeId)
-        {
-            var result = await _groceryListService.AddRecipeToGroceryListAsync(listId, recipeId);
-            return result.Match<ActionResult<IEnumerable<GroceryItemDTO>>>(
-                addedItems => Ok(addedItems),
-                error => NotFound(error)
-            );
         }
     }
 }

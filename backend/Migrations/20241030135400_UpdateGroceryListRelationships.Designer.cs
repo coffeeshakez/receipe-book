@@ -11,8 +11,8 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241018095147_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20241030135400_UpdateGroceryListRelationships")]
+    partial class UpdateGroceryListRelationships
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,19 +20,19 @@ namespace backend.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
 
-            modelBuilder.Entity("IngredientInstruction", b =>
+            modelBuilder.Entity("InstructionRecipeIngredient", b =>
                 {
-                    b.Property<int>("IngredientsId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("InstructionsId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("IngredientsId", "InstructionsId");
+                    b.Property<int>("RecipeIngredientsId")
+                        .HasColumnType("INTEGER");
 
-                    b.HasIndex("InstructionsId");
+                    b.HasKey("InstructionsId", "RecipeIngredientsId");
 
-                    b.ToTable("IngredientInstruction", (string)null);
+                    b.HasIndex("RecipeIngredientsId");
+
+                    b.ToTable("InstructionRecipeIngredient", (string)null);
                 });
 
             modelBuilder.Entity("backend.Models.Category", b =>
@@ -124,26 +124,32 @@ namespace backend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Measurement")
+                    b.Property<string>("AllergenType")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Category")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
+
+                    b.Property<string>("CommonUnit")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsAllergenic")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Quantity")
-                        .IsRequired()
+                    b.Property<string>("NutritionalInfo")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("RecipeId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("RecipeId");
 
                     b.ToTable("Ingredients");
                 });
@@ -221,17 +227,47 @@ namespace backend.Migrations
                     b.ToTable("Recipes");
                 });
 
-            modelBuilder.Entity("IngredientInstruction", b =>
+            modelBuilder.Entity("backend.Models.RecipeIngredient", b =>
                 {
-                    b.HasOne("backend.Models.Ingredient", null)
-                        .WithMany()
-                        .HasForeignKey("IngredientsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
+                    b.Property<int>("IngredientId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Measurement")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Quantity")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("RecipeId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IngredientId");
+
+                    b.HasIndex("RecipeId");
+
+                    b.ToTable("RecipeIngredients");
+                });
+
+            modelBuilder.Entity("InstructionRecipeIngredient", b =>
+                {
                     b.HasOne("backend.Models.Instruction", null)
                         .WithMany()
                         .HasForeignKey("InstructionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("backend.Models.RecipeIngredient", null)
+                        .WithMany()
+                        .HasForeignKey("RecipeIngredientsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -245,17 +281,6 @@ namespace backend.Migrations
                         .IsRequired();
 
                     b.Navigation("GroceryList");
-                });
-
-            modelBuilder.Entity("backend.Models.Ingredient", b =>
-                {
-                    b.HasOne("backend.Models.Recipe", "Recipe")
-                        .WithMany("Ingredients")
-                        .HasForeignKey("RecipeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Recipe");
                 });
 
             modelBuilder.Entity("backend.Models.Instruction", b =>
@@ -288,6 +313,25 @@ namespace backend.Migrations
                     b.Navigation("Cuisine");
                 });
 
+            modelBuilder.Entity("backend.Models.RecipeIngredient", b =>
+                {
+                    b.HasOne("backend.Models.Ingredient", "Ingredient")
+                        .WithMany("RecipeIngredients")
+                        .HasForeignKey("IngredientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("backend.Models.Recipe", "Recipe")
+                        .WithMany("RecipeIngredients")
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Ingredient");
+
+                    b.Navigation("Recipe");
+                });
+
             modelBuilder.Entity("backend.Models.Category", b =>
                 {
                     b.Navigation("Recipes");
@@ -303,11 +347,16 @@ namespace backend.Migrations
                     b.Navigation("Items");
                 });
 
+            modelBuilder.Entity("backend.Models.Ingredient", b =>
+                {
+                    b.Navigation("RecipeIngredients");
+                });
+
             modelBuilder.Entity("backend.Models.Recipe", b =>
                 {
-                    b.Navigation("Ingredients");
-
                     b.Navigation("Instructions");
+
+                    b.Navigation("RecipeIngredients");
                 });
 #pragma warning restore 612, 618
         }

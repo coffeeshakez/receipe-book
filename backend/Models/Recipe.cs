@@ -13,7 +13,7 @@ namespace backend.Models
         public Category Category { get; set; }
         public int CuisineId { get; set; }
         public Cuisine Cuisine { get; set; }
-        public List<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
+        public List<RecipeIngredient> RecipeIngredients { get; set; } = new List<RecipeIngredient>();
         public List<Instruction> Instructions { get; set; } = new List<Instruction>();
     }
 }

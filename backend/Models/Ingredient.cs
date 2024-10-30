@@ -12,15 +12,18 @@ namespace backend.Models
         public required string Name { get; set; }
 
         [Required]
-        public required string Quantity { get; set; }
-
         [MaxLength(50)]
-        public required string Measurement { get; set; }
+        public required string Category { get; set; }
 
-        public int RecipeId { get; set; }
-        public Recipe Recipe { get; set; }
+        // Additional useful fields
+        public string? Description { get; set; }
+        public string? NutritionalInfo { get; set; }
+        public bool IsAllergenic { get; set; }
+        public string? AllergenType { get; set; }
+        public string? CommonUnit { get; set; }
 
+        // Navigation properties
         [JsonIgnore]
-        public List<Instruction> Instructions { get; set; } = new List<Instruction>();
+        public List<RecipeIngredient> RecipeIngredients { get; set; } = new List<RecipeIngredient>();
     }
 }
