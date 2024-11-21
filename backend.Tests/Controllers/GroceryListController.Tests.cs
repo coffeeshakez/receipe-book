@@ -8,8 +8,9 @@ using backend.Exceptions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
+using backend.Controllers;
 
-namespace backend.Controllers.Tests
+namespace backend.Tests.Controllers
 {
     public class GroceryListControllerTests
     {
@@ -36,9 +37,10 @@ namespace backend.Controllers.Tests
             _mockService.Setup(s => s.GetAllAsync()).ReturnsAsync(expectedLists);
 
             // Act
-            var result = await _controller.GetAllGroceryLists();
+            var actionResult = await _controller.GetAllGroceryLists();
 
             // Assert
+            var result = Assert.IsType<ActionResult<IEnumerable<GroceryListDTO>>>(actionResult);
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
             var returnedLists = Assert.IsType<List<GroceryListDTO>>(okResult.Value);
             Assert.Equal(expectedLists.Count, returnedLists.Count);
@@ -49,16 +51,22 @@ namespace backend.Controllers.Tests
         {
             // Arrange
             var listId = 1;
-            var expectedList = new GroceryListDTO { Id = listId, Items = new List<GroceryItemDTO>() };
+            var expectedList = new GroceryListDTO 
+            { 
+                Id = listId, 
+                CreatedAt = DateTime.UtcNow,
+                Items = new List<GroceryItemDTO>() 
+            };
             _mockService.Setup(s => s.GetByIdAsync(listId)).ReturnsAsync(expectedList);
 
             // Act
-            var result = await _controller.GetGroceryList(listId);
+            var actionResult = await _controller.GetGroceryList(listId);
 
             // Assert
+            var result = Assert.IsType<ActionResult<GroceryListDTO>>(actionResult);
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
             var returnedList = Assert.IsType<GroceryListDTO>(okResult.Value);
-            Assert.Equal(listId, returnedList.Id);
+            Assert.Equal(expectedList.Id, returnedList.Id);
         }
 
         [Fact]
@@ -70,21 +78,51 @@ namespace backend.Controllers.Tests
                 .ThrowsAsync(new NotFoundException($"Grocery list with ID {listId} not found"));
 
             // Act
-            var result = await _controller.GetGroceryList(listId);
+            var actionResult = await _controller.GetGroceryList(listId);
 
             // Assert
+            var result = Assert.IsType<ActionResult<GroceryListDTO>>(actionResult);
             Assert.IsType<NotFoundObjectResult>(result.Result);
         }
 
         [Fact]
-        public async Task CreateGroceryList_ReturnsCreatedAtAction_WhenSuccessful()
+        public async Task CreateGroceryList_ReturnsCreatedAtAction()
         {
             // Arrange
-            var newList = new GroceryListDTO { Id = 1, Items = new List<GroceryItemDTO>() };
+            var newList = new GroceryListDTO 
+            { 
+                Id = 1, 
+                CreatedAt = DateTime.UtcNow,
+                Items = new List<GroceryItemDTO>() 
+            };
             _mockService.Setup(s => s.CreateAsync()).ReturnsAsync(newList);
 
             // Act
-            var result = await _controller.CreateGroceryList(null);
+            var actionResult = await _controller.CreateGroceryList(null);
+
+            // Assert
+            var result = Assert.IsType<ActionResult<GroceryListDTO>>(actionResult);
+            var createdAtResult = Assert.IsType<CreatedAtActionResult>(result.Result);
+            Assert.Equal(nameof(GroceryListController.GetGroceryList), createdAtResult.ActionName);
+            var returnedList = Assert.IsType<GroceryListDTO>(createdAtResult.Value);
+            Assert.Equal(newList.Id, returnedList.Id);
+        }
+
+        [Fact]
+        public async Task CreateGroceryListFromRecipe_ReturnsCreatedAtAction()
+        {
+            // Arrange
+            var recipeId = 1;
+            var newList = new GroceryListDTO 
+            { 
+                Id = 1, 
+                CreatedAt = DateTime.UtcNow,
+                Items = new List<GroceryItemDTO>() 
+            };
+            _mockService.Setup(s => s.CreateFromRecipeAsync(recipeId)).ReturnsAsync(newList);
+
+            // Act
+            var result = await _controller.CreateGroceryList(recipeId);
 
             // Assert
             var createdAtResult = Assert.IsType<CreatedAtActionResult>(result.Result);
@@ -170,6 +208,22 @@ namespace backend.Controllers.Tests
         }
 
         [Fact]
+        public async Task RemoveGroceryItem_ReturnsNotFound_WhenItemDoesNotExist()
+        {
+            // Arrange
+            var listId = 1;
+            var itemId = 999;
+            _mockService.Setup(s => s.RemoveItemAsync(listId, itemId))
+                .ThrowsAsync(new NotFoundException($"Grocery item with ID {itemId} not found"));
+
+            // Act
+            var result = await _controller.RemoveGroceryItem(listId, itemId);
+
+            // Assert
+            Assert.IsType<NotFoundObjectResult>(result);
+        }
+
+        [Fact]
         public async Task AddRecipeToGroceryList_ReturnsOkResult_WhenSuccessful()
         {
             // Arrange
@@ -193,17 +247,104 @@ namespace backend.Controllers.Tests
         }
 
         [Fact]
-        public async Task GetAllGroceryLists_Returns500_WhenServiceThrows()
+        public async Task AddRecipeToGroceryList_ReturnsNotFound_WhenListDoesNotExist()
         {
             // Arrange
-            _mockService.Setup(s => s.GetAllAsync()).ThrowsAsync(new Exception("Test exception"));
+            var listId = 999;
+            var recipeId = 1;
+            _mockService.Setup(s => s.AddRecipeToListAsync(listId, recipeId))
+                .ThrowsAsync(new NotFoundException($"Grocery list with ID {listId} not found"));
 
             // Act
-            var result = await _controller.GetAllGroceryLists();
+            var result = await _controller.AddRecipeToGroceryList(listId, recipeId);
 
             // Assert
-            var statusCodeResult = Assert.IsType<ObjectResult>(result.Result);
-            Assert.Equal(500, statusCodeResult.StatusCode);
+            Assert.IsType<NotFoundObjectResult>(result.Result);
+        }
+
+        [Fact]
+        public async Task GetAllGroceryLists_ReturnsOkResult_WhenEmpty()
+        {
+            // Arrange
+            var emptyList = new List<GroceryListDTO>();
+            _mockService.Setup(s => s.GetAllAsync()).ReturnsAsync(emptyList);
+
+            // Act
+            var actionResult = await _controller.GetAllGroceryLists();
+
+            // Assert
+            var result = Assert.IsType<ActionResult<IEnumerable<GroceryListDTO>>>(actionResult);
+            var okResult = Assert.IsType<OkObjectResult>(result.Result);
+            var returnedLists = Assert.IsType<List<GroceryListDTO>>(okResult.Value);
+            Assert.Empty(returnedLists);
+        }
+
+        [Fact]
+        public async Task CreateGroceryListFromRecipe_ReturnsNotFound_WhenRecipeDoesNotExist()
+        {
+            // Arrange
+            var invalidRecipeId = 999;
+            _mockService.Setup(s => s.CreateFromRecipeAsync(invalidRecipeId))
+                .ThrowsAsync(new NotFoundException($"Recipe with ID {invalidRecipeId} not found"));
+
+            // Act
+            var result = await _controller.CreateGroceryList(invalidRecipeId);
+
+            // Assert
+            Assert.IsType<NotFoundObjectResult>(result.Result);
+        }
+
+        [Fact]
+        public async Task AddGroceryItem_ReturnsNotFound_WhenListDoesNotExist()
+        {
+            // Arrange
+            var invalidListId = 999;
+            var itemDto = new GroceryItemDTO 
+            { 
+                Name = "Test Item",
+                Quantity = "1",
+                Unit = "piece"
+            };
+            _mockService.Setup(s => s.AddItemAsync(invalidListId, itemDto))
+                .ThrowsAsync(new NotFoundException($"Grocery list with ID {invalidListId} not found"));
+
+            // Act
+            var result = await _controller.AddGroceryItem(invalidListId, itemDto);
+
+            // Assert
+            Assert.IsType<NotFoundObjectResult>(result.Result);
+        }
+
+        [Fact]
+        public async Task UpdateGroceryItem_ReturnsNotFound_WhenItemDoesNotExist()
+        {
+            // Arrange
+            var listId = 1;
+            var invalidItemId = 999;
+            var patchDto = new GroceryItemPatchDTO { Checked = true };
+            _mockService.Setup(s => s.PatchItemAsync(listId, patchDto))
+                .ThrowsAsync(new NotFoundException($"Grocery item with ID {invalidItemId} not found"));
+
+            // Act
+            var result = await _controller.UpdateGroceryItem(listId, invalidItemId, patchDto);
+
+            // Assert
+            Assert.IsType<NotFoundObjectResult>(result.Result);
+        }
+
+        [Fact]
+        public async Task UpdateGroceryItem_ReturnsBadRequest_WhenPatchDataIsInvalid()
+        {
+            // Arrange
+            var listId = 1;
+            var itemId = 1;
+            GroceryItemPatchDTO patchDto = null;
+
+            // Act
+            var result = await _controller.UpdateGroceryItem(listId, itemId, patchDto);
+
+            // Assert
+            Assert.IsType<BadRequestObjectResult>(result.Result);
         }
     }
 } 

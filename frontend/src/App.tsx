@@ -1,10 +1,11 @@
 import './App.css';
 import { CuisineMenu } from './components/CuisineMenu';
 import { MenuManager } from './components/MenuManager';
-import { CreateMenu } from './components/CreateMenu';
+
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import React, { useState } from 'react';
 import { Recipe } from '@/services/apiHandler';
+import CreateMenu from './components/CreateMenu';
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -15,7 +16,6 @@ function App() {
   };
 
   const handleMenuSelect = (recipes: Recipe[]) => {
-    // Handle menu selection
     console.log('Selected recipes:', recipes);
   };
 

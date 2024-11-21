@@ -116,13 +116,15 @@ namespace backend.Controllers
 
         // PATCH api/grocerylist/{listId}/items/{itemId}
         [HttpPatch("{listId}/items/{itemId}")]
-        public async Task<ActionResult<GroceryItemDTO>> UpdateGroceryItem(
-            int listId, 
-            int itemId, 
-            [FromBody] GroceryItemPatchDTO patchDTO)
+        public async Task<ActionResult<GroceryItemDTO>> UpdateGroceryItem(int listId, int itemId, GroceryItemPatchDTO patchDTO)
         {
             try
             {
+                if (patchDTO == null)
+                {
+                    return BadRequest(new { message = "Patch data cannot be null" });
+                }
+
                 patchDTO.Id = itemId;
                 var updatedItem = await _groceryListService.PatchItemAsync(listId, patchDTO);
                 return Ok(updatedItem);
@@ -133,26 +135,27 @@ namespace backend.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error updating grocery item {ItemId} in list {ListId}", itemId, listId);
+                _logger.LogError(ex, "Failed to update grocery item {ItemId} in list {ListId}", itemId, listId);
                 return StatusCode(500, new { message = "An error occurred while updating the grocery item" });
             }
         }
 
         // DELETE api/grocerylist/{listId}/items/{itemId}
         [HttpDelete("{listId}/items/{itemId}")]
-        public async Task<ActionResult> RemoveGroceryItem(int listId, int itemId)
+        public async Task<IActionResult> RemoveGroceryItem(int listId, int itemId)
         {
             try
             {
-                var result = await _groceryListService.RemoveItemAsync(listId, itemId);
-                if (!result)
-                    return NotFound();
-                
+                await _groceryListService.RemoveItemAsync(listId, itemId);
                 return NoContent();
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error removing grocery item {ItemId} from list {ListId}", itemId, listId);
+                _logger.LogError(ex, "Failed to remove grocery item {ItemId} from list {ListId}", itemId, listId);
                 return StatusCode(500, new { message = "An error occurred while removing the grocery item" });
             }
         }
