@@ -1,6 +1,7 @@
 import type {Metadata} from 'next';
 import './globals.css';
 import Header from '@/components/Header/Header';
+import { Providers } from './providers';
 
 export const metadata: Metadata = {
   title: 'receipe-book',
@@ -17,8 +18,10 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
         <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet" />
       </head>
       <body>
-        <Header />
-        <main>{children}</main>
+        <Providers>
+          <Header />
+          <main>{children}</main>
+        </Providers>
       </body>
     </html>
   );

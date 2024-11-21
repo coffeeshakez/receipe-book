@@ -1,4 +1,10 @@
-const API_BASE_URL = 'http://localhost:5176/api';
+import { getBaseUrl } from '@/utils/api';
+
+const API_BASE_URL = getBaseUrl();
+
+if (!API_BASE_URL) {
+  console.error('API_BASE_URL is not defined in environment variables');
+}
 
 export interface Recipe {
   id: number;
@@ -22,7 +28,7 @@ export interface Instruction {
   ingredients: Ingredient[];
 }
 
-export interface GroceryItem {
+export interface IGroceryItem {
   id: number;
   name: string;
   quantity: string;
@@ -30,10 +36,10 @@ export interface GroceryItem {
   checked: boolean;
 }
 
-export interface GroceryList {
+export interface IGroceryList {
   id: number;
   createdAt: string;
-  items: GroceryItem[];
+  items: IGroceryItem[];
 }
 
 export interface Menu {
@@ -93,7 +99,10 @@ export const apiHandler = {
     return response.json();
   },
 
-  async getGroceryList(id: number): Promise<GroceryList> {
+  async getGroceryList(id: number): Promise<IGroceryList> {
+    if (!API_BASE_URL) {
+      throw new Error('API_BASE_URL is not configured');
+    }
     const response = await fetch(`${API_BASE_URL}/grocerylist/${id}`);
     if (!response.ok) {
       throw new Error('Failed to fetch grocery list');
@@ -101,7 +110,7 @@ export const apiHandler = {
     return response.json();
   },
 
-  async getGroceryLists(): Promise<GroceryList[]> {
+  async getGroceryLists(): Promise<IGroceryList[]> {
     const response = await fetch(`${API_BASE_URL}/grocerylist`);
     if (!response.ok) {
       throw new Error('Failed to fetch grocery lists');
@@ -146,7 +155,7 @@ export const apiHandler = {
     return response.json();
   },
 
-  async createGroceryListFromRecipe(recipeId: number): Promise<GroceryList> {
+  async createGroceryListFromRecipe(recipeId: number): Promise<IGroceryList> {
     const response = await fetch(`${API_BASE_URL}/grocerylist/create/${recipeId}`, {
       method: 'POST',
     });
@@ -289,6 +298,20 @@ export const apiHandler = {
       const errorText = await response.text();
       console.error('Failed to add recipe:', errorText);
       throw new Error(`Failed to add recipe: ${response.status} ${response.statusText}`);
+    }
+    return response.json();
+  },
+
+  async patchGroceryItem(listId: number, itemId: number, patch: Partial<Omit<GroceryItem, 'id'>>): Promise<GroceryItem> {
+    const response = await fetch(`${API_BASE_URL}/grocerylist/${listId}/items/${itemId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(patch),
+    });
+    if (!response.ok) {
+      throw new Error('Failed to update grocery item');
     }
     return response.json();
   },
