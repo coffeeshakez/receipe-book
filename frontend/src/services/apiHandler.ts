@@ -118,7 +118,7 @@ export const apiHandler = {
     return response.json();
   },
 
-  async addGroceryItem(listId: number, item: Omit<GroceryItem, 'id'>): Promise<GroceryItem> {
+  async addGroceryItem(listId: number, item: Omit<IGroceryItem, 'id'>): Promise<IGroceryItem> {
     const response = await fetch(`${API_BASE_URL}/grocerylist/${listId}/items`, {
       method: 'POST',
       headers: {
@@ -141,7 +141,7 @@ export const apiHandler = {
     }
   },
 
-  async updateGroceryItem(listId: number, itemId: number, item: Omit<GroceryItem, 'id'>): Promise<GroceryItem> {
+  async updateGroceryItem(listId: number, itemId: number, item: Omit<IGroceryItem, 'id'>): Promise<IGroceryItem> {
     const response = await fetch(`${API_BASE_URL}/grocerylist/${listId}/items/${itemId}`, {
       method: 'PATCH',
       headers: {
@@ -165,7 +165,7 @@ export const apiHandler = {
     return response.json();
   },
 
-  async addRecipeToGroceryList(listId: number, recipeId: number): Promise<GroceryItem[]> {
+  async addRecipeToGroceryList(listId: number, recipeId: number): Promise<IGroceryItem[]> {
     const response = await fetch(`${API_BASE_URL}/grocerylist/${listId}/addrecipe/${recipeId}`, {
       method: 'POST',
     });
@@ -230,18 +230,6 @@ export const apiHandler = {
     return response.json();
   },
 
-  async addRecipeToGroceryList(listId: number, recipeId: number): Promise<GroceryItem[]> {
-    const response = await fetch(`${API_BASE_URL}/grocerylist/${listId}/addrecipe/${recipeId}`, {
-      method: 'POST',
-    });
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Failed to add recipe items to grocery list:', errorText);
-      throw new Error(`Failed to add recipe items to grocery list: ${response.status} ${response.statusText}`);
-    }
-    return response.json();
-  },
-
   async getCuisines(): Promise<Cuisine[]> {
     const response = await fetch(`${API_BASE_URL}/cuisines`);
     if (!response.ok) {
@@ -302,7 +290,7 @@ export const apiHandler = {
     return response.json();
   },
 
-  async patchGroceryItem(listId: number, itemId: number, patch: Partial<Omit<GroceryItem, 'id'>>): Promise<GroceryItem> {
+  async patchGroceryItem(listId: number, itemId: number, patch: Partial<Omit<IGroceryItem, 'id'>>): Promise<IGroceryItem> {
     const response = await fetch(`${API_BASE_URL}/grocerylist/${listId}/items/${itemId}`, {
       method: 'PATCH',
       headers: {

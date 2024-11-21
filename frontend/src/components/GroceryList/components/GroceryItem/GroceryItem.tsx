@@ -1,12 +1,12 @@
-import { IGroceryItem  } from '@/services/apiHandler';
+import { IGroceryItem } from '@/services/apiHandler';
 import styles from './GroceryItem.module.scss';
+import { useState } from 'react';
 
 interface Props {
   item: IGroceryItem;
   onToggleCheck: (checked: boolean) => void;
   onRemove: () => void;
   isSwipeable?: boolean;
-  onSwipe?: (direction: 'left' | 'right') => void;
   isChecked: boolean;
   isLoading?: boolean;
 }
@@ -16,12 +16,13 @@ export const GroceryItem = ({
   onToggleCheck,
   onRemove,
   isSwipeable,
-  onSwipe,
   isChecked,
   isLoading
 }: Props) => {
+  const [isSwipedLeft, setIsSwipedLeft] = useState(false);
+
   const handleTouchStart = (e: React.TouchEvent) => {
-    if (!isSwipeable || !onSwipe) return;
+    if (!isSwipeable) return;
 
     const touch = e.touches[0];
     const startX = touch.clientX;
@@ -29,9 +30,7 @@ export const GroceryItem = ({
     const handleTouchMove = (e: TouchEvent) => {
       const touch = e.touches[0];
       const diff = startX - touch.clientX;
-      if (Math.abs(diff) > 50) {
-        onSwipe(diff > 0 ? 'left' : 'right');
-      }
+      setIsSwipedLeft(diff > 50);
     };
 
     document.addEventListener('touchmove', handleTouchMove);
@@ -42,21 +41,19 @@ export const GroceryItem = ({
 
   return (
     <div 
-      className={`${styles.item} ${isChecked ? styles.checked : ''} ${isLoading ? styles.loading : ''}`}
+      className={`${styles.item} ${isChecked ? styles.checked : ''} ${isLoading ? styles.loading : ''} ${isSwipedLeft ? styles.swiped : ''}`}
       onTouchStart={handleTouchStart}
       role="listitem"
     >
       <div className={styles.itemContent}>
         <input
           type="checkbox"
-          checked={item.checked}
+          checked={isChecked}
           onChange={(e) => onToggleCheck(e.target.checked)}
           disabled={isLoading}
-          aria-label={`Mark ${item.name} as ${item.checked ? 'uncompleted' : 'completed'}`}
+          aria-label={`Mark ${item.name} as ${isChecked ? 'uncompleted' : 'completed'}`}
         />
-        <span className={styles.itemName}>
-          {item.name}
-        </span>
+        <span className={styles.itemName}>{item.name}</span>
         {(item.quantity || item.unit) && (
           <span className={styles.itemQuantity}>
             {item.quantity} {item.unit}

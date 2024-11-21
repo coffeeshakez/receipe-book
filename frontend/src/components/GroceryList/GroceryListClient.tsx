@@ -1,11 +1,9 @@
 'use client';
 
 import { useGroceryList } from '@/hooks/useGroceryList';
-import { AddItemForm } from '@/components/GroceryList/AddItemForm';
 import styles from './GroceryListClient.module.scss';
-import { GroceryItem } from './GroceryItem';
-import { IGroceryItem } from '@/services/apiHandler';
-import { UseMutateFunction } from '@tanstack/react-query';
+import { AddItemForm } from './components/AddItemForm/AddItemForm';
+import { GroceryItem } from './components/GroceryItem/GroceryItem';
 
 interface Props {
   listId: number;
@@ -19,82 +17,51 @@ export const GroceryListClient = ({ listId }: Props) => {
     toggleItem,
     removeItem,
     addItem,
-    refreshList,
     isAddingItem,
     isRemovingItem,
     isTogglingItem,
-    addRecipe
   } = useGroceryList(listId);
 
   if (isLoading) {
-    return (
-      <div className={styles.loadingContainer} role="alert" aria-busy="true">
-        <div className={styles.spinner} />
-        Loading grocery list...
-      </div>
-    );
+    return <div>Loading...</div>;
   }
 
   if (error) {
-    return (
-      <div className={styles.error} role="alert">
-        {error instanceof Error ? error.message : 'An error occurred'}
-        <button 
-          onClick={refreshList}
-          className={styles.retryButton}
-        >
-          Retry
-        </button>
-      </div>
-    );
+    return <div>Error: {error instanceof Error ? error.message : 'An error occurred'}</div>;
   }
 
   if (!groceryList) {
-    return (
-      <div className={styles.empty} role="alert">
-        No grocery list found
-      </div>
-    );
+    return <div>No grocery list found</div>;
   }
 
-  const uncheckedItems = groceryList.items.filter((item: { checked: boolean }) => !item.checked);
-  const checkedItems = groceryList.items.filter((item: { checked: boolean }) => item.checked);
+  const uncheckedItems = groceryList.items.filter((item) => !item.checked);
+  const checkedItems = groceryList.items.filter((item) => item.checked);
 
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Grocery List</h1>
-      
-      <AddItemForm 
-        onAdd={addItem} 
-        isSubmitting={isAddingItem}
-      />
-      
-      <div className={styles.itemList} role="list">
-        <div className={styles.uncheckedItems}>
-          {uncheckedItems.map((item: IGroceryItem) => (
-            <GroceryItem
-              key={item.id}
-              item={item}
-              onToggleCheck={(checked) => toggleItem({ itemId: item.id, checked })}
-              onRemove={() => removeItem(item.id)}
-              isSwipeable
-              isChecked={false}
-              isLoading={isTogglingItem || isRemovingItem}
-            />
-          ))}
-        </div>
-
+      <AddItemForm onAdd={addItem} isSubmitting={isAddingItem} />
+      <div className={styles.itemList}>
+        {uncheckedItems.map((item) => (
+          <GroceryItem
+            key={item.id}
+            item={item}
+            onToggleCheck={(checked) => toggleItem(item.id, checked)}
+            onRemove={() => removeItem(item.id)}
+            isChecked={item.checked}
+            isLoading={isTogglingItem || isRemovingItem}
+          />
+        ))}
         {checkedItems.length > 0 && (
-          <div className={styles.checkedItems}>
+          <div>
             <h2>Completed Items</h2>
-            {checkedItems.map(item => (
+            {checkedItems.map((item) => (
               <GroceryItem
                 key={item.id}
                 item={item}
-                onToggleCheck={(checked) => toggleItem({ itemId: item.id, checked })}
+                onToggleCheck={(checked) => toggleItem(item.id, checked)}
                 onRemove={() => removeItem(item.id)}
-                isSwipeable
-                isChecked={true}
+                isChecked={item.checked}
                 isLoading={isTogglingItem || isRemovingItem}
               />
             ))}

@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+  color: #666;
+  min-height: 200px;
+  gap: 16px;
+}
+
+.icon {
+  font-size: 48px;
+  color: #bdc3c7;
+  margin-bottom: 16px;
+}
+
+.message {
+  font-size: 1.2rem;
+  font-weight: 500;
+} 
