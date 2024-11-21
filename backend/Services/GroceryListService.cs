@@ -22,7 +22,7 @@ namespace backend.Services
             _logger = logger;
         }
 
-        public async Task<backend.DTOs.GroceryListDTO> CreateFromRecipeAsync(int recipeId)
+        public async Task<GroceryListDTO> CreateFromRecipeAsync(int recipeId)
         {
             var recipe = await _context.Recipes
                 .Include(r => r.RecipeIngredients)
@@ -52,7 +52,7 @@ namespace backend.Services
             return MapToGroceryListDTO(groceryList);
         }
 
-        public async Task<backend.DTOs.GroceryListDTO?> GetByIdAsync(int id)
+        public async Task<GroceryListDTO?> GetByIdAsync(int id)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace backend.Services
             }
         }
 
-        public async Task<IEnumerable<backend.DTOs.GroceryListDTO>> GetAllAsync()
+        public async Task<IEnumerable<GroceryListDTO>> GetAllAsync()
         {
             try
             {
@@ -92,7 +92,7 @@ namespace backend.Services
             }
         }
 
-        public async Task<backend.DTOs.GroceryItemDTO> UpdateItemAsync(int listId, int itemId, backend.DTOs.GroceryItemDTO itemDTO)
+        public async Task<GroceryItemDTO> UpdateItemAsync(int listId, int itemId, GroceryItemDTO itemDTO)
         {
             var groceryList = await _context.GroceryLists
                 .Include(gl => gl.Items)
@@ -119,7 +119,7 @@ namespace backend.Services
             return MapToGroceryItemDTO(groceryItem);
         }
 
-        public async Task<backend.DTOs.GroceryItemDTO> AddItemAsync(int listId, backend.DTOs.GroceryItemDTO itemDTO)
+        public async Task<GroceryItemDTO> AddItemAsync(int listId, GroceryItemDTO itemDTO)
         {
             try
             {
@@ -176,7 +176,7 @@ namespace backend.Services
             return true;
         }
 
-        public async Task<IEnumerable<backend.DTOs.GroceryItemDTO>> AddRecipeToListAsync(int listId, int recipeId)
+        public async Task<IEnumerable<GroceryItemDTO>> AddRecipeToListAsync(int listId, int recipeId)
         {
             var groceryList = await _context.GroceryLists
                 .Include(gl => gl.Items)
@@ -212,7 +212,7 @@ namespace backend.Services
             return newItems.Select(MapToGroceryItemDTO);
         }
 
-        public async Task<backend.DTOs.GroceryItemDTO> PatchItemAsync(int listId, backend.DTOs.GroceryItemPatchDTO patchDTO)
+        public async Task<GroceryItemDTO> PatchItemAsync(int listId, GroceryItemPatchDTO patchDTO)
         {
             var groceryList = await _context.GroceryLists
                 .Include(gl => gl.Items)
@@ -246,14 +246,14 @@ namespace backend.Services
             return MapToGroceryItemDTO(groceryItem);
         }
 
-        private static backend.DTOs.GroceryListDTO MapToGroceryListDTO(GroceryList groceryList)
+        private static GroceryListDTO MapToGroceryListDTO(GroceryList groceryList)
         {
             if (groceryList == null)
             {
                 throw new ArgumentNullException(nameof(groceryList));
             }
 
-            return new backend.DTOs.GroceryListDTO
+            return new GroceryListDTO
             {
                 Id = groceryList.Id,
                 CreatedAt = groceryList.CreatedAt,
@@ -261,14 +261,14 @@ namespace backend.Services
             };
         }
 
-        private static backend.DTOs.GroceryItemDTO MapToGroceryItemDTO(GroceryItem item)
+        private static GroceryItemDTO MapToGroceryItemDTO(GroceryItem item)
         {
             if (item == null)
             {
                 throw new ArgumentNullException(nameof(item));
             }
 
-            return new backend.DTOs.GroceryItemDTO
+            return new GroceryItemDTO
             {
                 Id = item.Id,
                 Name = item.Name,

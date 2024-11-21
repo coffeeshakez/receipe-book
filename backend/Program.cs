@@ -8,7 +8,7 @@ using Microsoft.OpenApi.Models;
 using System.IO;
 using System;
 using Microsoft.Extensions.Logging;
-using backend.Services;  // Add this line at the top of the file
+using backend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,9 +55,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Recipe API v1"));
 }
 
-// Comment out or remove this line
-// app.UseHttpsRedirection();
-
 // Use CORS before routing and authorization
 app.UseCors("AllowFrontend");
 
@@ -65,7 +62,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Initialize the database
+
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;

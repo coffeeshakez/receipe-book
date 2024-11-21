@@ -134,7 +134,7 @@ export const apiHandler = {
 
   async updateGroceryItem(listId: number, itemId: number, item: Omit<GroceryItem, 'id'>): Promise<GroceryItem> {
     const response = await fetch(`${API_BASE_URL}/grocerylist/${listId}/items/${itemId}`, {
-      method: 'PUT',
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },

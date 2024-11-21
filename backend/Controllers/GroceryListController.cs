@@ -10,6 +10,7 @@ using System.Text.Json;
 using backend.Services;
 using System.Collections.Generic;
 using backend.Exceptions;
+using backend.DTOs;
 
 namespace backend.Controllers
 {
@@ -29,7 +30,7 @@ namespace backend.Controllers
         }
 
         [HttpPost("create/{recipeId}")]
-        public async Task<ActionResult<backend.DTOs.GroceryListDTO>> CreateGroceryList(int recipeId)
+        public async Task<ActionResult<GroceryListDTO>> CreateGroceryList(int recipeId)
         {
             try
             {
@@ -48,7 +49,7 @@ namespace backend.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<backend.DTOs.GroceryListDTO>> GetGroceryList(int id)
+        public async Task<ActionResult<GroceryListDTO>> GetGroceryList(int id)
         {
             try
             {
@@ -67,7 +68,7 @@ namespace backend.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<backend.DTOs.GroceryListDTO>>> GetAllGroceryLists()
+        public async Task<ActionResult<IEnumerable<GroceryListDTO>>> GetAllGroceryLists()
         {
             try
             {
@@ -82,10 +83,10 @@ namespace backend.Controllers
         }
 
         [HttpPatch("{listId}/items/{itemId}")]
-        public async Task<ActionResult<backend.DTOs.GroceryItemDTO>> UpdateGroceryItem(
+        public async Task<ActionResult<GroceryItemDTO>> UpdateGroceryItem(
             int listId, 
             int itemId, 
-            [FromBody] backend.DTOs.GroceryItemPatchDTO patchDTO)
+            [FromBody] GroceryItemPatchDTO patchDTO)
         {
             try
             {
@@ -105,9 +106,9 @@ namespace backend.Controllers
         }
 
         [HttpPost("{listId}/items")]
-        public async Task<ActionResult<backend.DTOs.GroceryItemDTO>> AddGroceryItem(
+        public async Task<ActionResult<GroceryItemDTO>> AddGroceryItem(
             int listId, 
-            [FromBody] backend.DTOs.GroceryItemDTO itemDTO)
+            [FromBody] GroceryItemDTO itemDTO)
         {
             try
             {
@@ -144,7 +145,7 @@ namespace backend.Controllers
         }
 
         [HttpPost("{listId}/addrecipe/{recipeId}")]
-        public async Task<ActionResult<IEnumerable<backend.DTOs.GroceryItemDTO>>> AddRecipeToGroceryList(
+        public async Task<ActionResult<IEnumerable<GroceryItemDTO>>> AddRecipeToGroceryList(
             int listId, 
             int recipeId)
         {
