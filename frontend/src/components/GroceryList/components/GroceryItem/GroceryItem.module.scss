@@ -1,73 +1,124 @@
 .item {
-  display: flex;
-  align-items: center;
-  padding: 15px;
-  background: white;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: relative;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-  &.swiped {
-    transform: translateX(-80px);
-  }
-
-  &.checked {
-    opacity: 0.7;
-    .itemName {
-      text-decoration: line-through;
-      color: #666;
-    }
-  }
-
-  &.loading {
-    opacity: 0.7;
-    pointer-events: none;
-  }
+  margin-bottom: 8px;
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: stretch;
 }
 
 .itemContent {
-  flex: 1;
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 12px;
+  padding: 16px;
+  flex: 1;
+  min-height: 24px;
+
+  @media (max-width: 768px) {
+    padding: 14px;
+  }
 
   input[type="checkbox"] {
     width: 20px;
     height: 20px;
+    margin: 0;
+    border: 2px solid #3498db;
+    border-radius: 4px;
+    appearance: none;
+    background: white;
     cursor: pointer;
-  }
+    flex-shrink: 0;
 
-  .itemName {
-    flex: 1;
-    font-size: 16px;
-  }
+    &:checked {
+      background: #3498db;
+      &:after {
+        content: '✓';
+        display: block;
+        color: white;
+        text-align: center;
+        line-height: 18px;
+        font-size: 12px;
+      }
+    }
 
-  .itemQuantity {
-    color: #666;
-    font-size: 14px;
+    @media (max-width: 768px) {
+      width: 24px;
+      height: 24px;
+      &:checked:after {
+        line-height: 22px;
+        font-size: 14px;
+      }
+    }
   }
 }
 
+.itemName {
+  flex: 1;
+  font-size: 16px;
+  margin: 0;
+  word-break: break-word;
+}
+
+.itemQuantity {
+  font-size: 14px;
+  color: #666;
+  background: #f5f5f5;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
 .deleteButton {
-  position: absolute;
-  right: -80px;
-  top: 0;
-  bottom: 0;
-  width: 80px;
-  background-color: #e74c3c;
+  min-width: 60px;
+  padding: 0;
+  background: #e74c3c;
   color: white;
   border: none;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
   cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s;
 
   &:hover {
-    background-color: #c0392b;
+    background: #c0392b;
   }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    background: #bdc3c7;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 768px) {
+    min-width: 50px;
+    font-size: 13px;
+  }
+}
+
+.checked {
+  .itemContent {
+    background: #f8f9fa;
+  }
+
+  .itemName {
+    color: #666;
+    text-decoration: line-through;
+  }
+}
+
+.loading {
+  pointer-events: none;
+  opacity: 0.7;
 }
 
 .loadingOverlay {
@@ -77,4 +128,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 2;
+  border-radius: 8px;
 } 
