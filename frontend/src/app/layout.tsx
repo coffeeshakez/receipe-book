@@ -1,27 +1,30 @@
-import type {Metadata} from 'next';
 import './globals.css';
-import Header from '@/components/Header/Header';
-import { Providers } from './providers';
+import { Inter } from 'next/font/google';
 
-export const metadata: Metadata = {
-  title: 'receipe-book',
-  description: 'Receipe book',
+import QueryProvider from '@/providers/QueryClientProvider';
+import Header from '@/components/Header/Header';
+
+const inter = Inter({ subsets: ['latin'] });
+
+export const metadata = {
+  title: 'Recipe Book',
+  description: 'A simple recipe book application',
 };
 
-export default function RootLayout({children}: {children: React.ReactNode}) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet" />
-      </head>
-      <body>
-        <Providers>
+      <body className={inter.className}>
+        <QueryProvider>
           <Header />
-          <main>{children}</main>
-        </Providers>
+          <main className="container">
+            {children}
+          </main>
+        </QueryProvider>
       </body>
     </html>
   );
