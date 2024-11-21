@@ -8,15 +8,15 @@ namespace backend.Data
 {
     public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
     {
-        public DbSet<Recipe>? Recipes { get; set; }
-        public DbSet<Ingredient>? Ingredients { get; set; }
-        public DbSet<RecipeIngredient>? RecipeIngredients { get; set; }
-        public DbSet<Instruction>? Instructions { get; set; }
-        public DbSet<GroceryList>? GroceryLists { get; set; }
-        public DbSet<GroceryItem>? GroceryItems { get; set; }
-        public DbSet<Menu>? Menus { get; set; }
-        public DbSet<Cuisine>? Cuisines { get; set; }
-        public DbSet<Category>? Categories { get; set; }
+        public DbSet<Recipe> Recipes { get; set; } = null!;
+        public DbSet<Ingredient> Ingredients { get; set; } = null!;
+        public DbSet<RecipeIngredient> RecipeIngredients { get; set; } = null!;
+        public DbSet<Instruction> Instructions { get; set; } = null!;
+        public DbSet<GroceryList> GroceryLists { get; set; } = null!;
+        public DbSet<GroceryItem> GroceryItems { get; set; } = null!;
+        public DbSet<Menu> Menus { get; set; } = null!;
+        public DbSet<Cuisine> Cuisines { get; set; } = null!;
+        public DbSet<Category> Categories { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

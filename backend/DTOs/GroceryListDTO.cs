@@ -4,7 +4,7 @@ namespace backend.DTOs
     {
         public int Id { get; set; }
         public DateTime CreatedAt { get; set; }
-        public List<GroceryItemDTO> Items { get; set; } = new List<GroceryItemDTO>();
+        public List<GroceryItemDTO> Items { get; set; } = new();
     }
 }
 

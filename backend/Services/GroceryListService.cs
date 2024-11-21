@@ -1,13 +1,13 @@
-using backend.Data;
-using backend.DTOs;
-using backend.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using OneOf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using backend.Data;
+using backend.Models;
+using backend.DTOs;
+using backend.Exceptions;
 
 namespace backend.Services
 {
@@ -22,30 +22,77 @@ namespace backend.Services
             _logger = logger;
         }
 
-        private double ParseQuantity(string quantity)
+        public async Task<backend.DTOs.GroceryListDTO> CreateFromRecipeAsync(int recipeId)
         {
-            if (string.IsNullOrWhiteSpace(quantity)) return 0;
+            var recipe = await _context.Recipes
+                .Include(r => r.RecipeIngredients)
+                    .ThenInclude(ri => ri.Ingredient)
+                .FirstOrDefaultAsync(r => r.Id == recipeId);
 
-            // Handle fractions like "1/2"
-            if (quantity.Contains('/'))
+            if (recipe == null)
             {
-                var parts = quantity.Split('/');
-                if (parts.Length == 2 && double.TryParse(parts[0], out double numerator) && double.TryParse(parts[1], out double denominator))
+                throw new NotFoundException($"Recipe with id {recipeId} not found");
+            }
+
+            var groceryList = new GroceryList
+            {
+                CreatedAt = DateTime.UtcNow,
+                Items = recipe.RecipeIngredients.Select(ri => new GroceryItem
                 {
-                    return numerator / denominator;
-                }
-            }
+                    Name = ri.Ingredient.Name,
+                    Quantity = ri.Quantity,
+                    Unit = ri.Measurement,
+                    Checked = false
+                }).ToList()
+            };
 
-            // Handle regular numbers
-            if (double.TryParse(quantity, out double result))
-            {
-                return result;
-            }
+            _context.GroceryLists.Add(groceryList);
+            await _context.SaveChangesAsync();
 
-            return 0;
+            return MapToGroceryListDTO(groceryList);
         }
 
-        public async Task<OneOf<IEnumerable<GroceryItemDTO>, string>> AddRecipeToGroceryListAsync(int listId, int recipeId)
+        public async Task<backend.DTOs.GroceryListDTO?> GetByIdAsync(int id)
+        {
+            try
+            {
+                var groceryList = await _context.GroceryLists
+                    .Include(gl => gl.Items)
+                    .FirstOrDefaultAsync(gl => gl.Id == id);
+
+                if (groceryList == null)
+                {
+                    throw new NotFoundException($"Grocery list with id {id} not found");
+                }
+
+                return MapToGroceryListDTO(groceryList);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving grocery list {Id}", id);
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<backend.DTOs.GroceryListDTO>> GetAllAsync()
+        {
+            try
+            {
+                var groceryLists = await _context.GroceryLists
+                    .Include(gl => gl.Items)
+                    .OrderByDescending(gl => gl.CreatedAt)
+                    .ToListAsync();
+
+                return groceryLists.Select(MapToGroceryListDTO);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving all grocery lists");
+                throw;
+            }
+        }
+
+        public async Task<backend.DTOs.GroceryItemDTO> UpdateItemAsync(int listId, int itemId, backend.DTOs.GroceryItemDTO itemDTO)
         {
             var groceryList = await _context.GroceryLists
                 .Include(gl => gl.Items)
@@ -53,7 +100,91 @@ namespace backend.Services
 
             if (groceryList == null)
             {
-                return $"Grocery list with id {listId} not found";
+                throw new NotFoundException($"Grocery list with id {listId} not found");
+            }
+
+            var groceryItem = groceryList.Items.FirstOrDefault(i => i.Id == itemId);
+            if (groceryItem == null)
+            {
+                throw new NotFoundException($"Grocery item with id {itemId} not found in list {listId}");
+            }
+
+            groceryItem.Name = itemDTO.Name;
+            groceryItem.Quantity = itemDTO.Quantity;
+            groceryItem.Unit = itemDTO.Unit;
+            groceryItem.Checked = itemDTO.Checked;
+
+            await _context.SaveChangesAsync();
+
+            return MapToGroceryItemDTO(groceryItem);
+        }
+
+        public async Task<backend.DTOs.GroceryItemDTO> AddItemAsync(int listId, backend.DTOs.GroceryItemDTO itemDTO)
+        {
+            try
+            {
+                var groceryList = await _context.GroceryLists
+                    .Include(gl => gl.Items)
+                    .FirstOrDefaultAsync(gl => gl.Id == listId);
+
+                if (groceryList == null)
+                {
+                    throw new NotFoundException($"Grocery list with id {listId} not found");
+                }
+
+                var newItem = new GroceryItem
+                {
+                    Name = itemDTO.Name ?? throw new ArgumentNullException(nameof(itemDTO.Name)),
+                    Quantity = itemDTO.Quantity ?? throw new ArgumentNullException(nameof(itemDTO.Quantity)),
+                    Unit = itemDTO.Unit ?? throw new ArgumentNullException(nameof(itemDTO.Unit)),
+                    Checked = itemDTO.Checked,
+                    GroceryList = groceryList
+                };
+
+                groceryList.Items.Add(newItem);
+                await _context.SaveChangesAsync();
+
+                return MapToGroceryItemDTO(newItem);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error adding item to grocery list {ListId}", listId);
+                throw;
+            }
+        }
+
+        public async Task<bool> RemoveItemAsync(int listId, int itemId)
+        {
+            var groceryList = await _context.GroceryLists
+                .Include(gl => gl.Items)
+                .FirstOrDefaultAsync(gl => gl.Id == listId);
+
+            if (groceryList == null)
+            {
+                return false;
+            }
+
+            var item = groceryList.Items.FirstOrDefault(i => i.Id == itemId);
+            if (item == null)
+            {
+                return false;
+            }
+
+            groceryList.Items.Remove(item);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<IEnumerable<backend.DTOs.GroceryItemDTO>> AddRecipeToListAsync(int listId, int recipeId)
+        {
+            var groceryList = await _context.GroceryLists
+                .Include(gl => gl.Items)
+                .FirstOrDefaultAsync(gl => gl.Id == listId);
+
+            if (groceryList == null)
+            {
+                throw new NotFoundException($"Grocery list with id {listId} not found");
             }
 
             var recipe = await _context.Recipes
@@ -63,55 +194,88 @@ namespace backend.Services
 
             if (recipe == null)
             {
-                return $"Recipe with id {recipeId} not found";
+                throw new NotFoundException($"Recipe with id {recipeId} not found");
             }
 
-            var newItems = new List<GroceryItem>();
-
-            foreach (var recipeIngredient in recipe.RecipeIngredients)
+            var newItems = recipe.RecipeIngredients.Select(ri => new GroceryItem
             {
-                var existingItem = groceryList.Items
-                    .FirstOrDefault(i => i.Name.ToLower() == recipeIngredient.Ingredient.Name.ToLower());
+                Name = ri.Ingredient.Name,
+                Quantity = ri.Quantity,
+                Unit = ri.Measurement,
+                Checked = false,
+                GroceryList = groceryList
+            }).ToList();
 
-                if (existingItem != null)
-                {
-                    // Parse both quantities and add them
-                    var existingQuantity = ParseQuantity(existingItem.Quantity);
-                    var newQuantity = ParseQuantity(recipeIngredient.Quantity);
-                    var totalQuantity = existingQuantity + newQuantity;
+            groceryList.Items.AddRange(newItems);
+            await _context.SaveChangesAsync();
 
-                    // If it's a whole number, remove the decimal point
-                    existingItem.Quantity = totalQuantity % 1 == 0 
-                        ? ((int)totalQuantity).ToString() 
-                        : totalQuantity.ToString();
-                }
-                else
-                {
-                    var newItem = new GroceryItem
-                    {
-                        Name = recipeIngredient.Ingredient.Name,
-                        Quantity = recipeIngredient.Quantity,
-                        Unit = recipeIngredient.Measurement,
-                        Checked = false,
-                        GroceryList = groceryList
-                    };
-                    newItems.Add(newItem);
-                    groceryList.Items.Add(newItem);
-                }
+            return newItems.Select(MapToGroceryItemDTO);
+        }
+
+        public async Task<backend.DTOs.GroceryItemDTO> PatchItemAsync(int listId, backend.DTOs.GroceryItemPatchDTO patchDTO)
+        {
+            var groceryList = await _context.GroceryLists
+                .Include(gl => gl.Items)
+                .FirstOrDefaultAsync(gl => gl.Id == listId);
+
+            if (groceryList == null)
+            {
+                throw new NotFoundException($"Grocery list with id {listId} not found");
             }
+
+            var groceryItem = groceryList.Items.FirstOrDefault(i => i.Id == patchDTO.Id);
+            if (groceryItem == null)
+            {
+                throw new NotFoundException($"Grocery item with id {patchDTO.Id} not found in list {listId}");
+            }
+
+            if (patchDTO.Name != null)
+                groceryItem.Name = patchDTO.Name;
+            
+            if (patchDTO.Quantity != null)
+                groceryItem.Quantity = patchDTO.Quantity;
+            
+            if (patchDTO.Unit != null)
+                groceryItem.Unit = patchDTO.Unit;
+            
+            if (patchDTO.Checked.HasValue)
+                groceryItem.Checked = patchDTO.Checked.Value;
 
             await _context.SaveChangesAsync();
 
-            var addedItemDTOs = newItems.Select(item => new GroceryItemDTO
+            return MapToGroceryItemDTO(groceryItem);
+        }
+
+        private static backend.DTOs.GroceryListDTO MapToGroceryListDTO(GroceryList groceryList)
+        {
+            if (groceryList == null)
+            {
+                throw new ArgumentNullException(nameof(groceryList));
+            }
+
+            return new backend.DTOs.GroceryListDTO
+            {
+                Id = groceryList.Id,
+                CreatedAt = groceryList.CreatedAt,
+                Items = groceryList.Items.Select(MapToGroceryItemDTO).ToList()
+            };
+        }
+
+        private static backend.DTOs.GroceryItemDTO MapToGroceryItemDTO(GroceryItem item)
+        {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
+            return new backend.DTOs.GroceryItemDTO
             {
                 Id = item.Id,
                 Name = item.Name,
                 Quantity = item.Quantity,
                 Unit = item.Unit,
                 Checked = item.Checked
-            });
-
-            return OneOf<IEnumerable<GroceryItemDTO>, string>.FromT0(addedItemDTOs);
+            };
         }
     }
 }
