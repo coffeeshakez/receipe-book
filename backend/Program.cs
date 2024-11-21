@@ -62,7 +62,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -80,18 +79,6 @@ using (var scope = app.Services.CreateScope())
         if (ex.InnerException != null)
         {
             logger.LogError(ex.InnerException, "Inner exception details:");
-        }
-        
-        logger.LogInformation($"Current Directory: {Environment.CurrentDirectory}");
-        
-        try
-        {
-            File.WriteAllText("test.txt", "This is a test file.");
-            logger.LogInformation("Successfully wrote test file.");
-        }
-        catch (Exception fileEx)
-        {
-            logger.LogError(fileEx, "Failed to write test file.");
         }
     }
 }

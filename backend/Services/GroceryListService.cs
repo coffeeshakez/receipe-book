@@ -52,26 +52,33 @@ namespace backend.Services
             return MapToGroceryListDTO(groceryList);
         }
 
-        public async Task<GroceryListDTO?> GetByIdAsync(int id)
+        public async Task<GroceryListDTO> GetByIdAsync(int id)
         {
-            try
-            {
-                var groceryList = await _context.GroceryLists
-                    .Include(gl => gl.Items)
-                    .FirstOrDefaultAsync(gl => gl.Id == id);
+            _logger.LogDebug("Fetching grocery list {ListId} from database", id);
+            
+            var groceryList = await _context.GroceryLists
+                .Include(g => g.Items)
+                .FirstOrDefaultAsync(g => g.Id == id);
 
-                if (groceryList == null)
-                {
-                    throw new NotFoundException($"Grocery list with id {id} not found");
-                }
-
-                return MapToGroceryListDTO(groceryList);
-            }
-            catch (Exception ex)
+            if (groceryList == null)
             {
-                _logger.LogError(ex, "Error retrieving grocery list {Id}", id);
-                throw;
+                _logger.LogWarning("Grocery list {ListId} not found in database", id);
+                throw new NotFoundException($"Grocery list with ID {id} not found");
             }
+
+            _logger.LogInformation("Found grocery list {ListId} with {ItemCount} items", 
+                id, 
+                groceryList.Items?.Count ?? 0);
+            
+            foreach (var item in groceryList.Items)
+            {
+                _logger.LogDebug("Item {ItemId} state in database: Name={Name}, Checked={Checked}", 
+                    item.Id, 
+                    item.Name, 
+                    item.Checked);
+            }
+
+            return MapToGroceryListDTO(groceryList);
         }
 
         public async Task<IEnumerable<GroceryListDTO>> GetAllAsync()
@@ -246,7 +253,7 @@ namespace backend.Services
             return MapToGroceryItemDTO(groceryItem);
         }
 
-        private static GroceryListDTO MapToGroceryListDTO(GroceryList groceryList)
+        private GroceryListDTO MapToGroceryListDTO(GroceryList groceryList)
         {
             if (groceryList == null)
             {
@@ -261,12 +268,14 @@ namespace backend.Services
             };
         }
 
-        private static GroceryItemDTO MapToGroceryItemDTO(GroceryItem item)
+        private GroceryItemDTO MapToGroceryItemDTO(GroceryItem item)
         {
             if (item == null)
             {
                 throw new ArgumentNullException(nameof(item));
             }
+
+            _logger.LogInformation($"Mapping item {item.Id}: Name={item.Name}, Checked={item.Checked}");
 
             return new GroceryItemDTO
             {

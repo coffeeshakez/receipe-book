@@ -53,17 +53,22 @@ namespace backend.Controllers
         {
             try
             {
+                _logger.LogInformation("Retrieving grocery list {ListId}", id);
                 var groceryList = await _groceryListService.GetByIdAsync(id);
+                _logger.LogInformation("Successfully retrieved grocery list {ListId} with {ItemCount} items", 
+                    id, 
+                    groceryList.Items?.Count ?? 0);
                 return Ok(groceryList);
             }
             catch (NotFoundException ex)
             {
+                _logger.LogWarning("Grocery list {ListId} not found", id);
                 return NotFound(new { message = ex.Message });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error retrieving grocery list {Id}", id);
-                return StatusCode(500, new { message = "An error occurred while retrieving the grocery list", error = ex.Message });
+                _logger.LogError(ex, "Failed to retrieve grocery list {ListId}", id);
+                return StatusCode(500, new { message = "An error occurred while retrieving the grocery list" });
             }
         }
 
@@ -72,7 +77,9 @@ namespace backend.Controllers
         {
             try
             {
+                _logger.LogWarning("=== GETTING ALL GROCERY LISTS ===");
                 var lists = await _groceryListService.GetAllAsync();
+                _logger.LogWarning("=== FOUND {Count} LISTS ===", lists.Count());
                 return Ok(lists);
             }
             catch (Exception ex)
