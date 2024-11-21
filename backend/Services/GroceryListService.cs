@@ -253,6 +253,24 @@ namespace backend.Services
             return MapToGroceryItemDTO(groceryItem);
         }
 
+        public async Task<GroceryListDTO> CreateAsync()
+        {
+            var groceryList = new GroceryList
+            {
+                CreatedAt = DateTime.UtcNow,
+                Items = new List<GroceryItem>()
+            };
+
+            _context.GroceryLists.Add(groceryList);
+            await _context.SaveChangesAsync();
+
+            return new GroceryListDTO
+            {
+                Id = groceryList.Id,
+                Items = new List<GroceryItemDTO>()
+            };
+        }
+
         private GroceryListDTO MapToGroceryListDTO(GroceryList groceryList)
         {
             if (groceryList == null)

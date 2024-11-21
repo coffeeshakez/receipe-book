@@ -29,40 +29,33 @@ namespace backend.Controllers
             _logger = logger;
         }
 
-        [HttpPost("create/{recipeId}")]
-        public async Task<ActionResult<GroceryListDTO>> CreateGroceryList(int recipeId)
+        // GET api/grocerylist
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<GroceryListDTO>>> GetAllGroceryLists()
         {
             try
             {
-                var groceryList = await _groceryListService.CreateFromRecipeAsync(recipeId);
-                return Ok(groceryList);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
+                var lists = await _groceryListService.GetAllAsync();
+                return Ok(lists);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error creating grocery list from recipe {RecipeId}", recipeId);
-                return StatusCode(500, "An error occurred while creating the grocery list");
+                _logger.LogError(ex, "Error retrieving all grocery lists");
+                return StatusCode(500, new { message = "An error occurred while retrieving grocery lists" });
             }
         }
 
+        // GET api/grocerylist/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<GroceryListDTO>> GetGroceryList(int id)
         {
             try
             {
-                _logger.LogInformation("Retrieving grocery list {ListId}", id);
                 var groceryList = await _groceryListService.GetByIdAsync(id);
-                _logger.LogInformation("Successfully retrieved grocery list {ListId} with {ItemCount} items", 
-                    id, 
-                    groceryList.Items?.Count ?? 0);
                 return Ok(groceryList);
             }
             catch (NotFoundException ex)
             {
-                _logger.LogWarning("Grocery list {ListId} not found", id);
                 return NotFound(new { message = ex.Message });
             }
             catch (Exception ex)
@@ -72,46 +65,34 @@ namespace backend.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<GroceryListDTO>>> GetAllGroceryLists()
+        // POST api/grocerylist
+        [HttpPost]
+        public async Task<ActionResult<GroceryListDTO>> CreateGroceryList([FromQuery] int? recipeId)
         {
             try
             {
-                _logger.LogWarning("=== GETTING ALL GROCERY LISTS ===");
-                var lists = await _groceryListService.GetAllAsync();
-                _logger.LogWarning("=== FOUND {Count} LISTS ===", lists.Count());
-                return Ok(lists);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error retrieving all grocery lists");
-                return StatusCode(500, new { message = "An error occurred while retrieving grocery lists", error = ex.Message });
-            }
-        }
+                var groceryList = recipeId.HasValue 
+                    ? await _groceryListService.CreateFromRecipeAsync(recipeId.Value)
+                    : await _groceryListService.CreateAsync();  // Create empty list
 
-        [HttpPatch("{listId}/items/{itemId}")]
-        public async Task<ActionResult<GroceryItemDTO>> UpdateGroceryItem(
-            int listId, 
-            int itemId, 
-            [FromBody] GroceryItemPatchDTO patchDTO)
-        {
-            try
-            {
-                patchDTO.Id = itemId; // Set the ID from the route
-                var updatedItem = await _groceryListService.PatchItemAsync(listId, patchDTO);
-                return Ok(updatedItem);
+                return CreatedAtAction(
+                    nameof(GetGroceryList), 
+                    new { id = groceryList.Id }, 
+                    groceryList
+                );
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new { message = ex.Message });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error updating grocery item {ItemId} in list {ListId}", itemId, listId);
-                return StatusCode(500, "An error occurred while updating the grocery item");
+                _logger.LogError(ex, "Error creating grocery list {RecipeId}", recipeId);
+                return StatusCode(500, new { message = "An error occurred while creating the grocery list" });
             }
         }
 
+        // POST api/grocerylist/{listId}/items
         [HttpPost("{listId}/items")]
         public async Task<ActionResult<GroceryItemDTO>> AddGroceryItem(
             int listId, 
@@ -120,19 +101,44 @@ namespace backend.Controllers
             try
             {
                 var newItem = await _groceryListService.AddItemAsync(listId, itemDTO);
-                return Ok(newItem);
+                return CreatedAtAction(nameof(GetGroceryList), new { id = listId }, newItem);
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new { message = ex.Message });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error adding grocery item to list {ListId}", listId);
-                return StatusCode(500, "An error occurred while adding the grocery item");
+                return StatusCode(500, new { message = "An error occurred while adding the grocery item" });
             }
         }
 
+        // PATCH api/grocerylist/{listId}/items/{itemId}
+        [HttpPatch("{listId}/items/{itemId}")]
+        public async Task<ActionResult<GroceryItemDTO>> UpdateGroceryItem(
+            int listId, 
+            int itemId, 
+            [FromBody] GroceryItemPatchDTO patchDTO)
+        {
+            try
+            {
+                patchDTO.Id = itemId;
+                var updatedItem = await _groceryListService.PatchItemAsync(listId, patchDTO);
+                return Ok(updatedItem);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating grocery item {ItemId} in list {ListId}", itemId, listId);
+                return StatusCode(500, new { message = "An error occurred while updating the grocery item" });
+            }
+        }
+
+        // DELETE api/grocerylist/{listId}/items/{itemId}
         [HttpDelete("{listId}/items/{itemId}")]
         public async Task<ActionResult> RemoveGroceryItem(int listId, int itemId)
         {
@@ -142,16 +148,17 @@ namespace backend.Controllers
                 if (!result)
                     return NotFound();
                 
-                return Ok();
+                return NoContent();
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error removing grocery item {ItemId} from list {ListId}", itemId, listId);
-                return StatusCode(500, "An error occurred while removing the grocery item");
+                return StatusCode(500, new { message = "An error occurred while removing the grocery item" });
             }
         }
 
-        [HttpPost("{listId}/addrecipe/{recipeId}")]
+        // POST api/grocerylist/{listId}/recipes/{recipeId}
+        [HttpPost("{listId}/recipes/{recipeId}")]
         public async Task<ActionResult<IEnumerable<GroceryItemDTO>>> AddRecipeToGroceryList(
             int listId, 
             int recipeId)
@@ -163,12 +170,12 @@ namespace backend.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new { message = ex.Message });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error adding recipe {RecipeId} to grocery list {ListId}", recipeId, listId);
-                return StatusCode(500, "An error occurred while adding the recipe to the grocery list");
+                return StatusCode(500, new { message = "An error occurred while adding the recipe to the grocery list" });
             }
         }
     }

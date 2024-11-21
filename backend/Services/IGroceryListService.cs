@@ -5,13 +5,13 @@ namespace backend.Services
 {
     public interface IGroceryListService
     {
+        Task<GroceryListDTO> CreateAsync();
         Task<GroceryListDTO> CreateFromRecipeAsync(int recipeId);
-        Task<GroceryListDTO?> GetByIdAsync(int id);
+        Task<GroceryListDTO> GetByIdAsync(int id);
         Task<IEnumerable<GroceryListDTO>> GetAllAsync();
-        Task<GroceryItemDTO> UpdateItemAsync(int listId, int itemId, GroceryItemDTO itemDTO);
-        Task<GroceryItemDTO> AddItemAsync(int listId, GroceryItemDTO itemDTO);
+        Task<GroceryItemDTO> AddItemAsync(int listId, GroceryItemDTO item);
+        Task<GroceryItemDTO> PatchItemAsync(int listId, GroceryItemPatchDTO patchDTO);
         Task<bool> RemoveItemAsync(int listId, int itemId);
         Task<IEnumerable<GroceryItemDTO>> AddRecipeToListAsync(int listId, int recipeId);
-        Task<GroceryItemDTO> PatchItemAsync(int listId, GroceryItemPatchDTO patchDTO);
     }
 }

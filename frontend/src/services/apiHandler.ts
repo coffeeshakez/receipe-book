@@ -155,16 +155,6 @@ export const apiHandler = {
     return response.json();
   },
 
-  async createGroceryListFromRecipe(recipeId: number): Promise<IGroceryList> {
-    const response = await fetch(`${API_BASE_URL}/grocerylist/create/${recipeId}`, {
-      method: 'POST',
-    });
-    if (!response.ok) {
-      throw new Error('Failed to create grocery list');
-    }
-    return response.json();
-  },
-
   async addRecipeToGroceryList(listId: number, recipeId: number): Promise<IGroceryItem[]> {
     const response = await fetch(`${API_BASE_URL}/grocerylist/${listId}/addrecipe/${recipeId}`, {
       method: 'POST',
@@ -290,7 +280,42 @@ export const apiHandler = {
     return response.json();
   },
 
-  async patchGroceryItem(listId: number, itemId: number, patch: Partial<Omit<IGroceryItem, 'id'>>): Promise<IGroceryItem> {
+  createGroceryList: async (recipeId?: number): Promise<IGroceryList> => {
+    const url = recipeId 
+      ? `${API_BASE_URL}/grocerylist?recipeId=${recipeId}`
+      : `${API_BASE_URL}/grocerylist`;
+      
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to create grocery list');
+    }
+
+    return response.json();
+  },
+
+  fetchGroceryList: async (id: number): Promise<IGroceryList> => {
+    const response = await fetch(`${API_BASE_URL}/grocerylist/${id}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch grocery list');
+    }
+    return response.json();
+  },
+
+  fetchAllGroceryLists: async (): Promise<IGroceryList[]> => {
+    const response = await fetch(`${API_BASE_URL}/grocerylist`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch grocery lists');
+    }
+    return response.json();
+  },
+
+  patchGroceryItem: async (listId: number, itemId: number, patch: Partial<Omit<IGroceryItem, 'id'>>): Promise<IGroceryItem> => {
     const response = await fetch(`${API_BASE_URL}/grocerylist/${listId}/items/${itemId}`, {
       method: 'PATCH',
       headers: {
@@ -298,9 +323,23 @@ export const apiHandler = {
       },
       body: JSON.stringify(patch),
     });
+
     if (!response.ok) {
       throw new Error('Failed to update grocery item');
     }
+
+    return response.json();
+  },
+
+  addRecipeToList: async (listId: number, recipeId: number): Promise<IGroceryItem[]> => {
+    const response = await fetch(`${API_BASE_URL}/grocerylist/${listId}/recipes/${recipeId}`, {
+      method: 'POST',
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to add recipe to grocery list');
+    }
+
     return response.json();
   },
 };

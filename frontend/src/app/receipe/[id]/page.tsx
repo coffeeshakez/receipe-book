@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import styles from './page.module.scss';
 import { apiHandler } from '@/services/apiHandler';
-import type { Recipe as RecipeType, GroceryList } from '@/services/apiHandler';
+import type { Recipe as RecipeType, IGroceryList } from '@/services/apiHandler';
 import { Button } from '@/components/Button/Button';
 import { TextWithIcon } from '@/components/TextWithIcon/TextWithIcon';
 import { Expand } from '@/components/Expand/Expand';
@@ -13,7 +13,7 @@ export default function RecipePage() {
   const [recipe, setRecipe] = useState<RecipeType | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [groceryLists, setGroceryLists] = useState<GroceryList[]>([]);
+  const [groceryLists, setGroceryLists] = useState<IGroceryList[]>([]);
   const [showListOptions, setShowListOptions] = useState(false);
   const params = useParams();
   const id = params?.id as string;
@@ -42,7 +42,7 @@ export default function RecipePage() {
 
   const handleCreateNewList = async () => {
     try {
-      const newList = await apiHandler.createGroceryListFromRecipe(parseInt(id));
+      const newList = await apiHandler.createGroceryList(parseInt(id));
       router.push(`/grocery-list/${newList.id}`);
     } catch (error) {
       console.error('Error creating grocery list:', error);
