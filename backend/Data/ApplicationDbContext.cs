@@ -1,24 +1,22 @@
 using Microsoft.EntityFrameworkCore;
 using backend.Models;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace backend.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
-        {
-        }
-
-        public DbSet<Recipe> Recipes { get; set; }
-        public DbSet<Ingredient> Ingredients { get; set; }
-        public DbSet<RecipeIngredient> RecipeIngredients { get; set; }
-        public DbSet<Instruction> Instructions { get; set; }
-        public DbSet<GroceryList> GroceryLists { get; set; }
-        public DbSet<GroceryItem> GroceryItems { get; set; }
-        public DbSet<Menu> Menus { get; set; }
-        public DbSet<Cuisine> Cuisines { get; set; }
-        public DbSet<Category> Categories { get; set; }
+        public DbSet<Recipe>? Recipes { get; set; }
+        public DbSet<Ingredient>? Ingredients { get; set; }
+        public DbSet<RecipeIngredient>? RecipeIngredients { get; set; }
+        public DbSet<Instruction>? Instructions { get; set; }
+        public DbSet<GroceryList>? GroceryLists { get; set; }
+        public DbSet<GroceryItem>? GroceryItems { get; set; }
+        public DbSet<Menu>? Menus { get; set; }
+        public DbSet<Cuisine>? Cuisines { get; set; }
+        public DbSet<Category>? Categories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -55,13 +53,18 @@ namespace backend.Data
                 .WithMany(ri => ri.Instructions)
                 .UsingEntity(j => j.ToTable("InstructionRecipeIngredient"));
 
-            // Menu RecipeIds conversion
+            // Menu RecipeIds conversion and comparison
             modelBuilder.Entity<Menu>()
                 .Property(m => m.RecipeIds)
                 .HasConversion(
                     v => string.Join(',', v),
                     v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList()
-                );
+                )
+                .Metadata.SetValueComparer(new ValueComparer<List<int>>(
+                    (c1, c2) => c1.SequenceEqual(c2),
+                    c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                    c => c.ToList()
+                ));
 
             // GroceryList - GroceryItem relationship
             modelBuilder.Entity<GroceryList>()

@@ -37,6 +37,7 @@ namespace backend.Controllers
         {
             try
             {
+
                 var cuisine = await _context.Cuisines
                     .Include(c => c.Recipes)
                         .ThenInclude(r => r.Category)
@@ -68,7 +69,7 @@ namespace backend.Controllers
                         Img = r.Img,
                         Category = r.Category.Name
                     })
-                    .ToList(); // Change this to ToList() instead of ToListAsync()
+                    .ToList();
 
                 var result = new CuisineWithRecipesDto
                 {

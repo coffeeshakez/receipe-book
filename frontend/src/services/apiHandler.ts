@@ -233,11 +233,6 @@ export const apiHandler = {
     return response.json();
   },
 
-  // Remove or comment out the getPopularMenus method if it exists
-  // async getPopularMenus(): Promise<Menu[]> {
-  //   ...
-  // },
-
   async getCuisines(): Promise<Cuisine[]> {
     const response = await fetch(`${API_BASE_URL}/cuisines`);
     if (!response.ok) {
@@ -262,7 +257,6 @@ export const apiHandler = {
     return response.json();
   },
 
-  // Add this method to the existing apiHandler object
   getRandomRecipe: async (categoryIds: number[] = [], cuisineIds: number[] = []): Promise<Recipe> => {
     const params = new URLSearchParams();
     categoryIds.forEach(id => params.append('categoryId', id.toString()));

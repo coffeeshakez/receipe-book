@@ -23,7 +23,5 @@ namespace backend.Controllers
         {
             return await _context.Categories.ToListAsync();
         }
-
-        // Add other CRUD operations as needed
     }
 }

@@ -58,7 +58,12 @@ namespace backend.Data
                         // Create or get existing Category
                         if (!categories.ContainsKey(recipeDto.Category))
                         {
-                            var category = new Category { Name = recipeDto.Category, Description = $"{recipeDto.Category} category" };
+                            var category = new Category
+                            {
+                                Name = recipeDto.Category,
+                                Description = $"{recipeDto.Category} category",
+                                Recipes = new List<Recipe>()
+                            };
                             context.Categories.Add(category);
                             categories[recipeDto.Category] = category;
                         }

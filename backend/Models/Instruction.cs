@@ -12,7 +12,7 @@ namespace backend.Models
         public required string InstructionText { get; set; }
 
         public int RecipeId { get; set; }
-        public Recipe Recipe { get; set; }
+        public Recipe? Recipe { get; set; }
 
         public List<RecipeIngredient> RecipeIngredients { get; set; } = new List<RecipeIngredient>();
     }

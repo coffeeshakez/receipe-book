@@ -22,12 +22,15 @@ namespace backend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Ingredient>>> GetIngredients()
         {
+
             return await _context.Ingredients.ToListAsync();
+
         }
 
         [HttpGet("categories")]
         public async Task<ActionResult<IEnumerable<string>>> GetCategories()
         {
+
             return await _context.Ingredients
                 .Select(i => i.Category)
                 .Distinct()
@@ -37,6 +40,7 @@ namespace backend.Controllers
         [HttpPost]
         public async Task<ActionResult<Ingredient>> CreateIngredient(CreateIngredientDTO dto)
         {
+
             var existingIngredient = await _context.Ingredients
                 .FirstOrDefaultAsync(i => i.Name.ToLower() == dto.Name.ToLower());
 

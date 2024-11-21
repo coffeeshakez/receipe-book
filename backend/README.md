@@ -30,7 +30,7 @@ If you encounter issues with the database, such as missing tables or columns, fo
      public class ApplicationDbContext : DbContext
      {
          public DbSet<Recipe> Recipes { get; set; }
-         // ... other DbSets ...
+         // ... other DbSets ...  
 
          public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
              : base(options)

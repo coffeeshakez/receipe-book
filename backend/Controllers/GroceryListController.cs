@@ -34,6 +34,7 @@ namespace backend.Controllers
         [HttpPost("create/{recipeId}")]
         public async Task<ActionResult<GroceryListDTO>> CreateGroceryList(int recipeId)
         {
+
             var recipe = await _context.Recipes
                 .Include(r => r.RecipeIngredients)
                     .ThenInclude(ri => ri.Ingredient)
@@ -85,9 +86,11 @@ namespace backend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<GroceryListDTO>> GetGroceryList(int id)
         {
+
             var groceryList = await _context.GroceryLists
                 .Include(gl => gl.Items)
                 .FirstOrDefaultAsync(gl => gl.Id == id);
+
 
             if (groceryList == null)
             {
