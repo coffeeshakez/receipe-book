@@ -35,7 +35,7 @@ export default function HomePage() {
   return (
     <div className={styles.homePage}>
       <section className={styles.hero}>
-        <h1>Welcome to Our Recipe Book</h1>
+        <h1>Recipe Book</h1>
         <p>Discover, cook, and enjoy delicious meals</p>
         <SearchBar />
       </section>

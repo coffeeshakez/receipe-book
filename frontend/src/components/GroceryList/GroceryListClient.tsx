@@ -23,15 +23,15 @@ export const GroceryListClient = ({ listId }: Props) => {
   } = useGroceryList(listId);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <p>Loading...</p>;
   }
 
   if (error) {
-    return <div>Error: {error instanceof Error ? error.message : 'An error occurred'}</div>;
+    return <p>Error: {error instanceof Error ? error.message : 'An error occurred'}</p>;
   }
 
   if (!groceryList) {
-    return <div>No grocery list found</div>;
+    return <p>No grocery list found</p>;
   }
 
   const uncheckedItems = groceryList.items.filter((item) => !item.checked);
